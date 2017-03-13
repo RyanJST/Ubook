@@ -52,6 +52,21 @@ public class MainMenu {
 					System.out.println("Please press 1 to access your user account settings");
 					System.out.println("Please press 2 to Temporary Housing Settings");
 					System.out.println("Please press 99 to exit");
+					String choice = input.readLine();
+					switch(choice){
+					case "1":
+						userSettings(userName, con);
+						break;
+					case"2":
+						TH(userName, con);
+						break;		
+					case"99":
+						signedDone = true;
+						break;
+					default:
+						System.out.println("That is not a valid option, please try again");
+						break;
+					}
 				}
 				
 			}
@@ -63,6 +78,8 @@ public class MainMenu {
 			e.printStackTrace();
 		}
 	}
+
+
 
 	private static String signup(Connector con) {
 		// TODO Auto-generated method stub
@@ -129,33 +146,24 @@ public class MainMenu {
 		
 	}
 
-	private static void TH(Connector con) {
+	private static void userSettings(String userName, Connector con) {
+		// TODO Auto-generated method stub
+		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+		String choice = null;
+		
+		boolean finished = false;
+		
+		while(!finished){
+			
+		}
+	}
+	
+	private static void TH(String userName, Connector con) {
 		// TODO Auto-generated method stub
 		System.out.println("Please press 1 to register a new house");
-		System.out.println("NOTE!  You must log in first if not logged in.");
+		
 		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		String choice = null;
 		
 	}
-
-	private static void userAccounts(Connector con) {
-		System.out.println("Please press 1 to register a new user");
-		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-		String choice = null;
-		try {
-			choice = input.readLine();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		User newUser = new User();
-		switch(choice){
-		
-		case"1":
-				
-				break;
-				default:
-					break;
-			}
-		}
-	}
+}
