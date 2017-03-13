@@ -131,6 +131,9 @@ public class TH {
 		ResultSet rs = null;
 		try {
 			rs = stmt.executeQuery(sql);
+			if(rs.isBeforeFirst()){
+				System.out.println("You do not have any houses registered in the system.");
+			}
 			while(rs.next()){
 				
 				System.out.println("House ID: " + rs.getString("hid") +",   House Name: " + rs.getString("name") );
@@ -141,7 +144,7 @@ public class TH {
 		catch(SQLException e){
 			e.printStackTrace();
 		}
-		}
+	}
 }
 
 	
