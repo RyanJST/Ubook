@@ -3,6 +3,8 @@ package Ubook;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 public class TH {
@@ -125,9 +127,23 @@ public class TH {
 
 	public void listOwnedHouses(String userName, Statement stmt) {
 		// TODO Auto-generated method stub
-		
-	}
+		String sql = "SELECT hid, name FROM TH WHERE login = '" + userName + "';";
+		ResultSet rs = null;
+		try {
+			rs = stmt.executeQuery(sql);
+			while(rs.next()){
+				
+				System.out.println("House ID: " + rs.getString("hid") +",   House Name: " + rs.getString("name") );
+					
+				}
+			
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		}
+}
 
 	
 	
-}
+
