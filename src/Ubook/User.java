@@ -9,8 +9,6 @@ public class User {
 
 	public String setUpUser(Statement stmt) {
 		// TODO Auto-generated method stub
-		String query = "";
-		boolean result = false;
 		int gottenResults = 0;
 		
 		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
@@ -68,9 +66,7 @@ public class User {
 		String sql = "INSERT INTO Users (login, name, password, address, phoneNumber)"
 				+ " VALUES( '" + userName + "', '" + name+"','" + password + "', '" + address+"','" + phoneNumber + "')";
 		try{
-   		 	gottenResults=stmt.executeUpdate(sql);
-		     result = true;
-		     
+   		 	gottenResults=stmt.executeUpdate(sql);		     
 		 	}
 		 	catch(Exception e)
 		 	{
@@ -102,7 +98,7 @@ public class User {
 			e1.printStackTrace();
 		}
 		
-		System.out.println("Please put in your user name");
+		System.out.println("Please put in your password");
 		
 		String password = null;
 		try {
@@ -117,7 +113,8 @@ public class User {
 		try {
 			rs = stmt.executeQuery(sql);
 			while(rs.next()){
-				if(rs.getString("password") != password){
+				
+				if(!rs.getString("password").equals(password)){
 					userName = null;
 					System.out.println("That is the wrong password "
 							+ "for the username you entered");

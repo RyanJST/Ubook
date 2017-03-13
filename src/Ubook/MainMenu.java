@@ -51,6 +51,10 @@ public class MainMenu {
 				while(!signedDone){
 					System.out.println("Please press 1 to access your user account settings");
 					System.out.println("Please press 2 to Temporary Housing Settings");
+					System.out.println("Please press 3 to look for and reserve a TH.");
+					System.out.println("Please press 4 to record a stay at a TH.");
+					System.out.println("Please press 5 to create/view feedback for THs and users");
+					
 					System.out.println("Please press 99 to exit");
 					String choice = input.readLine();
 					switch(choice){
@@ -154,16 +158,43 @@ public class MainMenu {
 		boolean finished = false;
 		
 		while(!finished){
+			System.out.println("Please press 1 to register a new favorite TH you like to stay at.");
 			
 		}
 	}
 	
 	private static void TH(String userName, Connector con) {
 		// TODO Auto-generated method stub
-		System.out.println("Please press 1 to register a new house");
 		
 		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		String choice = null;
+		
+		TH house = new TH();
+		boolean finished = false;
+		
+		while(!finished){
+			System.out.println("Please press 1 to register a new house");
+			System.out.println("Please press 2 to see the houses you have listed.");
+			System.out.println("Please press 3 to change information on a house you own.");
+			
+			try {
+				choice = input.readLine();
+				
+				switch(choice){
+				case "1":
+					house.registerHouse(userName, con.stmt);
+					break;
+				
+				case "2":
+					house.listOwnedHouses(userName, con.stmt);
+				default:
+						
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
 	}
 }
