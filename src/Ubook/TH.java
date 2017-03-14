@@ -3,6 +3,7 @@ package Ubook;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.security.acl.Owner;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -135,6 +136,8 @@ public class TH {
 			 		System.out.println(e.getMessage());
 			 	}
 		}
+		User owner = new User();
+		owner.setOwner(userName, stmt);
 	}
 
 	public void listOwnedHouses(String userName, Statement stmt) {
@@ -158,7 +161,7 @@ public class TH {
 		}
 	}
 
-	public void changeHouse(String userName, Statement stmt) {
+	public int changeHouse(String userName, Statement stmt) {
 		// TODO Auto-generated method stub
 		String houseID = null;
 		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
@@ -170,7 +173,7 @@ public class TH {
 		String URL = null;
 		String phoneNumber = null;
 		String yearBuilt = null;
-		
+		int result = 0;
 			System.out.println("Please input the Housing ID of the house you wish to update. If you wish to stop, press e now.");
 			
 			try{
@@ -206,7 +209,7 @@ public class TH {
 				}
 	
 			}
-			sql = "SELECT hid, name FROM TH WHERE login = '" + userName + "' AND hid = '" +houseID+ "';";
+			sql = "SELECT * FROM TH WHERE login = '" + userName + "' AND hid = '" +houseID+ "';";
 			try {
 				rs = stmt.executeQuery(sql);
 				if(!rs.isBeforeFirst()){
@@ -216,7 +219,12 @@ public class TH {
 				}
 				else{
 					while(rs.next()){
-						
+						name = rs.getString("name");
+						category = rs.getString("category");
+						address = rs.getString("address");;
+						URL = rs.getString("URL");;
+						phoneNumber = rs.getString("phoneNumber");;
+						yearBuilt = rs.getString("yearBuilt");;
 					}
 				}
 			
@@ -230,7 +238,128 @@ public class TH {
 		if(houseID != null){
 			
 			System.out.println("Please select what you want the new name to be, leave blank to keep the name the same.");
+			String choice = null;
+			try {
+				choice = input.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			if(!choice.isEmpty()){
+				name = choice;
+			}
+			
+			System.out.println("Please select what you want the new category to be, leave blank to keep the category the same.");
+			
+			try {
+				choice = input.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			if(!choice.isEmpty()){
+				category = choice;
+			}
+			
+	System.out.println("Please select what you want the new address to be, leave blank to keep the address the same.");
+			
+			try {
+				choice = input.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			if(!choice.isEmpty()){
+				address = choice;
+			}
+			
+	System.out.println("Please select what you want the new URL to be, leave blank to keep the URL the same.");
+			
+			try {
+				choice = input.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			if(!choice.isEmpty()){
+				URL = choice;
+			}
+			
+			boolean phoneDone = false;
+			while(!phoneDone){
+				System.out.println("Please select what you want the new phone number to be, leave blank to keep the phone number the same.");
+			
+				try {
+					choice = input.readLine();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				if(!choice.isEmpty()){
+					phoneNumber = choice;
+					
+					try{
+						phoneDone = true;
+					}
+					catch(NumberFormatException n){
+						phoneNumber = null;
+					}
+					
+					if(phoneNumber == null){
+						System.out.println("You need to give a valid phone number. Please try again.");
+					}
+				}
+				else{
+					phoneDone = true;
+				}
+			}
+			
+			phoneDone = false;
+			while(!phoneDone){
+				System.out.println("Please select what you want the new year built to be, leave blank to keep the year built the same.");
+			
+				try {
+					choice = input.readLine();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				if(!choice.isEmpty()){
+					yearBuilt = choice;
+					
+					try{
+						phoneDone = true;
+					}
+					catch(NumberFormatException n){
+						yearBuilt = null;
+					}
+					
+					if(yearBuilt == null){
+						System.out.println("You need to give a valid year built. Please try again.");
+					}
+				}
+				else{
+					phoneDone = true;
+				}
+			}
+			
+			sql = "UPDATE TH SET category = '" + category+ "',name = '" + name+ "',address = '" + address+ "',URL = '" + URL+ "',phoneNumber = '" + phoneNumber+ "',"
+					+ "yearBuilt = '" + yearBuilt+ "' WHERE hid = '" + houseID + "' AND login = '" + userName + "';";
+			
+			try {
+				result = stmt.executeUpdate(sql);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		return result;
 	}
 }
 

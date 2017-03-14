@@ -81,11 +81,6 @@ public class User {
 	}
 
 	public String loginUser(Statement stmt) {
-		// TODO Auto-generated method stub
-		String query = "";
-		boolean result = false;
-		int gottenResults = 0;
-		
 		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		
 		System.out.println("Please put in your user name");
@@ -127,6 +122,19 @@ public class User {
 		}
 		
 		return userName;
+	}
+
+	public void setOwner(String userName, Statement stmt) {
+		// TODO Auto-generated method stub
+		
+		String sql = "UPDATE Users Set userType = '1' WHERE login = '" + userName + "' AND userType = '0';";
+		
+		try {
+			stmt.executeUpdate(sql);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

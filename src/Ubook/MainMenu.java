@@ -188,14 +188,16 @@ public class MainMenu {
 				
 				case "2":
 					house.listOwnedHouses(userName, con.stmt);
-				
+					break;
 				case "3":
 					house.changeHouse(userName, con.stmt);
-					
+					break;
 				case "99":
 					finished = true;
+					break;
 				default:
-						System.out.println("You selected an incorrect option.  Please try again.");
+					System.out.println("You selected an incorrect option.  Please try again.");
+					break;
 				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
