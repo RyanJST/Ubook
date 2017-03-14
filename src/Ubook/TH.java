@@ -162,34 +162,26 @@ public class TH {
 		// TODO Auto-generated method stub
 		String houseID = null;
 		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-		String sql = "SELECT hid, name FROM TH WHERE login = '" + userName + "';";
+		String sql = null;
 		ResultSet rs = null;
-		try {
-			rs = stmt.executeQuery(sql);
-			if(!rs.isBeforeFirst()){
-				System.out.println("You do not have any houses registered in the system.  Please register a house before trying to update a house listing.");
-				houseID = "e";
-			}
-			
-		}
-		catch(SQLException e){
-			e.printStackTrace();
-		}
+		String name = null;
+		String category = null;
+		String address = null;
+		String URL = null;
+		String phoneNumber = null;
+		String yearBuilt = null;
 		
-		if(houseID == null){
-			System.out.println("Please input the Housing ID of the house you wish to update. If you wish to stop, press e now, otherwise press any other key to continue.");
+			System.out.println("Please input the Housing ID of the house you wish to update. If you wish to stop, press e now.");
 			
 			try{
-				if(input.readLine().equals("e")){
-					houseID = "e";
-							
+					houseID = input.readLine();
 				}
-			}
+			
 			catch(IOException e){
 				e.printStackTrace();
 			}
-		}
-		if(houseID == null){
+		
+		if(!houseID.equals("e")){
 			while(houseID == null){
 				try {
 					houseID = input.readLine();
@@ -212,17 +204,32 @@ public class TH {
 					System.out.println("Please put in a valid HouseID.");
 				
 				}
-				
-				
+	
 			}
 			sql = "SELECT hid, name FROM TH WHERE login = '" + userName + "' AND hid = '" +houseID+ "';";
 			try {
 				rs = stmt.executeQuery(sql);
 				if(!rs.isBeforeFirst()){
-					System.out.println("You do not have a house registered with that HouseID. Do you want to try again?  (Y/N)");
-					houseID = "e";
+					System.out.println("You do not have a house registered with that HouseID. Please try again. \n");
+					houseID = null;
+					
 				}
-			System.out.println("End of Change");
+				else{
+					while(rs.next()){
+						
+					}
+				}
+			
+		}
+
+			catch(SQLException e){
+				e.printStackTrace();
+			}
+	}
+		
+		if(houseID != null){
+			
+			System.out.println("Please select what you want the new name to be, leave blank to keep the name the same.");
 		}
 	}
 }
