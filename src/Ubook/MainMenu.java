@@ -176,6 +176,7 @@ public class MainMenu {
 			System.out.println("Please press 1 to register a new house");
 			System.out.println("Please press 2 to see the houses you have listed.");
 			System.out.println("Please press 3 to change information on a house you own.");
+			System.out.println("Please press 99 to exit the temporary housing menu.");
 			
 			try {
 				choice = input.readLine();
@@ -187,8 +188,14 @@ public class MainMenu {
 				
 				case "2":
 					house.listOwnedHouses(userName, con.stmt);
+				
+				case "3":
+					house.changeHouse(userName, con.stmt);
+					
+				case "99":
+					finished = true;
 				default:
-						
+						System.out.println("You selected an incorrect option.  Please try again.");
 				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
