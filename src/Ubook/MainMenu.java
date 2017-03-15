@@ -102,7 +102,7 @@ public class MainMenu {
 						+ "Do you want to try again?(Y/N) ");
 				
 				try {
-					if(input.readLine() != "y"){
+					if(input.readLine().equals("y") || input.readLine().equals("Y")){
 						result = true;
 						
 					}
@@ -134,7 +134,7 @@ public class MainMenu {
 						+ "Do you want to try again?(Y/N) ");
 				
 				try {
-					if(input.readLine() != "y"){
+					if(input.readLine().equals("y") || input.readLine().equals("Y")){
 						result = true;
 						
 					}
