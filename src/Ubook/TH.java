@@ -1,23 +1,22 @@
 package Ubook;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class TH {
+	//
 
 	private String verifyHouseID(String userName, Statement stmt){
 		
 		String houseID = null;
-		BufferedReader input = new BufferedReader(new InputStreamReader(System.in)); 
+		////BufferedReader input = new BufferedReader(new InputStreamReader(System.in)); 
 		ResultSet rs;
 		System.out.println("Please input the Housing ID of the house you wish to update. If you wish to stop, press e now.");
 		
 		try{
-				houseID = input.readLine();
+				houseID = MainMenu.input.readLine();
 			}
 		
 		catch(IOException e){
@@ -27,7 +26,7 @@ public class TH {
 	if(!houseID.equals("e")){
 		while(houseID == null){
 			try {
-				houseID = input.readLine();
+				houseID = MainMenu.input.readLine();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -54,13 +53,13 @@ public class TH {
 	public void registerHouse(String userName, Statement stmt) {
 		// TODO Auto-generated method stub
 		
-		System.out.println("Here you register your temporary housing.  If you do not wish to do so, press e now.  Otherwise, press any other key to continue.");
+		System.out.println("Here you register your temporary housing.  If you do not wish to do so, press e now.  Otherwise, press enter to continue.");
 		
-		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-		String houseName = null;
+		//BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+		String houseName = "start";
 		boolean changed = false;
 		try{
-			if((houseName = input.readLine()).equals("e")){
+			if(!(houseName = MainMenu.input.readLine()).equals("e")){
 				houseName = null;	
 			}
 		}
@@ -72,7 +71,7 @@ public class TH {
 				System.out.println("Please set the name of your new temporary housing.");
 				
 				try {
-					houseName = input.readLine();
+					houseName = MainMenu.input.readLine();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -88,7 +87,7 @@ public class TH {
 				System.out.println("Please set the address of your new temporary housing.");
 				
 				try {
-					address = input.readLine();
+					address = MainMenu.input.readLine();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -103,7 +102,7 @@ public class TH {
 				System.out.println("Please set the phone number of your new temporary housing in the format \"1234567890\".");
 				
 				try {
-					phoneNumber = input.readLine();
+					phoneNumber = MainMenu.input.readLine();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -124,7 +123,7 @@ public class TH {
 				System.out.println("Please set the year that your temporary housing was built. This field does not need to be filled in.");
 				
 				try {
-					yearBuilt = input.readLine();
+					yearBuilt = MainMenu.input.readLine();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -145,7 +144,7 @@ public class TH {
 			System.out.println("Please input the category of your temporary housing.  Does not need to be filled in.");
 			
 			try {
-				category = input.readLine();
+				category = MainMenu.input.readLine();
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -155,7 +154,7 @@ public class TH {
 			System.out.println("Please input the web address of your temporary housing.  Does not need to be filled in.");
 			
 			try {
-				URL = input.readLine();
+				URL = MainMenu.input.readLine();
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -167,25 +166,27 @@ public class TH {
 					",   House URL: " + URL +",   House Year Built: " + yearBuilt + "\n");
 			
 			System.out.println("Do you want to keep these changes?  (Y/N)");
-			
-			
-			try{
-				if(input.readLine().equals("y") || input.readLine().equals("Y")){
-					changed = true;
-				}
-			}
-			catch(IOException e){
-				
+			String choice = null;
+			try {
+				choice = MainMenu.input.readLine();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 			
+			if(choice.equals("y") || choice.equals("Y")){
+				changed = true;
+	
 			
 			
 			if(changed){
+				System.out.println("Registering House");
 				String sql = "INSERT INTO TH (category, name, address, URL, phoneNumber, yearBuilt, login)"
 						+ " VALUES( '" + category + "', '" + houseName+"','" + address + "', '" + URL+"','" + phoneNumber + "',"
 								+ "'" + yearBuilt + "','" + userName + "')";
 				try{
-		   		    stmt.executeUpdate(sql);		     
+		   		    stmt.executeUpdate(sql);		    
+		   		    System.out.println("Your new house was registered! \n");
 				 	}
 				 	catch(Exception e)
 				 	{
@@ -193,7 +194,11 @@ public class TH {
 				 		System.out.println(e.getMessage());
 				 	}
 			}
+
+			}
+			
 		}
+		System.out.println("Exiting house registration \n");
 	}
 
 	public void listOwnedHouses(String userName, Statement stmt) {
@@ -221,7 +226,7 @@ public class TH {
 
 		// TODO Auto-generated method stub
 		String houseID = null;
-		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+		//BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		String sql = null;
 		ResultSet rs = null;
 		String name = null;
@@ -269,7 +274,7 @@ public class TH {
 			System.out.println("Please select what you want the new name to be, leave blank to keep the name the same.");
 			String choice = null;
 			try {
-				choice = input.readLine();
+				choice = MainMenu.input.readLine();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -282,7 +287,7 @@ public class TH {
 			System.out.println("Please select what you want the new category to be, leave blank to keep the category the same.");
 			
 			try {
-				choice = input.readLine();
+				choice = MainMenu.input.readLine();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -295,7 +300,7 @@ public class TH {
 			System.out.println("Please select what you want the new address to be, leave blank to keep the address the same.");
 			
 			try {
-				choice = input.readLine();
+				choice = MainMenu.input.readLine();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -308,7 +313,7 @@ public class TH {
 			System.out.println("Please select what you want the new URL to be, leave blank to keep the URL the same.");
 			
 			try {
-				choice = input.readLine();
+				choice = MainMenu.input.readLine();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -321,7 +326,7 @@ public class TH {
 			System.out.println("Please select what you want the new phone number to be, leave blank to keep the phone number the same.");
 			
 				try {
-					choice = input.readLine();
+					choice = MainMenu.input.readLine();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -337,7 +342,7 @@ public class TH {
 			System.out.println("Please select what you want the new year built to be, leave blank to keep the year built the same.");
 			
 				try {
-					choice = input.readLine();
+					choice = MainMenu.input.readLine();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -355,7 +360,7 @@ public class TH {
 			
 			
 			try{
-				choice = input.readLine();
+				choice = MainMenu.input.readLine();
 			}
 			catch(IOException e){
 				
@@ -380,26 +385,26 @@ public class TH {
 		}
 		return result;
 	}
-
 	
 	public void updateAvailability(String userName, Statement stmt) {
 		// TODO Auto-generated method stub
 		
 		
-		System.out.println("Here is a list of the houses you own.");
+		System.out.println("Here is a list of the houses you own.\n");
 		listOwnedHouses(userName, stmt);
 		
-		System.out.println("Select which house you wish to do availability operations on.");
+		System.out.println("Select which house you wish to do availability operations on.\n");
 		String houseID = verifyHouseID(userName, stmt);
-		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+		//BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		while(houseID != null){
 			System.out.println("Press 1 to add a date of availability");
 			System.out.println("Press 2 to change a date of availability");
 			System.out.println("Press 3 to remove a date of availability");
-			System.out.println("Press 4 to exit.");
+			System.out.println("Press 4 to show all current availabilities of your house");
+			System.out.println("Press 5 to exit.");
 			String choice = null;
 			try {
-				choice = input.readLine();
+				choice = MainMenu.input.readLine();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -418,6 +423,9 @@ public class TH {
 				infoDate.removeAvailability(houseID, stmt);
 				break;
 			case "4":
+				infoDate.showAvailability(houseID, stmt);
+				break;
+			case "5":
 				houseID = null;
 				break;
 			default:

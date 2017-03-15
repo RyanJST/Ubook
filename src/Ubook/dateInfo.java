@@ -1,19 +1,17 @@
 package Ubook;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class dateInfo {
-
+	
 	public void createAvailability(String houseID, Statement stmt) {
 		// TODO Auto-generated method stub
 		
 		
-		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+		//BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		String startDate = null;
 		String endDate = null;
 		String priceNight = null;
@@ -22,7 +20,7 @@ public class dateInfo {
 		
 		System.out.println("What starting date do you wish to have at? Put in the format 'YYYY-MM-DD'.");
 		try {
-			startDate = input.readLine();
+			startDate = MainMenu.input.readLine();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -30,7 +28,7 @@ public class dateInfo {
 		
 		System.out.println("What ending date do you wish to have at? Put in the format 'YYYY-MM-DD'.");
 		try {
-			endDate = input.readLine();
+			endDate = MainMenu.input.readLine();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -39,7 +37,7 @@ public class dateInfo {
 		System.out.println("What price per night do you want?  Put in dollar amount only.");
 		
 		try {
-			priceNight = input.readLine();
+			priceNight = MainMenu.input.readLine();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -52,21 +50,21 @@ public class dateInfo {
 		
 		System.out.println("Do you wish to have this new date of availability?  (Y/N)");
 		
-
+		String choice = null;
 		try{
-			if(input.readLine().equals("y") || input.readLine().equals("Y")){
-				changed = true;
-			}
+			choice = MainMenu.input.readLine();
 		}
 		catch(IOException e){
 			
 		}
 		
-		
+		if(choice.equals("y") || choice.equals("Y")){
+			changed = true;
+		}
 		
 		if(changed){
 		
-		String sql = "INSERT INTO Period (fromDate, toDate) Values('" + startDate+ "', "+ endDate+ "');";
+		String sql = "INSERT INTO Period (fromDate, toDate) VAlUES ('" + startDate+ "', '"+ endDate+ "');";
 		
 		int result = 0;
 		
@@ -79,7 +77,7 @@ public class dateInfo {
 		
 		try(ResultSet generatedKeys = stmt.getGeneratedKeys()){
 			if(generatedKeys.next()){
-				result = generatedKeys.getInt("pid");
+				result = generatedKeys.getInt(1);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -88,9 +86,20 @@ public class dateInfo {
 		
 		
 		
-		sql = "INSERT INTO Availability (pid, hid, priceNight) Values('" + result+ "', "+ houseID+ "', " + priceNight + ")";
+		sql = "INSERT INTO Available(pid, hid, priceNight) Values('" + result+ "', '"+ houseID+ "', '" + priceNight + "')";
 	
+		try {
+			stmt.executeUpdate(sql);
+			System.out.println("New availability has been created!  \n");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
+		
+		}
+		
+		
 	}
 
 	public void changeAvailability(String houseID, Statement stmt) {
@@ -101,13 +110,13 @@ public class dateInfo {
 		
 		System.out.println("Select which availability you wish to update using the period ID.");
 		
-		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+		//BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		
 		
 		String pid = null;
 		
 		try {
-			pid = input.readLine();
+			pid = MainMenu.input.readLine();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -121,7 +130,7 @@ public class dateInfo {
 		System.out.println("Select the new from date. Put in the format 'YYYY-MM-DD'. Leave blank to keep the same.");
 		
 		try {
-			choice = input.readLine();
+			choice = MainMenu.input.readLine();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -134,7 +143,7 @@ public class dateInfo {
 		System.out.println("Select the new end date. Put in the format 'YYYY-MM-DD'. Leave blank to keep the same.");
 		
 		try {
-			choice = input.readLine();
+			choice = MainMenu.input.readLine();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -147,7 +156,7 @@ public class dateInfo {
 		System.out.println("Select the new price per night. Put in dollar amount. Leave blank to keep the same.");
 		
 		try {
-			choice = input.readLine();
+			choice = MainMenu.input.readLine();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -165,7 +174,7 @@ public class dateInfo {
 		choice = null;
 		boolean changed = false;
 		try{
-			choice = input.readLine();
+			choice = MainMenu.input.readLine();
 		}
 		catch(IOException e){
 			
@@ -176,7 +185,9 @@ public class dateInfo {
 		}
 		
 		if(changed){
-			String sql = "UPDATE Available SET priceNight = '" + priceNight + "' WHERE hid = '" +houseID + "', pid = '" + pid+"';" ;
+			createChangeAvailability(houseID, stmt, pid, fromDate, toDate, priceNight);
+			
+			/*String sql = "UPDATE Available SET priceNight = '" + priceNight + "' WHERE hid = '" +houseID + "', pid = '" + pid+"';" ;
 			
 			try {
 				stmt.executeUpdate(sql);
@@ -191,7 +202,7 @@ public class dateInfo {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+			*/
 			
 		}
 	}
@@ -203,13 +214,13 @@ public class dateInfo {
 		
 		System.out.println("Select which availability you wish to remove using the period ID.");
 		
-		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+		//BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		
 		
 		String pid = null;
 		
 		try {
-			pid = input.readLine();
+			pid = MainMenu.input.readLine();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -220,7 +231,7 @@ public class dateInfo {
 		String choice = null;
 		boolean changed = false;
 		try{
-			choice = input.readLine();
+			choice = MainMenu.input.readLine();
 		}
 		catch(IOException e){
 			
@@ -244,6 +255,27 @@ public class dateInfo {
 		}
 	}
 	
+	public void createChangeAvailability(String houseID, Statement stmt, String pid, String fromDate, String toDate, String priceNight){
+		String sql = "UPDATE Available SET priceNight = '" + priceNight + "' WHERE hid = '" +houseID + "', pid = '" + pid+"';" ;
+		
+		try {
+			stmt.executeUpdate(sql);
+			sql = "UPDATE Period SET fromDate = '" + fromDate + "', toDate = '" +toDate+"' WHERE pid = '" + pid+"';" ;
+			try{
+				stmt.executeUpdate(sql);
+				System.out.println("The changed availability has been made!\n");
+			}
+			catch(SQLException e1){
+				e1.printStackTrace();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+
 	public void showAvailability(String houseID, Statement stmt){
 		String sql = "SELECT pid, priceNight FROM Available WHERE hid = '" + houseID + "';";
 		

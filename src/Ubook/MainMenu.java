@@ -7,12 +7,12 @@ import java.io.InputStreamReader;
 
 public class MainMenu {
 
-	
+	public static BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 	public static void main(String[] args){
 		try{
 			Connector con = new Connector();
 			System.out.println("Hello!  Please select the option you want for UBook!");
-			BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+			//BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 			String userName = null;
 			boolean done = false;
 			//String innerChoice = null;
@@ -64,6 +64,8 @@ public class MainMenu {
 					case"2":
 						TH(userName, con);
 						break;		
+					case"3":
+						browseReserve(userName, con);
 					case"99":
 						signedDone = true;
 						break;
@@ -77,6 +79,7 @@ public class MainMenu {
 			
 			System.out.println("Thank you for using UBook!  Have a great day!");
 			con.closeConnection();
+			input.close();
 		}
 		
 		catch( Exception e){
@@ -84,11 +87,26 @@ public class MainMenu {
 		}
 	}
 
-
+	private static void browseReserve(String userName, Connector con) {
+		// TODO Auto-generated method stub
+		//BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+		System.out.println("Press 1 to add a date of availability");
+		System.out.println("Press 2 to change a date of availability");
+		System.out.println("Press 3 to remove a date of availability");
+		System.out.println("Press 4 to show all current availabilities of your house");
+		System.out.println("Press 5 to exit.");
+		String choice = null;
+		try {
+			choice = input.readLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	private static String signup(Connector con) {
 		// TODO Auto-generated method stub
-		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+		//BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		User newUser = new User();
 		String name = null;
 		boolean result = false;
@@ -101,17 +119,19 @@ public class MainMenu {
 				System.out.println("There was an issue with your registration, "
 						+ "Do you want to try again?(Y/N) ");
 				
+				String choice = null;
 				try {
-					if(input.readLine().equals("y") || input.readLine().equals("Y")){
-						result = true;
-						
-					}
-					else{
-						name = newUser.setUpUser(con.stmt);
-					}
+					choice = input.readLine();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+				}
+				if(choice.equals("y") || choice.equals("Y")){
+					result = true;
+					
+				}
+				else{
+					name = newUser.setUpUser(con.stmt);
 				}
 			}
 			}
@@ -120,7 +140,7 @@ public class MainMenu {
 
 	private static String login(Connector con) {
 		// TODO Auto-generated method stub
-		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+		//BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		User loginUser = new User();
 		String name = null;
 		boolean result = false;
@@ -153,7 +173,7 @@ public class MainMenu {
 
 	private static void userSettings(String userName, Connector con) {
 		// TODO Auto-generated method stub
-		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+		//BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		String choice = null;
 		
 		boolean finished = false;
@@ -167,7 +187,7 @@ public class MainMenu {
 	private static void TH(String userName, Connector con) {
 		// TODO Auto-generated method stub
 		
-		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+		//BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		String choice = null;
 		
 		TH house = new TH();

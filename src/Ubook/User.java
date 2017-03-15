@@ -1,23 +1,21 @@
 package Ubook;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.sql.*;
 
 public class User {
-
+	//BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 	public String setUpUser(Statement stmt) {
 		// TODO Auto-generated method stub
 		int gottenResults = 0;
 		
-		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+		//BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		String sql = null;
 		System.out.println("Please put in your preffered user name");
 		String userName = null;
 		while(userName == null){
 			try {
-				userName = input.readLine();
+				userName = MainMenu.input.readLine();
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -42,7 +40,7 @@ public class User {
 		String password = null;
 		
 		try {
-			password = input.readLine();
+			password = MainMenu.input.readLine();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -52,7 +50,7 @@ public class User {
 		String name = null;
 		
 		try {
-			name = input.readLine();
+			name = MainMenu.input.readLine();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -62,7 +60,7 @@ public class User {
 		String address = null;
 		
 		try {
-			address = input.readLine();
+			address = MainMenu.input.readLine();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -72,7 +70,7 @@ public class User {
 		String phoneNumber = null;
 		
 		try {
-			phoneNumber = input.readLine();
+			phoneNumber = MainMenu.input.readLine();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -96,13 +94,13 @@ public class User {
 	}
 
 	public String loginUser(Statement stmt) {
-		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+		//BufferedReader MainMenu.input = new BufferedReader(new InputStreamReader(System.in));
 		
 		System.out.println("Please put in your user name");
 		String userName = null;
 		
 		try {
-			userName = input.readLine();
+			userName = MainMenu.input.readLine();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -112,7 +110,7 @@ public class User {
 		
 		String password = null;
 		try {
-			password = input.readLine();
+			password = MainMenu.input.readLine();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
