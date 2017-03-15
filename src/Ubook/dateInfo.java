@@ -113,9 +113,87 @@ public class dateInfo {
 			e.printStackTrace();
 		}
 		
+		String choice = null;
 		String fromDate = null;
 		String toDate = null;
 		String priceNight = null;
+		
+		System.out.println("Select the new from date. Put in the format 'YYYY-MM-DD'. Leave blank to keep the same.");
+		
+		try {
+			choice = input.readLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(!choice.isEmpty()){
+			fromDate = choice;
+		}
+		
+		System.out.println("Select the new end date. Put in the format 'YYYY-MM-DD'. Leave blank to keep the same.");
+		
+		try {
+			choice = input.readLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(!choice.isEmpty()){
+			toDate = choice;
+		}
+		
+		System.out.println("Select the new price per night. Put in dollar amount. Leave blank to keep the same.");
+		
+		try {
+			choice = input.readLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(!choice.isEmpty()){
+			priceNight = choice;
+		}
+		
+		System.out.println("The new availability and price will be:");
+		System.out.println("Period ID: "+pid+", House ID: "+houseID+", From Date: " + fromDate + ", To Date: " + toDate + 
+				", Price per Night: " + priceNight);
+		System.out.println("Do you want to keep these changes?  (Y/N)");
+		
+		choice = null;
+		boolean changed = false;
+		try{
+			choice = input.readLine();
+		}
+		catch(IOException e){
+			
+		}
+		
+		if(choice.equals("y") || choice.equals("Y")){
+			changed = true;
+		}
+		
+		if(changed){
+			String sql = "UPDATE Available SET priceNight = '" + priceNight + "' WHERE hid = '" +houseID + "', pid = '" + pid+"';" ;
+			
+			try {
+				stmt.executeUpdate(sql);
+				sql = "UPDATE Period SET fromDate = '" + fromDate + "', toDate = '" +toDate+"' WHERE pid = '" + pid+"';" ;
+				try{
+					stmt.executeUpdate(sql);
+				}
+				catch(SQLException e1){
+					e1.printStackTrace();
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+		}
 	}
 
 	public void removeAvailability(String houseID, Statement stmt) {
@@ -141,8 +219,8 @@ public class dateInfo {
 				try{
 					rs2 = stmt.executeQuery(sql2);
 					while(rs2.next()){
-						System.out.println("Period ID: "+pid+", House ID: "+houseID+", From Date: " + rs2.getDate("fromDate").toString() + ", To Date: " + rs2.getDate("toDate") + 
-								", Price per Night: " + priceNight);
+						System.out.println("Period ID: "+pid+", House ID: "+houseID+", From Date: " + rs2.getDate("fromDate").toString() + ", To Date: " 
+								+ rs2.getDate("toDate").toString() +	", Price per Night: " + priceNight);
 					}
 				}
 				catch(SQLException e1){
