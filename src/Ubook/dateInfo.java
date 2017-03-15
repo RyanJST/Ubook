@@ -198,7 +198,50 @@ public class dateInfo {
 
 	public void removeAvailability(String houseID, Statement stmt) {
 		// TODO Auto-generated method stub
+		System.out.println("Here is a list of the availabilities you have on this house.");
+		showAvailability(houseID, stmt);
 		
+		System.out.println("Select which availability you wish to remove using the period ID.");
+		
+		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+		
+		
+		String pid = null;
+		
+		try {
+			pid = input.readLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		System.out.println("This will remove the availability of " + pid+ "Do you want to continue?");
+		
+		String choice = null;
+		boolean changed = false;
+		try{
+			choice = input.readLine();
+		}
+		catch(IOException e){
+			
+		}
+		
+		if(choice.equals("y") || choice.equals("Y")){
+			changed = true;
+		}
+		
+		if(changed){
+			String sql = "DELETE FROM Available WHERE hid = '" +houseID + "', pid = '" + pid+"';" ;
+			
+			try {
+				stmt.executeUpdate(sql);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+		}
 	}
 	
 	public void showAvailability(String houseID, Statement stmt){
