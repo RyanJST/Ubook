@@ -96,11 +96,66 @@ public class dateInfo {
 	public void changeAvailability(String houseID, Statement stmt) {
 		// TODO Auto-generated method stub
 		
+		System.out.println("Here is a list of the availabilities you have on this house.");
+		showAvailability(houseID, stmt);
+		
+		System.out.println("Select which availability you wish to update using the period ID.");
+		
+		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+		
+		
+		String pid = null;
+		
+		try {
+			pid = input.readLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		String fromDate = null;
+		String toDate = null;
+		String priceNight = null;
 	}
 
 	public void removeAvailability(String houseID, Statement stmt) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public void showAvailability(String houseID, Statement stmt){
+		String sql = "SELECT pid, priceNight FROM Available WHERE hid = '" + houseID + "';";
+		
+		ResultSet rs = null;
+		ResultSet rs2 = null;
+		String pid = null;
+		String priceNight = null;
+		try {
+			rs = stmt.executeQuery(sql);
+			while(rs.next()){
+				pid = rs.getString("pid");
+				priceNight = rs.getString("priceNight");
+				
+				String sql2 = "SELECT fromDate,toDate FROM Period WHERE pid = '" + pid + "';";
+				
+				try{
+					rs2 = stmt.executeQuery(sql2);
+					while(rs2.next()){
+						System.out.println("Period ID: "+pid+", House ID: "+houseID+", From Date: " + rs2.getDate("fromDate").toString() + ", To Date: " + rs2.getDate("toDate") + 
+								", Price per Night: " + priceNight);
+					}
+				}
+				catch(SQLException e1){
+					e1.printStackTrace();
+				}
+				//System.out.println("House ID: " + rs.getString("hid") +",   House Name: " + rs.getString("name") );
+					
+				}
+			
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
 	}
 
 }

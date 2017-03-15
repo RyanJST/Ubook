@@ -231,6 +231,11 @@ public class TH {
 		String phoneNumber = null;
 		String yearBuilt = null;
 		int result = 0;
+		
+		System.out.println("Here is a list of the houses you own.");
+		listOwnedHouses(userName, stmt);
+		
+		System.out.println("Select which house you wish to update");
 		houseID = verifyHouseID(userName, stmt);
 	
 			
@@ -379,6 +384,12 @@ public class TH {
 	
 	public void updateAvailability(String userName, Statement stmt) {
 		// TODO Auto-generated method stub
+		
+		
+		System.out.println("Here is a list of the houses you own.");
+		listOwnedHouses(userName, stmt);
+		
+		System.out.println("Select which house you wish to do availability operations on.");
 		String houseID = verifyHouseID(userName, stmt);
 		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		while(houseID != null){

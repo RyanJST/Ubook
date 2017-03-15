@@ -76,6 +76,7 @@ public class MainMenu {
 			}
 			
 			System.out.println("Thank you for using UBook!  Have a great day!");
+			con.closeConnection();
 		}
 		
 		catch( Exception e){
