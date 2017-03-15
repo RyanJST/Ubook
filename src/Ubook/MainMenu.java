@@ -3,7 +3,7 @@ package Ubook;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+
 
 public class MainMenu {
 
@@ -176,6 +176,7 @@ public class MainMenu {
 			System.out.println("Please press 1 to register a new house");
 			System.out.println("Please press 2 to see the houses you have listed.");
 			System.out.println("Please press 3 to change information on a house you own.");
+			System.out.println("Please press 4 to set up/change the availability of a TH you own.");
 			System.out.println("Please press 99 to exit the temporary housing menu.");
 			
 			try {
@@ -191,6 +192,9 @@ public class MainMenu {
 					break;
 				case "3":
 					house.changeHouse(userName, con.stmt);
+					break;
+				case "4":
+					house.updateAvailability(userName, con.stmt);
 					break;
 				case "99":
 					finished = true;

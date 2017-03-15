@@ -12,16 +12,31 @@ public class User {
 		int gottenResults = 0;
 		
 		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-		
+		String sql = null;
 		System.out.println("Please put in your preffered user name");
 		String userName = null;
-		try {
-			userName = input.readLine();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
+		while(userName == null){
+			try {
+				userName = input.readLine();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			sql = "SELECT login FROM Users WHERE login = '" + userName + "';";
+			ResultSet rs = null;
+			try {
+				rs = stmt.executeQuery(sql);
+					if(rs.isBeforeFirst()){
+						System.out.println("That username has already been taken.  Please select a different one.\n");
+					}
+				}
+			
+			catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();	
+				}
+			}
 
 		System.out.println("Please put in your password");
 		String password = null;
@@ -63,7 +78,7 @@ public class User {
 			e1.printStackTrace();
 		}
 
-		String sql = "INSERT INTO Users (login, name, password, address, phoneNumber)"
+		sql = "INSERT INTO Users (login, name, password, address, phoneNumber)"
 				+ " VALUES( '" + userName + "', '" + name+"','" + password + "', '" + address+"','" + phoneNumber + "')";
 		try{
    		 	gottenResults=stmt.executeUpdate(sql);		     
@@ -124,7 +139,7 @@ public class User {
 		return userName;
 	}
 
-	public void setOwner(String userName, Statement stmt) {
+	public void setAdmin(String userName, Statement stmt) {
 		// TODO Auto-generated method stub
 		
 		String sql = "UPDATE Users Set userType = '1' WHERE login = '" + userName + "' AND userType = '0';";
