@@ -519,9 +519,12 @@ public class TH {
 		System.out.println("\n");
 		System.out.println("Select which house you wish to view/update/create keywords for.");
 		houseID = verifyHouseID(userName, stmt);
-		Keyword keys = new Keyword();
 		
-		keys.setUp(houseID);
+		if(houseID != null){
+			Keyword keys = new Keyword();
+			
+			keys.setUp(houseID, stmt);
+		}
 	}
 
 

@@ -142,7 +142,7 @@ public class MainMenu {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				if(choice.equals("y") || choice.equals("Y")){
+				if(!choice.toLowerCase().equals("y")){
 					result = true;
 					
 				}
@@ -170,12 +170,13 @@ public class MainMenu {
 						+ "Do you want to try again?(Y/N) ");
 				
 				try {
-					if(input.readLine().equals("y") || input.readLine().equals("Y")){
+					String choice = input.readLine();
+					if(!choice.toLowerCase().equals("y")){
 						result = true;
 						
 					}
 					else{
-						name = loginUser.setUpUser(con.stmt);
+						name = loginUser.loginUser(con.stmt);
 					}
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
