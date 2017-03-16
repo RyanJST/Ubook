@@ -106,10 +106,10 @@ public class MainMenu {
 		switch(choice){
 
 			case"1":
-				BRTH.browseTHs(userName, con.stmt);
+				shopping.browseTHs(userName, con.stmt);
 				break;
 			case"2":
-				BRTH.reserveTHs(userName, con.stmt);
+				shopping.reserveTHs(userName, con.stmt);
 				break;
 			case"3":
 				done = false;
@@ -196,7 +196,21 @@ public class MainMenu {
 		
 		while(!finished){
 			System.out.println("Please press 1 to register a new favorite TH you like to stay at.");
+			System.out.println("Please press 2 to view/change your profile");
+			System.out.println("");
+			try {
+				choice = input.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
+			switch(choice){
+			case"1":
+				break;
+			case"2":
+				break;
+			}
 		}
 	}
 	
