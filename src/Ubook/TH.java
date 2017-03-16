@@ -274,6 +274,7 @@ public class TH {
 		System.out.println("Here is a list of the houses you own.");
 		listOwnedHouses(userName, stmt);
 		
+		System.out.println("\n");
 		System.out.println("Select which house you wish to update");
 		houseID = verifyHouseID(userName, stmt);
 	
@@ -506,6 +507,21 @@ public class TH {
 		
 		
 		
+	}
+
+	public void keywords(String userName, Statement stmt) {
+		// TODO Auto-generated method stub
+		
+		String houseID =null;
+		System.out.println("Here is a list of the houses you own.");
+		listOwnedHouses(userName, stmt);
+		
+		System.out.println("\n");
+		System.out.println("Select which house you wish to view/update/create keywords for.");
+		houseID = verifyHouseID(userName, stmt);
+		Keyword keys = new Keyword();
+		
+		keys.setUp(houseID);
 	}
 
 
