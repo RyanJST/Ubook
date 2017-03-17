@@ -66,6 +66,7 @@ public class MainMenu {
 						break;		
 					case"3":
 						browseReserve(userName, con);
+						break;
 					case"99":
 						signedDone = true;
 						break;
@@ -116,6 +117,15 @@ public class MainMenu {
 				break;
 			default:
 					break;
+		}
+		System.out.println("Press 1 to browse temporary houses");
+		System.out.println("Press 2 to reserve a temporary house");
+		System.out.println("Press 3 to exit");
+		try {
+			choice = input.readLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		}
 	}
