@@ -84,7 +84,7 @@ public class TH {
 			
 			String address = null;
 			while(address == null){
-				System.out.println("Please set the address of your new temporary housing.");
+				System.out.println("Please set the street address of your new temporary housing.");
 				
 				try {
 					address = MainMenu.input.readLine();
@@ -94,7 +94,39 @@ public class TH {
 				}
 				
 				if(address == null || address.isEmpty()){
-					System.out.println("You need to put in the address of your temporary housing.  Please try again.");
+					System.out.println("You need to put in the street address of your temporary housing.  Please try again.");
+				}
+			}
+			
+			String city = null;
+			while(city == null){
+				System.out.println("Please set the city of your new temporary housing.");
+				
+				try {
+					city = MainMenu.input.readLine();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				if(city == null || city.isEmpty()){
+					System.out.println("You need to put in the city of your temporary housing.  Please try again.");
+				}
+			}
+			
+			String state = null;
+			while(state == null){
+				System.out.println("Please set the state of your new temporary housing as a two letter abbreviation.");
+				
+				try {
+					state = MainMenu.input.readLine();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				if(state == null || state.length() != 2){
+					System.out.println("You need to put in the state of your temporary housing as a two letter abbreviation.  Please try again.");
 				}
 			}
 			String phoneNumber = null;
@@ -162,8 +194,8 @@ public class TH {
 			
 			System.out.println("This is what the new house listing will look like. \n");
 			
-			System.out.println("House Name: " + houseName + ",   Address: " + address +",   House category: " + category +
-					",   House URL: " + URL +",   House Year Built: " + yearBuilt + "\n");
+			System.out.println("House Name: " + houseName + ",   Street Address: " + address +", City: " +city+", State: "
+					+state+ "  House category: " + category +",   House URL: " + URL +",   House Year Built: " + yearBuilt + "\n");
 			
 			System.out.println("Do you want to keep these changes?  (Y/N)");
 			String choice = null;
@@ -181,9 +213,9 @@ public class TH {
 			
 			if(changed){
 				System.out.println("Registering House");
-				String sql = "INSERT INTO TH (category, name, address, URL, phoneNumber, yearBuilt, login)"
+				String sql = "INSERT INTO TH (category, name, address, URL, phoneNumber, yearBuilt, login, city, state)"
 						+ " VALUES( '" + category + "', '" + houseName+"','" + address + "', '" + URL+"','" + phoneNumber + "',"
-								+ "'" + yearBuilt + "','" + userName + "')";
+								+ "'" + yearBuilt + "','" + userName + "','" + city + "','" + state + "')";
 				try{
 		   		    stmt.executeUpdate(sql);		    
 		   		    System.out.println("Your new house was registered! \n");
@@ -235,11 +267,14 @@ public class TH {
 		String URL = null;
 		String phoneNumber = null;
 		String yearBuilt = null;
+		String city = null;
+		String state = null;
 		int result = 0;
 		
 		System.out.println("Here is a list of the houses you own.");
 		listOwnedHouses(userName, stmt);
 		
+		System.out.println("\n");
 		System.out.println("Select which house you wish to update");
 		houseID = verifyHouseID(userName, stmt);
 	
@@ -258,10 +293,12 @@ public class TH {
 					while(rs.next()){
 						name = rs.getString("name");
 						category = rs.getString("category");
-						address = rs.getString("address");;
-						URL = rs.getString("URL");;
-						phoneNumber = rs.getString("phoneNumber");;
-						yearBuilt = rs.getString("yearBuilt");;
+						address = rs.getString("address");
+						URL = rs.getString("URL");
+						phoneNumber = rs.getString("phoneNumber");
+						yearBuilt = rs.getString("yearBuilt");
+						city = rs.getString("city");
+						state = rs.getString("state");
 					}
 				}
 			
@@ -282,6 +319,7 @@ public class TH {
 			
 			if(!choice.isEmpty()){
 				name = choice;
+				choice = null;
 			}
 			
 			System.out.println("Please select what you want the new category to be, leave blank to keep the category the same.");
@@ -295,9 +333,10 @@ public class TH {
 			
 			if(!choice.isEmpty()){
 				category = choice;
+				choice = null;
 			}
 			
-			System.out.println("Please select what you want the new address to be, leave blank to keep the address the same.");
+			System.out.println("Please select what you want the new street address to be, leave blank to keep the address the same.");
 			
 			try {
 				choice = MainMenu.input.readLine();
@@ -308,6 +347,36 @@ public class TH {
 			
 			if(!choice.isEmpty()){
 				address = choice;
+				choice = null;
+			}
+			
+			System.out.println("Please select what you want the new city to be, leave blank to keep the city the same.");
+			
+			try {
+				choice = MainMenu.input.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			if(!choice.isEmpty()){
+				city = choice;
+				choice = null;
+			}			
+			
+			System.out.println("Please select what you want the new state to be, leave blank to keep the state the same.");
+			
+			try {
+				choice = MainMenu.input.readLine();
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			if(!choice.isEmpty()){
+				state = choice;
+				choice = null;
 			}
 			
 			System.out.println("Please select what you want the new URL to be, leave blank to keep the URL the same.");
@@ -321,6 +390,7 @@ public class TH {
 			
 			if(!choice.isEmpty()){
 				URL = choice;
+				choice = null;
 			}
 			
 			System.out.println("Please select what you want the new phone number to be, leave blank to keep the phone number the same.");
@@ -334,8 +404,8 @@ public class TH {
 				
 				if(!choice.isEmpty()){
 					phoneNumber = choice;
-
-			}
+					choice = null;
+				}
 			
 			
 
@@ -350,14 +420,15 @@ public class TH {
 				
 				if(!choice.isEmpty()){
 					yearBuilt = choice;
+					choice = null;
 				}
 			System.out.println("This is what the changed house listing will look like. \n");
 			
-			System.out.println("House ID: " + houseID +",   House Name: " + name + ",   Address: " + address +",   House category: " + category +
-					",   House URL: " + URL +",   House Year Built: " + yearBuilt + "\n");
+			System.out.println("House Name: " + name + ",   Street Address: " + address +", City: " +city+", State: "
+					+state+ "  House category: " + category +",   House URL: " + URL +",   House Year Built: " + yearBuilt + "\n");
 			
 			System.out.println("Do you want to keep these changes?  (Y/N)");
-			
+			choice = null;
 			
 			try{
 				choice = MainMenu.input.readLine();
@@ -373,7 +444,7 @@ public class TH {
 		
 		if(changed){
 			sql = "UPDATE TH SET category = '" + category+ "',name = '" + name+ "',address = '" + address+ "',URL = '" + URL+ "',phoneNumber = '" + phoneNumber+ "',"
-					+ "yearBuilt = '" + yearBuilt+ "' WHERE hid = '" + houseID + "' AND login = '" + userName + "';";
+					+ "yearBuilt = '" + yearBuilt+ "', city = '"+city+"', state = '"+state+"' WHERE hid = '" + houseID + "' AND login = '" + userName + "';";
 			
 			
 			try {
@@ -436,6 +507,24 @@ public class TH {
 		
 		
 		
+	}
+
+	public void keywords(String userName, Statement stmt) {
+		// TODO Auto-generated method stub
+		
+		String houseID =null;
+		System.out.println("Here is a list of the houses you own.");
+		listOwnedHouses(userName, stmt);
+		
+		System.out.println("\n");
+		System.out.println("Select which house you wish to view/update/create keywords for.");
+		houseID = verifyHouseID(userName, stmt);
+		
+		if(houseID != null){
+			Keyword keys = new Keyword();
+			
+			keys.setUp(houseID, stmt);
+		}
 	}
 
 

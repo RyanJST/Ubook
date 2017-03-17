@@ -152,7 +152,7 @@ public class MainMenu {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				if(choice.equals("y") || choice.equals("Y")){
+				if(!choice.toLowerCase().equals("y")){
 					result = true;
 					
 				}
@@ -180,12 +180,13 @@ public class MainMenu {
 						+ "Do you want to try again?(Y/N) ");
 				
 				try {
-					if(input.readLine().equals("y") || input.readLine().equals("Y")){
+					String choice = input.readLine();
+					if(!choice.toLowerCase().equals("y")){
 						result = true;
 						
 					}
 					else{
-						name = loginUser.setUpUser(con.stmt);
+						name = loginUser.loginUser(con.stmt);
 					}
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -237,7 +238,8 @@ public class MainMenu {
 			System.out.println("Please press 1 to register a new house");
 			System.out.println("Please press 2 to see the houses you have listed.");
 			System.out.println("Please press 3 to change information on a house you own.");
-			System.out.println("Please press 4 to set up/change the availability of a TH you own.");
+			System.out.println("Please press 4 to view/create keywords for your THs.");
+			System.out.println("Please press 5 to set up/change the availability of a TH you own.");
 			System.out.println("Please press 99 to exit the temporary housing menu.");
 			
 			try {
@@ -255,6 +257,9 @@ public class MainMenu {
 					house.changeHouse(userName, con.stmt);
 					break;
 				case "4":
+					house.keywords(userName, con.stmt);
+					break;
+				case "5":
 					house.updateAvailability(userName, con.stmt);
 					break;
 				case "99":
