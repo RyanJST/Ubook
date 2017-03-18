@@ -91,19 +91,20 @@ public class MainMenu {
 	private static void browseReserve(String userName, Connector con) {
 		// TODO Auto-generated method stub
 		//BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-		System.out.println("Press 1 to browse temporary houses");
-		System.out.println("Press 2 to reserve a temporary house");
-		System.out.println("Press 3 to exit");
-		String choice = null;
-		try {
-			choice = input.readLine();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 		boolean done = false;
 		BRTH shopping = new BRTH();
 		while(!done){
+			System.out.println("Press 1 to browse temporary houses");
+			System.out.println("Press 2 to reserve a temporary house");
+			System.out.println("Press 3 to exit");
+			String choice = null;
+			try {
+				choice = input.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		switch(choice){
 
 			case"1":
@@ -118,15 +119,7 @@ public class MainMenu {
 			default:
 					break;
 		}
-		System.out.println("Press 1 to browse temporary houses");
-		System.out.println("Press 2 to reserve a temporary house");
-		System.out.println("Press 3 to exit");
-		try {
-			choice = input.readLine();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 		}
 	}
 

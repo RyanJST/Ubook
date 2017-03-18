@@ -279,39 +279,19 @@ public class dateInfo {
 	}
 
 	public void showAvailability(String houseID, Statement stmt){
-		String sql = "SELECT pid, priceNight FROM Available WHERE hid = '" + houseID + "';";
-		
+		String sql = "SELECT A.pid, A.priceNight, P.fromDate, P.toDate FROM Available A, Period P WHERE A.hid = '"+houseID+"' AND P.pid = A.pid ;";
 		ResultSet rs = null;
-		ResultSet rs2 = null;
-		List<String> pid = new ArrayList<String>();
-		List<String>priceNight = new ArrayList<String>();
 		
 		try {
 			rs = stmt.executeQuery(sql);
 			while(rs.next()){
-				pid.add(rs.getString("pid"));
-				priceNight.add(rs.getString("priceNight"));
-				
-				
-				//System.out.println("House ID: " + rs.getString("hid") +",   House Name: " + rs.getString("name") );
-					
+				System.out.println("Period ID: "+rs.getString("A.pid")+", House ID: "+houseID+", From Date: " + rs.getDate("P.fromDate").toString() + ", To Date: " 
+						+ rs.getDate("P.toDate").toString() +	", Price per Night: " + rs.getString("A.priceNight"));
 				}
-			for(int i = 0; i < pid.size(); i++){
-				String sql2 = "SELECT fromDate,toDate FROM Period WHERE pid = '" + pid.get(i) + "';";
 				
-				try{
-					rs2 = stmt.executeQuery(sql2);
-					while(rs2.next()){
-						System.out.println("Period ID: "+pid.get(i)+", House ID: "+houseID+", From Date: " + rs2.getDate("fromDate").toString() + ", To Date: " 
-								+ rs2.getDate("toDate").toString() +	", Price per Night: " + priceNight.get(i));
-					}
-				}
-				catch(SQLException e1){
-					e1.printStackTrace();
-				}
 			}
 			
-		}
+		
 		catch(SQLException e){
 			e.printStackTrace();
 		}

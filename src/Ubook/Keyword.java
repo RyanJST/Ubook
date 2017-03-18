@@ -228,33 +228,16 @@ public class Keyword {
 	}
 
 	private void viewKeyWords(String ID, Statement stmt) {
-		// TODO Auto-generated method stub
-		String sql = "SELECT wid FROM HasKeywords WHERE hid = '" + ID + "';";
-		String sql2 = null;
+		String sql = "SELECT H.wid, K.word, K.language FROM HasKeywords H, Keywords K WHERE H.wid = K.wid AND H.hid = '" + ID + "';";
 		ResultSet rs = null;
-		ResultSet rs2 = null;
-		List<String> wids = new ArrayList<String>();
 		try {
 			rs = stmt.executeQuery(sql);
 
 				while(rs.next()){
-					wids.add(rs.getString(1));
+					
+					System.out.println("House ID: "+ID+", Keyword ID: "+rs.getString("wid")+", keyword: " +rs.getString("word")+", Language: "+rs.getString("language"));
 					
 					}
-				for(int i = 0; i < wids.size(); i++){
-					sql2 = "Select word, language from Keywords WHERE wid = '"+wids.get(i)+"';";
-					try{
-						rs2 = stmt.executeQuery(sql2);
-					
-						while(rs2.next()){
-							System.out.println("House ID: "+ID+", Keyword ID: "+wids.get(i)+", keyword: " +rs2.getString(1)+", Language: "+rs2.getString(2));
-							
-						}
-					}
-					catch(SQLException e){
-						e.printStackTrace();
-					}
-				}
 			}
 			catch(SQLException e){
 				e.printStackTrace();
