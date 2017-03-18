@@ -67,6 +67,9 @@ public class MainMenu {
 					case"3":
 						browseReserve(userName, con);
 						break;
+					case"5":
+						feedback(userName, con);
+						break;
 					case"99":
 						signedDone = true;
 						break;
@@ -85,6 +88,58 @@ public class MainMenu {
 		
 		catch( Exception e){
 			e.printStackTrace();
+		}
+	}
+
+	private static void feedback(String userName, Connector con) {
+		// TODO Auto-generated method stub
+		Feedback createdFeedback = new Feedback();
+		
+		boolean done = false;
+		String choice = null;
+		while(!done){
+			choice = null;
+			System.out.println("Press 1 to create feedback for a TH you stayed at.");
+			System.out.println("Press 2 to create feedback for a feedback on a TH.");
+			System.out.println("Press 3 to create a trusted review on another User.");
+			System.out.println("Press 4 to see the trusted level of a User.");
+			System.out.println("Press 5 to exit");
+			
+			try{
+				choice = input.readLine();
+			}
+			catch(IOException e){
+				e.printStackTrace();
+			}
+			switch(choice){
+			case "1":
+				createdFeedback.thReview(userName,con.stmt);
+				break;
+			case"2":
+				createdFeedback.reviewFeedback(userName, con.stmt);
+				break;		
+			case"3":
+				createdFeedback.reviewUsers(userName, con.stmt);
+				break;
+			case"4":
+				String reviewUser = null;
+				System.out.println("Put in the user name of the user you wish to see the trusted level of.");
+				try{
+					reviewUser = input.readLine();
+				}
+				catch(IOException e1){
+					e1.printStackTrace();
+				}
+				System.out.println("The trusted level is: " + Integer.toString(createdFeedback.viewUserFeedback(reviewUser, con.stmt)));
+				break;
+			case"5":
+				done = true;
+				break;
+			default:
+				System.out.println("That is not a valid option, please try again");
+				break;
+			}
+			
 		}
 	}
 

@@ -10,10 +10,6 @@ import java.util.List;
 public class dateInfo {
 	
 	public void createAvailability(String houseID, Statement stmt) {
-		// TODO Auto-generated method stub
-		
-		
-		//BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		String startDate = null;
 		String endDate = null;
 		String priceNight = null;
@@ -32,7 +28,6 @@ public class dateInfo {
 		try {
 			endDate = MainMenu.input.readLine();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -60,7 +55,7 @@ public class dateInfo {
 			
 		}
 		
-		if(choice.equals("y") || choice.equals("Y")){
+		if(choice.toLowerCase().equals("y")){
 			changed = true;
 		}
 		
@@ -182,30 +177,12 @@ public class dateInfo {
 			
 		}
 		
-		if(choice.equals("y") || choice.equals("Y")){
+		if(choice.toLowerCase().equals("y")){
 			changed = true;
 		}
 		
 		if(changed){
 			createChangeAvailability(houseID, stmt, pid, fromDate, toDate, priceNight);
-			
-			/*String sql = "UPDATE Available SET priceNight = '" + priceNight + "' WHERE hid = '" +houseID + "', pid = '" + pid+"';" ;
-			
-			try {
-				stmt.executeUpdate(sql);
-				sql = "UPDATE Period SET fromDate = '" + fromDate + "', toDate = '" +toDate+"' WHERE pid = '" + pid+"';" ;
-				try{
-					stmt.executeUpdate(sql);
-				}
-				catch(SQLException e1){
-					e1.printStackTrace();
-				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			*/
-			
 		}
 	}
 
@@ -239,7 +216,7 @@ public class dateInfo {
 			
 		}
 		
-		if(choice.equals("y") || choice.equals("Y")){
+		if(choice.toLowerCase().equals("y") ){
 			changed = true;
 		}
 		
