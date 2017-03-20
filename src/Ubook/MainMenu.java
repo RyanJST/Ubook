@@ -252,11 +252,11 @@ public class MainMenu {
 		String choice = null;
 		
 		boolean finished = false;
-		
+		User userItem = new User();
 		while(!finished){
 			System.out.println("Please press 1 to register a new favorite TH you like to stay at.");
 			System.out.println("Please press 2 to view/change your profile");
-			System.out.println("");
+			System.out.println("Please press 3 to exit the user settings menu");
 			try {
 				choice = input.readLine();
 			} catch (IOException e) {
@@ -266,8 +266,13 @@ public class MainMenu {
 			
 			switch(choice){
 			case"1":
+				userItem.setFavoriteTH(userName, con.stmt);
 				break;
 			case"2":
+				userItem.setViewProfile(userName, con.stmt);
+				break;
+			case"3":
+				finished = true;
 				break;
 			}
 		}

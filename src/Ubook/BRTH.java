@@ -4,12 +4,26 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BRTH {
 
 	public void browseTHs(String userName, Statement stmt) {
 		// TODO Auto-generated method stub
+		System.out.println("Here is where you set your filters and browse available THs.");
 		
+		boolean done = true;
+		String startPrice = null;
+		String endPrice = null;
+		String city = null;
+		String state = null;
+		String category = null;
+		List<String> keywords = new ArrayList<String>();
+		
+		while(!done){
+			
+		}
 	}
 
 	public void reserveTHs(String userName, Statement stmt) {

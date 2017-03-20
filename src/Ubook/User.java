@@ -150,4 +150,131 @@ public class User {
 		}
 	}
 
+	public void setFavoriteTH(String userName, Statement stmt) {
+		// TODO Auto-generated method stub
+		boolean done = false;
+		String choice = null;
+		String sql = null;
+		ResultSet rs = null; 
+		boolean haveFavorite = false;
+		while(!done){
+			
+			haveFavorite = viewFavoriteTH(userName, stmt);
+			
+			System.out.println("Here is the list of THs you have stayed at.");
+			
+			//Show Houses user has stayed at.
+			
+			System.out.println("Do you wish to register a new favorite or remove your current favorite?(Y/N)");
+			
+			try {
+				choice = MainMenu.input.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			if(!choice.toLowerCase().equals("y")){
+				done = true;
+				
+			}
+			else{
+				java.util.Date dt = new java.util.Date();
+				
+				java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+				String currentTime = sdf.format(dt);
+				System.out.println("What house ID do you wish to register as your favorite?  Leave blank to remove/not register a favorite.");
+				
+				try {
+					choice = MainMenu.input.readLine();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				String output = null;
+				
+				if(choice.isEmpty()){
+					sql = "DELETE FROM Favorites WHERE login = '" + userName + "';";
+					output = "You will have no favorite after this.";
+				}
+				else{
+					if(haveFavorite){
+						sql = "UPDATE Favorites SET hid = '" +choice+ "', fvdate = '"+currentTime+"' WHERE login = '" + userName + "';";
+					}
+					else{
+						sql = "INSERT INTO Favorites(hid, fvdate, login) VALUES('" +choice + "','"+currentTime+"', '"+userName+"');";
+					}
+					
+					output = "Your new Favorite will be, House ID: " + choice + ", Favorite Date: "+currentTime;
+				}
+				
+				
+				System.out.println(output);
+				System.out.println("Do you wish to keep this change?  (Y/N)");
+				
+				try {
+					choice = MainMenu.input.readLine();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				if(choice.toLowerCase().equals("y")){
+					try {
+						stmt.executeUpdate(sql);
+						System.out.println("Your Favorite has been updated!");
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+
+			}
+			
+			System.out.println("Do you wish to change/remove your favorite again? (Y/N)");
+			try {
+				choice = MainMenu.input.readLine();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			if(!choice.toLowerCase().equals("y")){
+				done = true;
+			}
+			
+		}
+		System.out.println("Exitting the Favorite TH menu.");
+		
+	}
+
+	public boolean viewFavoriteTH(String userName, Statement stmt){
+		ResultSet rs = null;
+		boolean haveFavorite = false;
+		String sql = "Select F.hid, T.name FROM Favorites F, TH T WHERE F.login = '"+userName+"' AND F.hid = T.hid";
+		
+		try {
+			rs = stmt.executeQuery(sql);
+			if(!rs.isBeforeFirst()){
+				System.out.println("You do not have a favorite house currently selected.");
+			}
+			else{
+				while(rs.next()){
+					System.out.println("Your current favorite place to stay is:");
+					System.out.println("House ID: "+ rs.getString("F.hid") + ", House name: " + rs.getString("T.name"));
+					haveFavorite = true;
+				}
+			}
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return haveFavorite;
+	}
+	public void setViewProfile(String userName, Statement stmt) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
