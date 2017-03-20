@@ -156,10 +156,10 @@ public class User {
 		String choice = null;
 		String sql = null;
 		ResultSet rs = null; 
-		boolean haveFavorite = false;
+		int haveFavorite = -1;
 		while(!done){
 			
-			haveFavorite = viewFavoriteTH(userName, stmt);
+			haveFavorite = viewFavoriteTH(userName, stmt, true);
 			
 			System.out.println("Here is the list of THs you have stayed at.");
 			
@@ -199,7 +199,7 @@ public class User {
 					output = "You will have no favorite after this.";
 				}
 				else{
-					if(haveFavorite){
+					if(haveFavorite != -1){
 						sql = "UPDATE Favorites SET hid = '" +choice+ "', fvdate = '"+currentTime+"' WHERE login = '" + userName + "';";
 					}
 					else{
@@ -249,9 +249,9 @@ public class User {
 		
 	}
 
-	public boolean viewFavoriteTH(String userName, Statement stmt){
+	public int viewFavoriteTH(String userName, Statement stmt, boolean viewResult){
 		ResultSet rs = null;
-		boolean haveFavorite = false;
+		int haveFavorite = -1;
 		String sql = "Select F.hid, T.name FROM Favorites F, TH T WHERE F.login = '"+userName+"' AND F.hid = T.hid";
 		
 		try {
@@ -260,10 +260,12 @@ public class User {
 				System.out.println("You do not have a favorite house currently selected.");
 			}
 			else{
-				while(rs.next()){
-					System.out.println("Your current favorite place to stay is:");
-					System.out.println("House ID: "+ rs.getString("F.hid") + ", House name: " + rs.getString("T.name"));
-					haveFavorite = true;
+				if(viewResult){
+					while(rs.next()){
+						System.out.println("Your current favorite place to stay is:");
+						System.out.println("House ID: "+ rs.getString("F.hid") + ", House name: " + rs.getString("T.name"));
+						haveFavorite = rs.getInt("F.hid");
+					}
 				}
 			}
 		} catch (SQLException e1) {

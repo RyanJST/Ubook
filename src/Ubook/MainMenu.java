@@ -93,8 +93,8 @@ public class MainMenu {
 
 	private static void feedback(String userName, Connector con) {
 		// TODO Auto-generated method stub
-		Feedback createdFeedback = new Feedback();
-		
+		UserFeedback createdFeedback = new UserFeedback();
+		THFeedback THReview = new THFeedback();
 		boolean done = false;
 		String choice = null;
 		while(!done){
@@ -113,10 +113,10 @@ public class MainMenu {
 			}
 			switch(choice){
 			case "1":
-				createdFeedback.thReview(userName,con.stmt);
+				THReview.thReview(userName,con.stmt);
 				break;
 			case"2":
-				createdFeedback.reviewFeedback(userName, con.stmt);
+				THReview.reviewFeedback(userName, con.stmt);
 				break;		
 			case"3":
 				createdFeedback.reviewUsers(userName, con.stmt);

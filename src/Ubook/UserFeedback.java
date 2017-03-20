@@ -5,17 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Feedback {
-
-	public void thReview(String userName, Statement stmt) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void reviewFeedback(String userName, Statement stmt) {
-		// TODO Auto-generated method stub
-		
-	}
+public class UserFeedback {
 
 	public void reviewUsers(String userName, Statement stmt) {
 		// TODO Auto-generated method stub
