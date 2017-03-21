@@ -426,8 +426,18 @@ public class MainMenu {
 			}
 		}
 		shopping.printSelected(con.stmt, reserves);
-		for(Reserve r: reserves) {
-			shopping.insertReserve(userName, r, con.stmt);
+		System.out.println("Confirm reservations?(y/n)");
+		String response = "";
+		try {
+			response = input.readLine().toLowerCase();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(response.charAt(0) == 'y') {
+			for(Reserve r: reserves) {
+				shopping.insertReserve(userName, r, con.stmt);
+			}
 		}
 	}
 }
