@@ -188,7 +188,7 @@ public class MainMenu {
 				shopping.browseTHs(userName, con.stmt);
 				break;
 			case"2":
-				shopping.reserveTHs(userName, con.stmt);
+				reserveTHs(userName, con, shopping);
 				break;
 			case"3":
 				done = true;
@@ -355,7 +355,6 @@ public class MainMenu {
 	private static void recordStay(String userName, Connector con) {
 		Stay stay = new Stay();
 		boolean finished = false;
-		//List pids = new ArrayList();
 		List<String> pids = new ArrayList<String>();
 		while(!finished) {
 			stay.showReservations(userName, con.stmt, pids);
@@ -393,6 +392,42 @@ public class MainMenu {
 			for(String pid: pids) {
 				stay.recordStay(userName, con.stmt, pid);
 			}
+		}
+	}
+	
+	private static void reserveTHs(String userName, Connector con, BRTH shopping) {
+		boolean finished = false;
+		List<Reserve> reserves = new ArrayList<Reserve>();
+		while(!finished) {
+			try{
+				shopping.showTHs(con.stmt);
+				System.out.println("Enter 'e' at any time to exit.");
+				System.out.println("Select House ID of desired house:");
+				String hid = input.readLine();
+				if (hid.charAt(0) == 'e') return;
+				if (shopping.showTHAvails(hid, con.stmt)){
+					System.out.println("Enter the date you would like to would like to start your stay (Format YYYY-MM-DD):");
+					String from = MainMenu.input.readLine();
+					if(from.charAt(0) == 'e') return;
+					System.out.println("Enter the date you would like to end your stay (Format YYYY-MM-DD):");
+					String to = MainMenu.input.readLine();
+					if(to.charAt(0) == 'e') return;
+					Reserve r = new Reserve(hid, from, to);
+					reserves.add(r);
+				}
+				System.out.println("Would you like to reserve another stay?(y/n)");
+				String response = input.readLine();
+				if(response.charAt(0) == 'n') {
+					finished = true;
+				}
+			}
+			catch (IOException e) {
+				
+			}
+		}
+		shopping.printSelected(con.stmt, reserves);
+		for(Reserve r: reserves) {
+			shopping.insertReserve(userName, r, con.stmt);
 		}
 	}
 }
