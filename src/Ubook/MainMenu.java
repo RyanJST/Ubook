@@ -3,7 +3,7 @@ package Ubook;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
+import java.util.*;
 
 public class MainMenu {
 
@@ -66,6 +66,9 @@ public class MainMenu {
 						break;		
 					case"3":
 						browseReserve(userName, con);
+						break;
+					case"4":
+						recordStay(userName, con);
 						break;
 					case"5":
 						feedback(userName, con);
@@ -188,7 +191,7 @@ public class MainMenu {
 				shopping.reserveTHs(userName, con.stmt);
 				break;
 			case"3":
-				done = false;
+				done = true;
 				break;
 			default:
 					break;
@@ -347,5 +350,49 @@ public class MainMenu {
 			}
 		}
 		
+	}
+	
+	private static void recordStay(String userName, Connector con) {
+		Stay stay = new Stay();
+		boolean finished = false;
+		//List pids = new ArrayList();
+		List<String> pids = new ArrayList<String>();
+		while(!finished) {
+			stay.showReservations(userName, con.stmt, pids);
+			System.out.println("Enter the id of the reservation you would like to record your stay for:");
+			String pid = "";
+			try {
+				pid = input.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			pids.add(pid);
+			System.out.println("Would you like to record another stay?(y/n)");
+			String response = "";
+			try {
+				response = input.readLine().toLowerCase();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (response.charAt(0) == 'n') {
+				finished = true;
+			}
+		}
+		stay.printSelected(userName, con.stmt, pids);
+		System.out.println("Confirm these stay records?(y/n)");
+		String response = "";
+		try {
+			response = input.readLine().toLowerCase();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (response.charAt(0) == 'y') {
+			for(String pid: pids) {
+				stay.recordStay(userName, con.stmt, pid);
+			}
+		}
 	}
 }
