@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class THFeedback {
 	public void thReview(String userName, Statement stmt, String TH) {
@@ -122,7 +124,7 @@ public class THFeedback {
 		}
 	}
 	
-	public void viewUsefulFeedback(String feedbackID, String amount, Statement stmt, String THID){
+	public void viewMostUsefulFeedback(String amount, Statement stmt, String THID){
 		
 		String sql = "SELECT F.fid, F.score, F.text, F.login, F.fbdate, AVG(R.rating) avg_score FROM Feedback F, Rates R "
 				+ "WHERE F.fid = R.fid AND F.hid = "+THID+" group by F.fid, F.score, F.text, F.login, F.fbdate"
@@ -137,6 +139,8 @@ public class THFeedback {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		List<reviewedFeedback> items = new ArrayList<reviewedFeedback>();
 		
 		System.out.println("Here are the top " + amount+ "feedbacks for this house.");
 		try {

@@ -103,11 +103,14 @@ public class MainMenu {
 		while(!done){
 			choice = null;
 			String result = null;
+			String numTotal = null;
 			System.out.println("Press 1 to create feedback for a TH you stayed at.");
 			System.out.println("Press 2 to create feedback for a feedback on a TH.");
 			System.out.println("Press 3 to create a trusted review on another User.");
 			System.out.println("Press 4 to see the trusted level of a User.");
-			System.out.println("Press 5 to exit");
+			System.out.println("Press 5 to see the most useful reviews of a TH.");
+			System.out.println("Press 6 to review a feedback on a TH");
+			System.out.println("Press 99 to exit");
 			
 			try{
 				choice = input.readLine();
@@ -155,6 +158,32 @@ public class MainMenu {
 				System.out.println("The trusted level is: " + Integer.toString(createdFeedback.viewUserFeedback(reviewUser, con.stmt)));
 				break;
 			case"5":
+				
+				System.out.println("What house do you wish to view the most useful feedbacks on?");
+				
+				try {
+					result = MainMenu.input.readLine();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				System.out.println("How many useful reviews do you wish to see?  E.G The 10 most useful reviews.");
+				
+				try {
+					numTotal = MainMenu.input.readLine();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				THReview.viewMostUsefulFeedback(numTotal, con.stmt, result);
+				
+				break;
+			case"6":
+				
+				break;
+			case"99":
 				done = true;
 				break;
 			default:
