@@ -121,6 +121,33 @@ public class THFeedback {
 			
 		}
 	}
+	
+	public void viewUsefulFeedback(String feedbackID, String amount, Statement stmt, String THID){
+		
+		String sql = "WITH results AS (SELECT F.fid, F.text, F.fbdate, F.score, F.login, AVG(R.rating) avgScore, DENSE_RANK() OVER "
+				+ "(ORDER BY AVG(R.rating) DESC) rn FROM Feedback F INNER JOIN Rates r ON F.fid = R.fid WHERE F.hid = '"+THID+"' GROUP BY F.fid) "
+				+ "SELECT fid, text, fbdate, score, login, avgScore FROM results WHERE rn <= '"+amount+"' ORDER BY avgScore DESC";
+		
+		ResultSet rs = null;
+		
+		try {
+			rs = stmt.executeQuery(sql);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		System.out.println("Here are the top " + amount+ "feedbacks for this house.");
+		try {
+			while(rs.next()){
+				System.out.println("Feedback ID: "+rs.getString("fid")+ ", TH Score: " +rs.getString("score")+ ", Feedback Text: "
+						+rs.getString("Text")+ ", TH Score: ");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	public void reviewFeedback(String userName, Statement stmt, String feedbackID) {
 		// TODO Auto-generated method stub
