@@ -99,6 +99,7 @@ public class MainMenu {
 		String choice = null;
 		while(!done){
 			choice = null;
+			String result = null;
 			System.out.println("Press 1 to create feedback for a TH you stayed at.");
 			System.out.println("Press 2 to create feedback for a feedback on a TH.");
 			System.out.println("Press 3 to create a trusted review on another User.");
@@ -112,11 +113,29 @@ public class MainMenu {
 				e.printStackTrace();
 			}
 			switch(choice){
+			
 			case "1":
-				THReview.thReview(userName,con.stmt);
+				System.out.println("Which house do you wish to leave feedback on?  NOTE:  You cannot review a house you own, nor a house you already reviewed, nor a house you haven't stayed at before.");
+				
+				try {
+					result = MainMenu.input.readLine();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				THReview.thReview(userName,con.stmt, result);
 				break;
 			case"2":
-				THReview.reviewFeedback(userName, con.stmt);
+				System.out.println("Which Feedback ID do you wish to leave feedback on?  NOTE:  You cannot review a feedback you made.");
+				
+				try {
+					result = MainMenu.input.readLine();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				THReview.reviewFeedback(userName, con.stmt, result);
 				break;		
 			case"3":
 				createdFeedback.reviewUsers(userName, con.stmt);
