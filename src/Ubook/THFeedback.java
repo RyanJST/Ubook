@@ -124,9 +124,10 @@ public class THFeedback {
 	
 	public void viewUsefulFeedback(String feedbackID, String amount, Statement stmt, String THID){
 		
-		String sql = "WITH results AS (SELECT F.fid, F.text, F.fbdate, F.score, F.login, AVG(R.rating) avgScore, DENSE_RANK() OVER "
-				+ "(ORDER BY AVG(R.rating) DESC) rn FROM Feedback F INNER JOIN Rates r ON F.fid = R.fid WHERE F.hid = '"+THID+"' GROUP BY F.fid) "
-				+ "SELECT fid, text, fbdate, score, login, avgScore FROM results WHERE rn <= '"+amount+"' ORDER BY avgScore DESC";
+		String sql = "SELECT F.fid, F.score, F.text, F.login, F.fbdate, AVG(R.rating) avg_score FROM Feedback F, Rates R "
+				+ "WHERE F.fid = R.fid AND F.hid = "+THID+" group by F.fid, F.score, F.text, F.login, F.fbdate"
+				+ "ORDER BY avg_score DESC "
+				+ "LIMIT "+amount+";";
 		
 		ResultSet rs = null;
 		
