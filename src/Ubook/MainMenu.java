@@ -76,6 +76,7 @@ public class MainMenu {
 						break;
 					case "6":
 						statistics(userName, con);
+						break;
 					case"99":
 						signedDone = true;
 						break;
@@ -120,10 +121,26 @@ public class MainMenu {
 			switch(choice){
 			
 			case"1":
+				System.out.println("How many of the most popular houses you wish to see?  E.G. the top 10 most popular houses.");
+				
+				try {
+					amount = MainMenu.input.readLine();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				shownStats.popularTH(userName, amount, con.stmt);
 				break;
 				
 			case"2":
+				System.out.println("How many of the most expensive houses you wish to see?  E.G. the top 10 most expensive houses.");
+				
+				try {
+					amount = MainMenu.input.readLine();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				shownStats.expensiveTH(userName, amount, con.stmt);
 				break;
 			

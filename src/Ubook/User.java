@@ -122,14 +122,19 @@ public class User {
 		ResultSet rs = null;
 		try {
 			rs = stmt.executeQuery(sql);
-			while(rs.next()){
-				
-				if(!rs.getString("password").equals(password)){
-					userName = null;
-					System.out.println("That is the wrong password "
-							+ "for the username you entered");
+			if(rs.isBeforeFirst()){
+				while(rs.next()){
 					
+					if(!rs.getString("password").equals(password)){
+						userName = null;
+						System.out.println("That is the wrong password "
+								+ "for the username you entered");
+						
+					}
 				}
+			}
+			else{
+				userName = null;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
