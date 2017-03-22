@@ -174,46 +174,63 @@ public class THFeedback {
 			System.out.println("Feedback ID: "+items.get(i).lFid+ ", TH Score: " +items.get(i).lScore+ ", Feedback Text: "
 					+items.get(i).lText+ ", Feedback Maker: "+items.get(i).lLogin+ ", Feedback Date:  "+items.get(i).lFBdate+ ", Average score" + items.get(i).lAvgScore);
 		}
+		System.out.println("\n");
 	}
 
 	public void reviewFeedback(String userName, Statement stmt, String feedbackID) {
 		// TODO Auto-generated method stub
-		System.out.println("What do you wish to rate this house?");
 		
-		String choice = null;
-		
+		String sql = "SELECT R.fid from Rates R where R.fid = '" +feedbackID+ "' AND R.login = '" + userName+ "';";
+		ResultSet rs = null;
+		boolean ratedBefore = false;
 		try {
-			choice = MainMenu.input.readLine();
-		} catch (IOException e) {
+			rs = stmt.executeQuery(sql);
+			if(rs.isBeforeFirst()){
+				System.out.println("You have rated that Feedback already.  Please select another Feedback to rate.");
+				ratedBefore = true;
+			}
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		System.out.println("This is the rating that you'll give the feedback.");
-		
-		System.out.println("Score: "+choice+", Feedback ID: "+ feedbackID);
-		
-		System.out.println("Do you wish to submit this review?  (Y/N)");
-		
-		try {
-			choice = MainMenu.input.readLine();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		if(choice.toLowerCase().equals("y")){
-			String sql = "INSERT INTO Rates(login, fid, rating) VALUES('"+userName+"', "
-					+ "'"+feedbackID+"', '"+choice+"')";
+		if(!ratedBefore){		
+			System.out.println("What do you wish to rate this feedback?");
+			
+			String choice = null;
 			
 			try {
-				stmt.executeUpdate(sql);
-				System.out.println("Your review has been created!");
-			} catch (SQLException e) {
+				choice = MainMenu.input.readLine();
+			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
+			System.out.println("This is the rating that you'll give the feedback.");
+			
+			System.out.println("Score: "+choice+", Feedback ID: "+ feedbackID);
+			
+			System.out.println("Do you wish to submit this review?  (Y/N)");
+			
+			try {
+				choice = MainMenu.input.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if(choice.toLowerCase().equals("y")){
+				sql = "INSERT INTO Rates(login, fid, rating) VALUES('"+userName+"', "
+						+ "'"+feedbackID+"', '"+choice+"')";
+				
+				try {
+					stmt.executeUpdate(sql);
+					System.out.println("Your review has been created!");
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
-		
 		System.out.println("Exitting feedback review.");
 	}
 }
