@@ -145,6 +145,14 @@ public class MainMenu {
 				break;
 			
 			case"3":
+			System.out.println("How many of the most highly rated houses per category you wish to see?  E.G. the top 10 most highly rated houses.");
+				
+				try {
+					amount = MainMenu.input.readLine();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				shownStats.ratedTH(userName, amount, con.stmt);
 				break;
 			
