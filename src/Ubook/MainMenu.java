@@ -54,6 +54,7 @@ public class MainMenu {
 					System.out.println("Please press 3 to look for and reserve a TH.");
 					System.out.println("Please press 4 to record a stay at a TH.");
 					System.out.println("Please press 5 to create/view feedback for THs and users");
+					System.out.println("Please press 6 to view statistics about the system.");
 					
 					System.out.println("Please press 99 to exit");
 					String choice = input.readLine();
@@ -73,6 +74,8 @@ public class MainMenu {
 					case"5":
 						feedback(userName, con);
 						break;
+					case "6":
+						statistics(userName, con);
 					case"99":
 						signedDone = true;
 						break;
@@ -92,6 +95,53 @@ public class MainMenu {
 		catch( Exception e){
 			e.printStackTrace();
 		}
+	}
+
+	private static void statistics(String userName, Connector con) {
+		// TODO Auto-generated method stub
+		Stats shownStats = new Stats();
+		String choice = null;
+		String amount = null;
+		boolean done = false;
+		while(!done){
+			choice = null;
+			System.out.println("Press 1 to see the top 'n' most popular THs, based upon recorded visits.");
+			System.out.println("Please press 2 to see the top 'n' most expensive THs (based upon average price per night from stays)");
+			System.out.println("Please press 3 to see the most highly rated THs in the system per category. (Based upon average feedback)");
+			System.out.println("Please press 99 to exit the system.");
+			
+			try{
+				choice = input.readLine();
+			}
+			catch(IOException e){
+				e.printStackTrace();
+			}
+			
+			switch(choice){
+			
+			case"1":
+				shownStats.popularTH(userName, amount, con.stmt);
+				break;
+				
+			case"2":
+				shownStats.expensiveTH(userName, amount, con.stmt);
+				break;
+			
+			case"3":
+				shownStats.ratedTH(userName, amount, con.stmt);
+				break;
+			
+			case"99":
+				done = true;
+				break;
+			
+			default:
+				System.out.println("That is not a valid input.  Please try again.");
+				break;
+			}
+			
+		}
+		
 	}
 
 	private static void feedback(String userName, Connector con) {
