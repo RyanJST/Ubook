@@ -127,9 +127,7 @@ public class THFeedback {
 	public void viewMostUsefulFeedback(String amount, Statement stmt, String THID){
 		
 		String sql = "SELECT F.fid, F.score, F.text, F.login, F.fbdate, AVG(R.rating) avg_score FROM Feedback F, Rates R "
-				+ "WHERE F.fid = R.fid AND F.hid = "+THID+" group by F.fid, F.score, F.text, F.login, F.fbdate"
-				+ "ORDER BY avg_score DESC "
-				+ "LIMIT "+amount+";";
+				+ "WHERE F.fid = R.fid AND F.hid = "+THID+" GROUP BY F.fid, F.score, F.text, F.login, F.fbdate ORDER BY avg_score DESC LIMIT "+amount+";";
 		
 		ResultSet rs = null;
 		
@@ -142,15 +140,40 @@ public class THFeedback {
 		
 		List<reviewedFeedback> items = new ArrayList<reviewedFeedback>();
 		
-		System.out.println("Here are the top " + amount+ "feedbacks for this house.");
+		System.out.println("Here are the top " + amount+ " feedbacks for this house.");
 		try {
 			while(rs.next()){
-				System.out.println("Feedback ID: "+rs.getString("fid")+ ", TH Score: " +rs.getString("score")+ ", Feedback Text: "
-						+rs.getString("Text")+ ", TH Score: ");
+				items.add(new reviewedFeedback(rs.getString("fid"),rs.getString("score"), rs.getString("text"), rs.getString("login")
+						, rs.getString("fbdate"), rs.getString("avg_score")));
+				//System.out.println("Feedback ID: "+rs.getString("fid")+ ", TH Score: " +rs.getString("score")+ ", Feedback Text: "
+						//+rs.getString("Text")+ ", TH Score: ");
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		
+		if(items.size() < 10){
+			sql = "SELECT F.fid, F.score, F.text, F.login, F.fbdate FROM Feedback F "
+					+ "WHERE F.hid = "+THID+" AND F.fid NOT IN (SELECT fid from 5530db34.Rates) group by F.fid, F.score, F.text, F.login, F.fbdate"
+					+ "ORDER BY F.fid DESC "
+					+ "LIMIT "+Integer.toString(Integer.parseInt(amount) - items.size())+";";
+			
+			try {
+				rs = stmt.executeQuery(sql);
+				while(rs.next()){
+					items.add(new reviewedFeedback(rs.getString("fid"),rs.getString("score"), rs.getString("text"), rs.getString("login")
+							, rs.getString("fbdate"), null));
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		for(int i = 0; i < items.size(); i ++){
+			System.out.println("Feedback ID: "+items.get(i).lFid+ ", TH Score: " +items.get(i).lScore+ ", Feedback Text: "
+					+items.get(i).lText+ ", Feedback Maker: "+items.get(i).lLogin+ ", Feedback Date:  "+items.get(i).lFBdate+ ", Average score" + items.get(i).lAvgScore);
 		}
 	}
 
