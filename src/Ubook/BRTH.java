@@ -9,12 +9,16 @@ import java.util.List;
 
 public class BRTH {
 
-	public void browseTHs(String userName, Statement stmt, String minPrice, String maxPrice, String city, String state, String category, String keywords) {
+	public void browseTHs(Statement stmt, String minPrice, String maxPrice, String city, String state, String category, String keywords, String sortBy) {
 		// TODO Auto-generated method stub
 		String[] kws = keywords.split(" ");
 		try{
-			String sql = "SELECT DISTINCT H.*, A.hid, A.priceNight FROM TH H, Available A WHERE H.hid = A.hid AND A.priceNight > " + minPrice;
+			String sql = "SELECT DISTINCT H.*, A.hid, A.priceNight, IFNULL(AVG(F.score), 0) as fbScore FROM TH H LEFT JOIN";
+			if (sortBy.equals("average trusted score")) sql += " (Feedback F LEFT JOIN Trust T ON F.login = T.login2)";
+			else sql += " Feedback F";
+			sql += " ON F.hid = H.hid, Available A WHERE H.hid = A.hid AND A.priceNight > " + minPrice;
 			if (!maxPrice.equals("")) sql += " AND A.priceNight < " + maxPrice;
+			if (sortBy.equals("average trusted score")) sql += " AND (T.isTrusted OR T.isTrusted IS NULL)";
 			sql += " AND A.priceNight <= ALL (SELECT A1.priceNight FROM Available A1 WHERE A1.hid = H.hid)";
 			if (!state.equals("")) sql += " AND H.state = '" + state + "'";
 			if (!city.equals("")) sql += " AND H.city = '" + city + "'";
@@ -27,13 +31,20 @@ public class BRTH {
 				}
 				sql += ") GROUP BY H1.hid HAVING COUNT(*) = " + kws.length + ")";
 			}
-			sql += " ORDER BY A.priceNight ASC;";
-			ResultSet rs = null;
+			sql += " GROUP BY H.hid, A.priceNight ORDER BY ";
+			if(sortBy.equals("average score") || sortBy.equals("average trusted score")) {
+				sql += "fbScore DESC;";
+			}
+			else {
+				sql += "A.priceNight ASC;";
+			}
+ 			ResultSet rs = null;
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
 				System.out.println("House ID: " + rs.getString("H.hid") + ", Name: " + rs.getString("H.name") + ", Category: " + rs.getString("H.category") + ", Price per Night as Low as: $" + rs.getString("A.priceNight"));
 				System.out.println("  Address: " + rs.getString("H.address") + ", " + rs.getString("H.city") + " " + rs.getString("H.state"));
 				System.out.println("  Owner: " + rs.getString("H.login") + ", Phone #: " + rs.getString("H.phoneNumber") +  ", Website: " + rs.getString("url"));
+				System.out.println("Average Feedback Score: " + rs.getString("fbScore"));
 			}
 		}
 		catch(SQLException e) {

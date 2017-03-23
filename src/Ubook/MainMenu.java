@@ -483,7 +483,7 @@ public class MainMenu {
 			System.out.println("Sort results by:");
 			System.out.println("Options(Pick one): price, average score, average trusted score");
 			sortBy = input.readLine();
-			shopping.browseTHs(userName, con.stmt, minPriceStr, maxPriceStr, cityStr, stateStr, categoryStr, keywordsStr);
+			shopping.browseTHs(con.stmt, minPriceStr, maxPriceStr, cityStr, stateStr, categoryStr, keywordsStr, sortBy);
 		}
 		catch(IOException e) {
 			
