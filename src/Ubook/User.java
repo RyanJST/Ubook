@@ -303,5 +303,23 @@ public class User {
 		
 		System.out.println("Exiting top trusted users Menu.");
 	}
+	
+	public void topUsefulUsers(String amount, Statement stmt){
+		String sql = "SELECT distinct F.login, AVG(R.rating) AS AVGuse FROM Feedback F, Rates R WHERE F.fid = R.fid GROUP BY F.login ORDER BY AVGuse DESC LIMIT 10;";
+		
+		ResultSet rs = null;
+		
+		try {
+			rs = stmt.executeQuery(sql);
+			while(rs.next()){
+				System.out.println("User Login: " + rs.getString("F.login") + ", Usefulness of Feedback Average: "+rs.getString("AVGuse") );
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		System.out.println("Exiting top trusted users Menu.");
+	}
 
 }
