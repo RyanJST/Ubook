@@ -136,6 +136,10 @@ public class BRTH {
 			stmt.executeUpdate(sql);
 			sql = "DELETE FROM Period WHERE pid = " + removePeriod + ";";
 			stmt.executeUpdate(sql);
+			
+			TH suggest = new TH();
+			
+			suggest.THSuggestions(r.hid, userName, stmt);
 		}
 		catch (SQLException e) {
 			
