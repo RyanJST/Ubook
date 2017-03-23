@@ -153,7 +153,7 @@ public class THFeedback {
 			e.printStackTrace();
 		}
 		
-		if(items.size() < 10){
+		if(items.size() < Integer.parseInt(amount)){
 			sql = "SELECT F.fid, F.score, F.text, F.login, F.fbdate FROM Feedback F "
 					+ "WHERE F.hid = "+THID+" AND F.fid NOT IN (SELECT fid from 5530db34.Rates) group by F.fid, F.score, F.text, F.login, F.fbdate ORDER BY F.fid DESC "
 					+ "LIMIT "+Integer.toString(Integer.parseInt(amount) - items.size())+";";
