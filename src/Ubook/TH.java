@@ -530,7 +530,7 @@ public class TH {
 	}
 
 	public void THSuggestions(String THID, String userName, Statement stmt){
-		String sql = "SELECT DISTINCT V.hid, COUNT(distinct V.login) AS guestCount FROM Visits V WHERE V.login = ANY(SELECT DISTINCT V2.login FROM Visits V2 WHERE V2.hid = '"+THID+"' AND V2.login != '"+userName+"') AND V.hid != '"+THID+"' GROUP BY  V.hid ORDER BY guestCount DESC; ";
+		String sql = "SELECT DISTINCT V.hid, T.name, T.category, T.address, T.URL, T.phoneNumber, T.yearBuilt, T.city, T.state, T.login, COUNT(distinct V.login) AS guestCount FROM Visits V, TH T WHERE V.login = ANY(SELECT DISTINCT V2.login FROM Visits V2 WHERE V2.hid = '"+THID+"' AND V2.login != '"+userName+"') AND V.hid != '"+THID+"' GROUP BY  V.hid ORDER BY guestCount DESC; ";
 		
 		List<String> userNames = new ArrayList<String>();
 		
@@ -538,18 +538,17 @@ public class TH {
 		
 		try {
 			rs = stmt.executeQuery(sql);
-			userNames.add(rs.getString("V.login"));
+			
+			while(rs.next()){
+				System.out.println("House ID: " + rs.getString("V.hid")+ ", House Visits by Other Users who stayed at this house: " + rs.getString("guestCount")+ ", House Name: " + rs.getString("T.name")+", House Category: " + rs.getString("T.category")+", House Address: " + rs.getString("T.address")
+				 + ", " +rs.getString("T.city")+", " + rs.getString("T.state")+", House Year Built: " + rs.getString("T.yearBuilt")+", House Phone Number: " + rs.getString("T.phoneNumber")+", House URL: " + rs.getString("T.URL")+
+						", House Owner: " + rs.getString("T.login"));
+			}
+			
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
-		for(int i = 0; i < userNames.size(); i++){
-			sql = "SELECT V.hid, COUNT(V.hid) AS houseCount FROM Visits V WHERE V.login = '"+userNames.get(i)+"' AND "
-					+ "V.hid != '"+THID+"';";
-			
-			
 		}
 	}
 
