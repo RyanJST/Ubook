@@ -13,9 +13,9 @@ public class BRTH {
 		// TODO Auto-generated method stub
 		String[] kws = keywords.split(" ");
 		try{
-			String sql = "SELECT * FROM TH H WHERE H.hid IN (SELECT A.hid FROM Available A WHERE A.priceNight > " + minPrice;
+			String sql = "SELECT DISTINCT H.*, A.hid, A.priceNight FROM TH H, Available A WHERE H.hid = A.hid AND A.priceNight > " + minPrice;
 			if (!maxPrice.equals("")) sql += " AND A.priceNight < " + maxPrice;
-			sql += ")";
+			sql += " AND A.priceNight <= ALL (SELECT A1.priceNight FROM Available A1 WHERE A1.hid = H.hid)";
 			if (!state.equals("")) sql += " AND H.state = '" + state + "'";
 			if (!city.equals("")) sql += " AND H.city = '" + city + "'";
 			if (!category.equals("")) sql += " AND H.category = '" + category + "'";
@@ -25,12 +25,15 @@ public class BRTH {
 					if(i != 0) sql += " OR ";
 					sql += "K.word = '" + kws[i] + "'";
 				}
-				sql += ") GROUP BY H1.hid HAVING COUNT(*) = " + kws.length + ");";
+				sql += ") GROUP BY H1.hid HAVING COUNT(*) = " + kws.length + ")";
 			}
+			sql += " ORDER BY A.priceNight ASC;";
 			ResultSet rs = null;
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
-				System.out.println("House ID: " + rs.getString("H.hid"));
+				System.out.println("House ID: " + rs.getString("H.hid") + ", Name: " + rs.getString("H.name") + ", Category: " + rs.getString("H.category") + ", Price per Night as Low as: $" + rs.getString("A.priceNight"));
+				System.out.println("  Address: " + rs.getString("H.address") + ", " + rs.getString("H.city") + " " + rs.getString("H.state"));
+				System.out.println("  Owner: " + rs.getString("H.login") + ", Phone #: " + rs.getString("H.phoneNumber") +  ", Website: " + rs.getString("url"));
 			}
 		}
 		catch(SQLException e) {

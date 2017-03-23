@@ -449,6 +449,7 @@ public class MainMenu {
 		String cityStr = "";
 		String stateStr = "";
 		String params = "";
+		String sortBy = "";
 		try {
 			System.out.println("Enter the parameters you would like to search by:");
 			System.out.println("Options: minimum price, maximum price, city, state, category, keywords");
@@ -476,9 +477,12 @@ public class MainMenu {
 			}
 			if(params.contains("keywords")) {
 				System.out.println("Enter keywords for your search:");
-				System.out.println("Format: keyword1 keyword2 keyword 3");
+				System.out.println("Format: keyword1 keyword2 keyword3");
 				keywordsStr = input.readLine();
 			}
+			System.out.println("Sort results by:");
+			System.out.println("Options(Pick one): price, average score, average trusted score");
+			sortBy = input.readLine();
 			shopping.browseTHs(userName, con.stmt, minPriceStr, maxPriceStr, cityStr, stateStr, categoryStr, keywordsStr);
 		}
 		catch(IOException e) {
