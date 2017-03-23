@@ -9,20 +9,32 @@ import java.util.List;
 
 public class BRTH {
 
-	public void browseTHs(String userName, Statement stmt) {
+	public void browseTHs(String userName, Statement stmt, String minPrice, String maxPrice, String city, String state, String category, String keywords) {
 		// TODO Auto-generated method stub
-		System.out.println("Here is where you set your filters and browse available THs.");
-		
-		boolean done = true;
-		String startPrice = null;
-		String endPrice = null;
-		String city = null;
-		String state = null;
-		String category = null;
-		List<String> keywords = new ArrayList<String>();
-		
-		while(!done){
-			
+		String[] kws = keywords.split(" ");
+		try{
+			String sql = "SELECT * FROM TH H WHERE H.hid IN (SELECT A.hid FROM Available A WHERE A.priceNight > " + minPrice;
+			if (!maxPrice.equals("")) sql += " AND A.priceNight < " + maxPrice;
+			sql += ")";
+			if (!state.equals("")) sql += " AND H.state = '" + state + "'";
+			if (!city.equals("")) sql += " AND H.city = '" + city + "'";
+			if (!category.equals("")) sql += " AND H.category = '" + category + "'";
+			if (!keywords.equals("")) {
+				sql += " AND H.hid IN (SELECT H1.hid FROM TH H1 JOIN HasKeywords HK ON H1.hid = HK.hid WHERE HK.wid IN (SELECT K.wid FROM Keywords K WHERE ";
+				for(int i = 0; i < kws.length; i++) {
+					if(i != 0) sql += " OR ";
+					sql += "K.word = '" + kws[i] + "'";
+				}
+				sql += ") GROUP BY H1.hid HAVING COUNT(*) = " + kws.length + ");";
+			}
+			ResultSet rs = null;
+			rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				System.out.println("House ID: " + rs.getString("H.hid"));
+			}
+		}
+		catch(SQLException e) {
+			System.out.println(e.getMessage());
 		}
 	}
 	
