@@ -285,5 +285,23 @@ public class User {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public void topTrustedUsers(String amount, Statement stmt){
+		String sql = "Select DISTINCT T.login2, sum(case when T.isTrusted = 1 then 1 else -1 end) AS trustedLevel FROM Trust T GROUP BY T.login2 ORDER BY trustedLevel DESC LIMIT '"+amount+"'; ";
+		
+		ResultSet rs = null;
+		
+		try {
+			rs = stmt.executeQuery(sql);
+			while(rs.next()){
+				System.out.println("User Login: " + rs.getString("T.login2") + ", Trusted Level: "+rs.getString("trustedLevel") );
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		System.out.println("Exiting top trusted users Menu.");
+	}
 
 }
