@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TH {
 	//
@@ -527,6 +529,29 @@ public class TH {
 		}
 	}
 
+	public void THSuggestions(String THID, String userName, Statement stmt){
+		String sql = "SELECT DISTINCT V.hid, COUNT(distinct V.login) AS guestCount FROM Visits V WHERE V.login = ANY(SELECT DISTINCT V2.login FROM Visits V2 WHERE V2.hid = '"+THID+"' AND V2.login != '"+userName+"') AND V.hid != '"+THID+"' GROUP BY  V.hid ORDER BY guestCount DESC; ";
+		
+		List<String> userNames = new ArrayList<String>();
+		
+		ResultSet rs = null;
+		
+		try {
+			rs = stmt.executeQuery(sql);
+			userNames.add(rs.getString("V.login"));
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		for(int i = 0; i < userNames.size(); i++){
+			sql = "SELECT V.hid, COUNT(V.hid) AS houseCount FROM Visits V WHERE V.login = '"+userNames.get(i)+"' AND "
+					+ "V.hid != '"+THID+"';";
+			
+			
+		}
+	}
 
 	
 }
