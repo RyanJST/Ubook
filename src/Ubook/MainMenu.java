@@ -1,3 +1,5 @@
+//Left, TH Browsing, Degree of separation, user admin check, and general cleanup/bug testing
+
 package Ubook;
 
 import java.io.BufferedReader;
