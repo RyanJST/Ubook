@@ -321,5 +321,30 @@ public class User {
 		
 		System.out.println("Exiting top trusted users Menu.");
 	}
+	
+	public int degreeOfSeperation(String userName, String checkName,Statement stmt){
+		int result = -1;
+		
+		String sql = "SELECT F.login FROM Favorites F WHERE F.login = '"+checkName+"' AND F.hid = (SELECT F2.hid FROM Favorites F WHERE F2.login = '"+userName+"');";
+		boolean found = false;
+		ResultSet rs = null;
+		
+		try {
+			rs = stmt.executeQuery(sql);
+			if(rs.isBeforeFirst()){
+				result = 1;
+				found = true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(!found){
+			sql = "SELECT F.login FROM Favorites F WHERE F.login = (SELECT F2.login from Favorites F2 WHERE F2.hid = (SELECT F3.hid FROM Favorites F3 WHERE F.login = '"+userName+"'))";
+		}
+		
+		return result;
+	}
 
 }
