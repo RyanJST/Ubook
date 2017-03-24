@@ -8,7 +8,7 @@ import java.sql.Statement;
 public class UserFeedback {
 
 	public void reviewUsers(String userName, Statement stmt) {
-		// TODO Auto-generated method stub
+
 		boolean done = false;
 		while(!done){
 			String ratedUser = null;
@@ -23,6 +23,8 @@ public class UserFeedback {
 				e.printStackTrace();
 			}
 			
+			
+			
 			System.out.println("Do you trust this user?  Press Y for yes, and N for no.");
 			
 			try{
@@ -34,26 +36,42 @@ public class UserFeedback {
 				e.printStackTrace();
 			}
 			
-			sql = "INSERT INTO Trust VALUES('"+userName+"','"+ratedUser+"','"+Integer.toString(trusted)+"');";
+			System.out.println("This is what your review will look like.");
 			
-			try{
-				stmt.executeUpdate(sql);
-			}
-			catch(SQLException e1){
-				e1.printStackTrace();
-			}
+			System.out.println("Reviewed User: "+ratedUser+ ", Trusted(1 for yes, 0 for no): " +Integer.toString(trusted));
 			
-			System.out.println("DO you wish to review another user?  (Y/N)");
+			System.out.println("Do you wish to submit this user review?  (Y/N)");
 			
-			try{
-				if(!MainMenu.input.readLine().toLowerCase().equals("y")){
-					done = true;
+			try {
+				if(MainMenu.input.readLine().toLowerCase().equals("y")){
+				
+					sql = "INSERT INTO Trust VALUES('"+userName+"','"+ratedUser+"','"+Integer.toString(trusted)+"');";
+					
+					try{
+						stmt.executeUpdate(sql);
+					}
+					catch(SQLException e1){
+						e1.printStackTrace();
+					}
+					
+					System.out.println("DO you wish to review another user?  (Y/N)");
+					
+					try{
+						if(!MainMenu.input.readLine().toLowerCase().equals("y")){
+							done = true;
+						}
+					}
+					catch(IOException e){
+						e.printStackTrace();
+					}
 				}
-			}
-			catch(IOException e){
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		System.out.println("Exiting User Review Menu.");
+		System.out.println("");
 	}
 	
 	

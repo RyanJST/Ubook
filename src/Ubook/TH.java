@@ -42,11 +42,9 @@ public class TH {
 	}
 	
 	public void registerHouse(String userName, Statement stmt) {
-		// TODO Auto-generated method stub
 		
 		System.out.println("Here you register your temporary housing. Do you wish to continue? (Y/N)");
 		
-		//BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		String houseName = "start";
 		boolean changed = false;
 		try{

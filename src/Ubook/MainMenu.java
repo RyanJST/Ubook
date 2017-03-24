@@ -50,7 +50,7 @@ public class MainMenu {
 				System.out.println("Hello, " + userName + "!");
 				System.out.println("What would you like to do today?");
 				while(!signedDone){
-					System.out.println("Please press 1 to access your user account settings");
+					System.out.println("Please press 1 to access user account settings");
 					System.out.println("Please press 2 to Temporary Housing Settings");
 					System.out.println("Please press 3 to look for and reserve a TH.");
 					System.out.println("Please press 4 to record a stay at a TH.");
@@ -393,7 +393,9 @@ public class MainMenu {
 		while(!finished){
 			System.out.println("Please press 1 to register a new favorite TH you like to stay at.");
 			System.out.println("Please press 2 to view/change your profile");
-			System.out.println("Please press 3 to exit the user settings menu");
+			System.out.println("Please press 3 to see the n most trusted users (Must be admin to do so.)");
+			System.out.println("Please press 4 to see the n most useful users, those who gave the most useful reviews. (Must be admin to do so.)");
+			System.out.println("Please press 5 to exit the user settings menu");
 			try {
 				choice = input.readLine();
 			} catch (IOException e) {
@@ -408,7 +410,12 @@ public class MainMenu {
 			case"2":
 				userItem.setViewProfile(userName, con.stmt);
 				break;
-			case"3":
+			case "3":
+				
+				break;
+			case "4":
+				break;
+			case"5":
 				finished = true;
 				break;
 			}
