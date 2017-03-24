@@ -81,6 +81,7 @@ public class MainMenu {
 						break;
 					case "7":
 						viewStays(userName, con);
+						break;
 					case"99":
 						signedDone = true;
 						break;
