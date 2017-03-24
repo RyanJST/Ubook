@@ -356,7 +356,7 @@ public class User {
 					admin = choice;
 				}
 				
-				sql = "UPDATE Users SET name = '"+fullName+"', userType '"+admin+"', password = '"+password+"', address = '"+address+"', phoneNumber = '"+phoneNumber+"' WHERE login = '"+userName+"';";
+				sql = "UPDATE Users SET name = '"+fullName+"', userType = '"+admin+"', password = '"+password+"', address = '"+address+"', phoneNumber = '"+phoneNumber+"' WHERE login = '"+userName+"';";
 				
 				stmt.executeUpdate(sql);
 				
@@ -371,7 +371,7 @@ public class User {
 	}
 	
 	public void topTrustedUsers(String amount, Statement stmt){
-		String sql = "Select DISTINCT T.login2, sum(case when T.isTrusted = 1 then 1 else -1 end) AS trustedLevel FROM Trust T GROUP BY T.login2 ORDER BY trustedLevel DESC LIMIT '"+amount+"'; ";
+		String sql = "Select DISTINCT T.login2, sum(case when T.isTrusted = 1 then 1 else -1 end) AS trustedLevel FROM Trust T GROUP BY T.login2 ORDER BY trustedLevel DESC LIMIT "+amount+"; ";
 		
 		ResultSet rs = null;
 		

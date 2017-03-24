@@ -94,6 +94,7 @@ public class Stay {
 		}
 		
 		System.out.println("Exiting View Stay menu.");
+		System.out.println("");
 		
 	}
 	
