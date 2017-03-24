@@ -25,24 +25,24 @@ public class THFeedback {
 		}
 		String sql = null;
 		if(choice.toLowerCase().equals("y")){
-			
-				//System.out.println("Here is the list of houses you stayed at.");
-				//Visit visited = new Visit();
-				//Method to showed houses userName stayed at.
-				//visited.showStayedHouses(userName, stmt)
+				Stay stayedAt = new Stay();
 				
-				//System.out.println("Which house do you wish to leave feedback on?  NOTE:  You cannot review a house you own, nor a house you already reviewed, nor a house you haven't stayed at before.");
-				String houseID = TH;
-				/*try {
+				System.out.println("Here are the houses you stayed at.");
+				
+				stayedAt.viewStays(userName, stmt);
+				
+				System.out.println("Which house do you wish to review?");
+				try {
 					choice = MainMenu.input.readLine();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				*/
-				houseID = choice;
-				boolean stayedAt = true; //Used for determining if you stayed at a TH
-				if(stayedAt){
+				String houseID = stayedAt.verifyStay(userName, choice, stmt);
+				
+				
+				
+				if(houseID != null){
 					sql = "SELECT f.fid from Feedback F where hid = '" +houseID+ "' AND login = '" + userName+ "';";
 					boolean ratedBefore = false;
 					try {
@@ -84,7 +84,7 @@ public class THFeedback {
 							e.printStackTrace();
 						}
 						
-						if(!choice.isEmpty()){
+						if(!choice.isEmpty() && choice.length() <= 101){
 							text = choice;
 						}
 						
@@ -103,7 +103,7 @@ public class THFeedback {
 							e.printStackTrace();
 						}
 						
-						if(!choice.toLowerCase().equals("y")){			
+						if(choice.toLowerCase().equals("y")){			
 							sql = "INSERT INTO Feedback(score, text, hid, login, fbdate) VALUES('"+score+"', "
 									+ "'"+text+"', '"+houseID+"', '"+userName+"', '"+currentTime+"')";
 							
@@ -145,8 +145,6 @@ public class THFeedback {
 			while(rs.next()){
 				items.add(new reviewedFeedback(rs.getString("fid"),rs.getString("score"), rs.getString("text"), rs.getString("login")
 						, rs.getString("fbdate"), rs.getString("avg_score")));
-				//System.out.println("Feedback ID: "+rs.getString("fid")+ ", TH Score: " +rs.getString("score")+ ", Feedback Text: "
-						//+rs.getString("Text")+ ", TH Score: ");
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -162,7 +160,7 @@ public class THFeedback {
 				rs = stmt.executeQuery(sql);
 				while(rs.next()){
 					items.add(new reviewedFeedback(rs.getString("fid"),rs.getString("score"), rs.getString("text"), rs.getString("login")
-							, rs.getString("fbdate"), null));
+							, rs.getString("fbdate"), "0"));
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block

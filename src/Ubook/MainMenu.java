@@ -13,12 +13,11 @@ public class MainMenu {
 	public static void main(String[] args){
 		try{
 			Connector con = new Connector();
-			System.out.println("Hello!  Please select the option you want for UBook!");
-			//BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+			System.out.println("Hello!  Welcome to UBook, your one stop shop for a place to stay! \n Please select the option you want for UBook!");
+			
 			String userName = null;
 			boolean done = false;
-			//String innerChoice = null;
-			//String choice = "1";
+
 			while(!done){
 				System.out.println("Please press 1 to log in");
 				System.out.println("Please press 2 to sign up");
@@ -59,8 +58,8 @@ public class MainMenu {
 					System.out.println("Please press 6 to view statistics about the system.");
 					
 					System.out.println("Please press 99 to exit");
-					String choice = input.readLine();
-					switch(choice){
+					
+					switch(input.readLine()){
 					case "1":
 						userSettings(userName, con);
 						break;
@@ -101,7 +100,7 @@ public class MainMenu {
 	}
 
 	private static void statistics(String userName, Connector con) {
-		// TODO Auto-generated method stub
+		
 		Stats shownStats = new Stats();
 		String choice = null;
 		String amount = null;
@@ -172,7 +171,7 @@ public class MainMenu {
 	}
 
 	private static void feedback(String userName, Connector con) {
-		// TODO Auto-generated method stub
+		
 		UserFeedback createdFeedback = new UserFeedback();
 		THFeedback THReview = new THFeedback();
 		boolean done = false;
