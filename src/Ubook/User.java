@@ -329,6 +329,7 @@ public class User {
 		boolean found = false;
 		ResultSet rs = null;
 		
+		
 		try {
 			rs = stmt.executeQuery(sql);
 			if(rs.isBeforeFirst()){
@@ -342,6 +343,16 @@ public class User {
 		
 		if(!found){
 			sql = "SELECT F.login FROM Favorites F WHERE F.login = (SELECT F2.login from Favorites F2 WHERE F2.hid = (SELECT F3.hid FROM Favorites F3 WHERE F.login = '"+userName+"'))";
+			
+			try {
+				rs = stmt.executeQuery(sql);
+				while(rs.next()){
+					
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		return result;
