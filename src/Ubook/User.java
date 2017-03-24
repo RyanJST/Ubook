@@ -325,7 +325,7 @@ public class User {
 	public int degreeOfSeperation(String userName, String checkName,Statement stmt){
 		int result = -1;
 		
-		String sql = "SELECT F.login FROM Favorites F WHERE F.login = '"+checkName+"' AND F.hid = (SELECT F2.hid FROM Favorites F WHERE F2.login = '"+userName+"');";
+		String sql = "SELECT F.login FROM Favorites F WHERE F.login = '"+checkName+"' AND F.hid = ANY(SELECT F2.hid FROM Favorites F WHERE F2.login = '"+userName+"');";
 		boolean found = false;
 		ResultSet rs = null;
 		
@@ -342,12 +342,12 @@ public class User {
 		}
 		
 		if(!found){
-			sql = "SELECT F.login FROM Favorites F WHERE F.login = (SELECT F2.login from Favorites F2 WHERE F2.hid = (SELECT F3.hid FROM Favorites F3 WHERE F.login = '"+userName+"'))";
+			sql = "SELECT F.login FROM Favorites F WHERE F.login = '"+checkName+"' AND F.hid = ANY(SELECT F4.hid FROM Favorites F4 WHERE F4.login = ANY(SELECT F2.login from Favorites F2 WHERE F2.hid = ANY(SELECT F3.hid FROM Favorites F3 WHERE F3.login = '"+userName+"')))";
 			
 			try {
 				rs = stmt.executeQuery(sql);
-				while(rs.next()){
-					
+				if(rs.isBeforeFirst()){
+					result = 2;
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
