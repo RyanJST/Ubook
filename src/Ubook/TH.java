@@ -55,13 +55,13 @@ public class TH {
 	public void registerHouse(String userName, Statement stmt) {
 		// TODO Auto-generated method stub
 		
-		System.out.println("Here you register your temporary housing.  If you do not wish to do so, press e now.  Otherwise, press enter to continue.");
+		System.out.println("Here you register your temporary housing. Do you wish to continue? (Y/N)");
 		
 		//BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		String houseName = "start";
 		boolean changed = false;
 		try{
-			if(!(houseName = MainMenu.input.readLine()).equals("e")){
+			if(!(MainMenu.input.readLine()).toLowerCase().equals("y")){
 				houseName = null;	
 			}
 		}
@@ -81,6 +81,7 @@ public class TH {
 				
 				if(houseName == null || houseName.isEmpty()){
 					System.out.println("You need to name your temporary housing.  Please try again.");
+					houseName = null;
 				}
 			}
 			
@@ -97,6 +98,7 @@ public class TH {
 				
 				if(address == null || address.isEmpty()){
 					System.out.println("You need to put in the street address of your temporary housing.  Please try again.");
+					address = null;
 				}
 			}
 			
@@ -113,6 +115,7 @@ public class TH {
 				
 				if(city == null || city.isEmpty()){
 					System.out.println("You need to put in the city of your temporary housing.  Please try again.");
+					city = null;
 				}
 			}
 			
@@ -129,6 +132,7 @@ public class TH {
 				
 				if(state == null || state.length() != 2){
 					System.out.println("You need to put in the state of your temporary housing as a two letter abbreviation.  Please try again.");
+					state = null;
 				}
 			}
 			String phoneNumber = null;
@@ -141,37 +145,24 @@ public class TH {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
-				try{
-				}
-				catch(NumberFormatException n){
-					phoneNumber = null;
-				}
 				if(phoneNumber == null || phoneNumber.isEmpty()){
 					System.out.println("You need to give a valid phone number. Please try again.");
+					phoneNumber = null;
 				}
 			}
 			
 			String yearBuilt = null;
-			while(yearBuilt == null){
-				System.out.println("Please set the year that your temporary housing was built. This field does not need to be filled in.");
-				
-				try {
-					yearBuilt = MainMenu.input.readLine();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-				try{
-				}
-				catch(NumberFormatException n){
-					yearBuilt = null;
-				}
-				
-				if(yearBuilt == null){
-					System.out.println("You need to give a valid year built. Please try again.");
-				}
+			System.out.println("Please set the year that your temporary housing was built. This field does not need to be filled in.");
+			
+			try {
+				yearBuilt = MainMenu.input.readLine();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			if(yearBuilt.isEmpty()){
+				yearBuilt = null;
 			}
 			
 			String category = null;
@@ -184,6 +175,10 @@ public class TH {
 				e1.printStackTrace();
 			}
 			
+			if(category.isEmpty()){
+				category = null;
+			}
+			
 			String URL = null;
 			System.out.println("Please input the web address of your temporary housing.  Does not need to be filled in.");
 			
@@ -192,6 +187,10 @@ public class TH {
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
+			}
+			
+			if(URL.isEmpty()){
+				URL = null;
 			}
 			
 			System.out.println("This is what the new house listing will look like. \n");
@@ -208,12 +207,7 @@ public class TH {
 				e1.printStackTrace();
 			}
 			
-			if(choice.equals("y") || choice.equals("Y")){
-				changed = true;
-	
-			
-			
-			if(changed){
+			if(choice.toLowerCase().equals("y")){
 				System.out.println("Registering House");
 				String sql = "INSERT INTO TH (category, name, address, URL, phoneNumber, yearBuilt, login, city, state)"
 						+ " VALUES( '" + category + "', '" + houseName+"','" + address + "', '" + URL+"','" + phoneNumber + "',"
@@ -222,12 +216,12 @@ public class TH {
 		   		    stmt.executeUpdate(sql);		    
 		   		    System.out.println("Your new house was registered! \n");
 				 	}
-				 	catch(Exception e)
+				 	catch(SQLException e)
 				 	{
 				 		System.out.println("cannot execute the query");
 				 		System.out.println(e.getMessage());
 				 	}
-			}
+			
 
 			}
 			
@@ -304,99 +298,15 @@ public class TH {
 					}
 				}
 			
-		}
+				}
 
 			catch(SQLException e){
 				e.printStackTrace();
 			}
 			
-			System.out.println("Please select what you want the new name to be, leave blank to keep the name the same.");
-			String choice = null;
-			try {
-				choice = MainMenu.input.readLine();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			if(!choice.isEmpty()){
-				name = choice;
-				choice = null;
-			}
-			
-			System.out.println("Please select what you want the new category to be, leave blank to keep the category the same.");
-			
-			try {
-				choice = MainMenu.input.readLine();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			if(!choice.isEmpty()){
-				category = choice;
-				choice = null;
-			}
-			
-			System.out.println("Please select what you want the new street address to be, leave blank to keep the address the same.");
-			
-			try {
-				choice = MainMenu.input.readLine();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			if(!choice.isEmpty()){
-				address = choice;
-				choice = null;
-			}
-			
-			System.out.println("Please select what you want the new city to be, leave blank to keep the city the same.");
-			
-			try {
-				choice = MainMenu.input.readLine();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			if(!choice.isEmpty()){
-				city = choice;
-				choice = null;
-			}			
-			
-			System.out.println("Please select what you want the new state to be, leave blank to keep the state the same.");
-			
-			try {
-				choice = MainMenu.input.readLine();
-				
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			if(!choice.isEmpty()){
-				state = choice;
-				choice = null;
-			}
-			
-			System.out.println("Please select what you want the new URL to be, leave blank to keep the URL the same.");
-			
-			try {
-				choice = MainMenu.input.readLine();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			if(!choice.isEmpty()){
-				URL = choice;
-				choice = null;
-			}
-			
-			System.out.println("Please select what you want the new phone number to be, leave blank to keep the phone number the same.");
-			
+			if(houseID != null){
+				System.out.println("Please select what you want the new name to be, leave blank to keep the name the same.");
+				String choice = null;
 				try {
 					choice = MainMenu.input.readLine();
 				} catch (IOException e) {
@@ -405,14 +315,12 @@ public class TH {
 				}
 				
 				if(!choice.isEmpty()){
-					phoneNumber = choice;
+					name = choice;
 					choice = null;
 				}
-			
-			
-
-			System.out.println("Please select what you want the new year built to be, leave blank to keep the year built the same.");
-			
+				
+				System.out.println("Please select what you want the new category to be, leave blank to keep the category the same.");
+				
 				try {
 					choice = MainMenu.input.readLine();
 				} catch (IOException e) {
@@ -421,39 +329,127 @@ public class TH {
 				}
 				
 				if(!choice.isEmpty()){
-					yearBuilt = choice;
+					category = choice;
 					choice = null;
 				}
-			System.out.println("This is what the changed house listing will look like. \n");
-			
-			System.out.println("House Name: " + name + ",   Street Address: " + address +", City: " +city+", State: "
-					+state+ "  House category: " + category +",   House URL: " + URL +",   House Year Built: " + yearBuilt + "\n");
-			
-			System.out.println("Do you want to keep these changes?  (Y/N)");
-			choice = null;
-			
-			try{
-				choice = MainMenu.input.readLine();
-			}
-			catch(IOException e){
 				
+				System.out.println("Please select what you want the new street address to be, leave blank to keep the address the same.");
+				
+				try {
+					choice = MainMenu.input.readLine();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				if(!choice.isEmpty()){
+					address = choice;
+					choice = null;
+				}
+				
+				System.out.println("Please select what you want the new city to be, leave blank to keep the city the same.");
+				
+				try {
+					choice = MainMenu.input.readLine();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				if(!choice.isEmpty()){
+					city = choice;
+					choice = null;
+				}			
+				
+				System.out.println("Please select what you want the new state to be, leave blank to keep the state the same.");
+				
+				try {
+					choice = MainMenu.input.readLine();
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				if(!choice.isEmpty()){
+					state = choice;
+					choice = null;
+				}
+				
+				System.out.println("Please select what you want the new URL to be, leave blank to keep the URL the same.");
+				
+				try {
+					choice = MainMenu.input.readLine();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				if(!choice.isEmpty()){
+					URL = choice;
+					choice = null;
+				}
+				
+				System.out.println("Please select what you want the new phone number to be, leave blank to keep the phone number the same.");
+				
+					try {
+						choice = MainMenu.input.readLine();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					if(!choice.isEmpty()){
+						phoneNumber = choice;
+						choice = null;
+					}
+				
+				
+	
+				System.out.println("Please select what you want the new year built to be, leave blank to keep the year built the same.");
+				
+					try {
+						choice = MainMenu.input.readLine();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					if(!choice.isEmpty()){
+						yearBuilt = choice;
+						choice = null;
+					}
+				System.out.println("This is what the changed house listing will look like. \n");
+				
+				System.out.println("House Name: " + name + ",   Street Address: " + address +", City: " +city+", State: "
+						+state+ "  House category: " + category +",   House URL: " + URL +",   House Year Built: " + yearBuilt + "\n");
+				
+				System.out.println("Do you want to keep these changes?  (Y/N)");
+				choice = null;
+				
+				try{
+					choice = MainMenu.input.readLine();
+				}
+				catch(IOException e){
+					
+				}
+				
+				if(choice.toLowerCase().equals("y")){
+					changed = true;
+				}
 			}
 			
-			if(choice.equals("y") || choice.equals("Y")){
-				changed = true;
-			}
-		}
-		
-		if(changed){
-			sql = "UPDATE TH SET category = '" + category+ "',name = '" + name+ "',address = '" + address+ "',URL = '" + URL+ "',phoneNumber = '" + phoneNumber+ "',"
-					+ "yearBuilt = '" + yearBuilt+ "', city = '"+city+"', state = '"+state+"' WHERE hid = '" + houseID + "' AND login = '" + userName + "';";
-			
-			
-			try {
-				result = stmt.executeUpdate(sql);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if(changed){
+				sql = "UPDATE TH SET category = '" + category+ "',name = '" + name+ "',address = '" + address+ "',URL = '" + URL+ "',phoneNumber = '" + phoneNumber+ "',"
+						+ "yearBuilt = '" + yearBuilt+ "', city = '"+city+"', state = '"+state+"' WHERE hid = '" + houseID + "' AND login = '" + userName + "';";
+				
+				
+				try {
+					result = stmt.executeUpdate(sql);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		return result;
@@ -532,8 +528,6 @@ public class TH {
 	public void THSuggestions(String THID, String userName, Statement stmt){
 		String sql = "SELECT DISTINCT V.hid, T.name, T.category, T.address, T.URL, T.phoneNumber, T.yearBuilt, T.city, T.state, T.login, COUNT(distinct V.login) AS guestCount FROM Visits V, TH T WHERE V.login = ANY(SELECT DISTINCT V2.login FROM Visits V2 WHERE V2.hid = '"+THID+"' AND V2.login != '"+userName+"') AND V.hid != '"+THID+"' GROUP BY  V.hid ORDER BY guestCount DESC; ";
 		
-		List<String> userNames = new ArrayList<String>();
-		
 		ResultSet rs = null;
 		
 		try {
@@ -550,6 +544,9 @@ public class TH {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		System.out.println("Exiting TH Suggestions");
+		System.out.println("");
 	}
 
 	
