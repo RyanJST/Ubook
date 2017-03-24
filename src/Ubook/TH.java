@@ -10,23 +10,12 @@ import java.util.List;
 public class TH {
 	//
 
-	private String verifyHouseID(String userName, Statement stmt){
+	public String verifyHouseID(String userName, String houseID,Statement stmt){
+ 
+		ResultSet rs = null;
 		
-		String houseID = null;
-		////BufferedReader input = new BufferedReader(new InputStreamReader(System.in)); 
-		ResultSet rs;
-		System.out.println("Please input the Housing ID of the house you wish to update. If you wish to stop, press e now.");
 		
-		try{
-				houseID = MainMenu.input.readLine();
-			}
-		
-		catch(IOException e){
-			e.printStackTrace();
-		}
-	
-	if(!houseID.equals("e")){
-		while(houseID == null){
+		if(houseID != null && !houseID.isEmpty()){
 			try {
 				houseID = MainMenu.input.readLine();
 			} catch (IOException e) {
@@ -40,7 +29,7 @@ public class TH {
 		try {
 			rs = stmt.executeQuery(sql);
 			if(!rs.isBeforeFirst()){
-				System.out.println("You do not have a house registered with that HouseID. Please try again. \n");
+				//System.out.println("You do not have a house registered with that HouseID. Please try again. \n");
 				houseID = null;
 				}
 			}
@@ -48,7 +37,7 @@ public class TH {
 			catch(SQLException e){
 				e.printStackTrace();
 			}
-		}
+		
 	return houseID;
 	}
 	
@@ -272,9 +261,18 @@ public class TH {
 		
 		System.out.println("\n");
 		System.out.println("Select which house you wish to update");
-		houseID = verifyHouseID(userName, stmt);
+		
+		try {
+			houseID = MainMenu.input.readLine();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		houseID = verifyHouseID(userName, houseID, stmt);
 	
-			
+		
+		
 		boolean changed = false;
 		if(houseID != null){
 			sql = "SELECT * FROM TH WHERE login = '" + userName + "' AND hid = '" +houseID+ "';";
@@ -452,6 +450,12 @@ public class TH {
 				}
 			}
 		}
+		else{
+			System.out.println("You do not own a house that is registered with that house ID.  Please try again.");
+		}
+		
+		System.out.println("Exiting the update house menu.");
+		
 		return result;
 	}
 	
@@ -463,7 +467,17 @@ public class TH {
 		listOwnedHouses(userName, stmt);
 		
 		System.out.println("Select which house you wish to do availability operations on.\n");
-		String houseID = verifyHouseID(userName, stmt);
+		String houseID = null;
+		
+		try {
+			houseID = MainMenu.input.readLine();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		
+		houseID = verifyHouseID(userName, houseID,stmt);
 		//BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		while(houseID != null){
 			System.out.println("Press 1 to add a date of availability");
@@ -516,7 +530,15 @@ public class TH {
 		
 		System.out.println("\n");
 		System.out.println("Select which house you wish to view/update/create keywords for.");
-		houseID = verifyHouseID(userName, stmt);
+		
+		try {
+			houseID = MainMenu.input.readLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		houseID = verifyHouseID(userName, houseID,stmt);
 		
 		if(houseID != null){
 			Keyword keys = new Keyword();

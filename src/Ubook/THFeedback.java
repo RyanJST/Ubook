@@ -38,90 +38,101 @@ public class THFeedback {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				String houseID = stayedAt.verifyStay(userName, choice, stmt);
 				
+				TH verifyHouse = new TH();
 				
+				String houseID = choice;
 				
-				if(houseID != null){
-					sql = "SELECT f.fid from Feedback F where hid = '" +houseID+ "' AND login = '" + userName+ "';";
-					boolean ratedBefore = false;
-					try {
-						rs = stmt.executeQuery(sql);
-						if(rs.isBeforeFirst()){
-							System.out.println("You have rated that TH already.  Please select another TH to rate.");
-							ratedBefore = true;
-						}
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}		
+				houseID = verifyHouse.verifyHouseID(userName, choice,stmt);
+				
+				if(houseID!= null){
+					System.out.println("You own that house, you cannot review it.");
+				}
+				
+				else{
+					houseID = stayedAt.verifyStay(userName, choice, stmt);
 					
-					if(!ratedBefore){
-						String text = null;
-						String score = null;
-						java.util.Date dt = new java.util.Date();
-						
-						java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
-						String currentTime = sdf.format(dt);
-						
-						System.out.println("Please put in the score you rate this TH.  Rate from 0(poor) to 10(excellent)");
-						
+					if(houseID != null){
+						sql = "SELECT f.fid from Feedback F where hid = '" +houseID+ "' AND login = '" + userName+ "';";
+						boolean ratedBefore = false;
 						try {
-							choice = MainMenu.input.readLine();
-						} catch (IOException e) {
+							rs = stmt.executeQuery(sql);
+							if(rs.isBeforeFirst()){
+								System.out.println("You have rated that TH already.  Please select another TH to rate.");
+								ratedBefore = true;
+							}
+						} catch (SQLException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
-						}
+						}		
 						
-						score = choice;
-						
-						System.out.println("Do you wish to write a short text review?  Leave blank if not, otherwise keep your review to 100 characters or less.");
-						
-						try {
-							choice = MainMenu.input.readLine();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						
-						if(!choice.isEmpty() && choice.length() <= 101){
-							text = choice;
-						}
-						
-						
-						System.out.println("Here is what your feedback will look like.");
-						
-						System.out.println("Score rating: "+score+", "
-								+ "Text Review: "+text+", House ID"+houseID+", Feedback Date: '"+currentTime);
-						
-						System.out.println("Do you wish to post this review?  (Y/N)");
-						
-						try {
-							choice = MainMenu.input.readLine();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						
-						if(choice.toLowerCase().equals("y")){			
-							sql = "INSERT INTO Feedback(score, text, hid, login, fbdate) VALUES('"+score+"', "
-									+ "'"+text+"', '"+houseID+"', '"+userName+"', '"+currentTime+"')";
+						if(!ratedBefore){
+							String text = null;
+							String score = null;
+							java.util.Date dt = new java.util.Date();
+							
+							java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+							String currentTime = sdf.format(dt);
+							
+							System.out.println("Please put in the score you rate this TH.  Rate from 0(poor) to 10(excellent)");
 							
 							try {
-								stmt.executeUpdate(sql);
-								System.out.println("Feedback updated!");
-							} catch (SQLException e) {
+								choice = MainMenu.input.readLine();
+							} catch (IOException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
+							
+							score = choice;
+							
+							System.out.println("Do you wish to write a short text review?  Leave blank if not, otherwise keep your review to 100 characters or less.");
+							
+							try {
+								choice = MainMenu.input.readLine();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
+							if(!choice.isEmpty() && choice.length() <= 101){
+								text = choice;
+							}
+							
+							
+							System.out.println("Here is what your feedback will look like.");
+							
+							System.out.println("Score rating: "+score+", "
+									+ "Text Review: "+text+", House ID"+houseID+", Feedback Date: '"+currentTime);
+							
+							System.out.println("Do you wish to post this review?  (Y/N)");
+							
+							try {
+								choice = MainMenu.input.readLine();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
+							if(choice.toLowerCase().equals("y")){			
+								sql = "INSERT INTO Feedback(score, text, hid, login, fbdate) VALUES('"+score+"', "
+										+ "'"+text+"', '"+houseID+"', '"+userName+"', '"+currentTime+"')";
+								
+								try {
+									stmt.executeUpdate(sql);
+									System.out.println("Feedback updated!");
+								} catch (SQLException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
 						}
 					}
-				}
-				
-
-				
-			
+					else{
+						System.out.println("You did not stay at this house.  Pleas try again.");
+					}
+			}
 		}
+		System.out.println("Exiting TH review menu.");
 	}
 	
 	public void viewMostUsefulFeedback(String amount, Statement stmt, String THID){
@@ -134,7 +145,6 @@ public class THFeedback {
 		try {
 			rs = stmt.executeQuery(sql);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -147,7 +157,6 @@ public class THFeedback {
 						, rs.getString("fbdate"), rs.getString("avg_score")));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -176,31 +185,43 @@ public class THFeedback {
 	}
 
 	public void reviewFeedback(String userName, Statement stmt, String feedbackID) {
-		// TODO Auto-generated method stub
-		
-		String sql = "SELECT R.fid from Rates R where R.fid = '" +feedbackID+ "' AND R.login = '" + userName+ "';";
+		String sql = "SELECT F.login FROM Feedback F where F.fid = '"+feedbackID+"' AND F.login = '"+userName+"';";
 		ResultSet rs = null;
 		boolean ratedBefore = false;
+		
 		try {
 			rs = stmt.executeQuery(sql);
 			if(rs.isBeforeFirst()){
-				System.out.println("You have rated that Feedback already.  Please select another Feedback to rate.");
+				System.out.println("You cannot rate a feedback you have made.");
 				ratedBefore = true;
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		if(!ratedBefore){
+			sql = "SELECT R.fid from Rates R where R.fid = '" +feedbackID+ "' AND R.login = '" + userName+ "';";
+			
+			try {
+				rs = stmt.executeQuery(sql);
+				if(rs.isBeforeFirst()){
+					System.out.println("You have rated that Feedback already.  Please select another Feedback to rate.");
+					ratedBefore = true;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 		if(!ratedBefore){		
 			System.out.println("What do you wish to rate this feedback?");
+			System.out.println("0: Not Useful");
+			System.out.println("1: Somewhat Useful");
+			System.out.println("2: Very Useful");
 			
 			String choice = null;
 			
 			try {
 				choice = MainMenu.input.readLine();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -213,7 +234,6 @@ public class THFeedback {
 			try {
 				choice = MainMenu.input.readLine();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			if(choice.toLowerCase().equals("y")){
@@ -224,7 +244,6 @@ public class THFeedback {
 					stmt.executeUpdate(sql);
 					System.out.println("Your review has been created!");
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

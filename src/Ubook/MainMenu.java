@@ -56,6 +56,7 @@ public class MainMenu {
 					System.out.println("Please press 4 to record a stay at a TH.");
 					System.out.println("Please press 5 to create/view feedback for THs and users");
 					System.out.println("Please press 6 to view statistics about the system.");
+					System.out.println("Please press 7 to view the stays you have recorded in the system.");
 					
 					System.out.println("Please press 99 to exit");
 					
@@ -78,6 +79,8 @@ public class MainMenu {
 					case "6":
 						statistics(userName, con);
 						break;
+					case "7":
+						viewStays(userName, con);
 					case"99":
 						signedDone = true;
 						break;
@@ -97,6 +100,13 @@ public class MainMenu {
 		catch( Exception e){
 			e.printStackTrace();
 		}
+	}
+
+	private static void viewStays(String userName, Connector con) {
+		Stay stayedAt = new Stay();
+		
+		stayedAt.viewStays(userName, con.stmt);
+		
 	}
 
 	private static void statistics(String userName, Connector con) {
