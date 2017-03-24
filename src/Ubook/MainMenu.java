@@ -395,7 +395,8 @@ public class MainMenu {
 			System.out.println("Please press 2 to view/change your profile");
 			System.out.println("Please press 3 to see the n most trusted users (Must be admin to do so.)");
 			System.out.println("Please press 4 to see the n most useful users, those who gave the most useful reviews. (Must be admin to do so.)");
-			System.out.println("Please press 5 to exit the user settings menu");
+			System.out.println("Please press 5 to set yourself as an admin.");
+			System.out.println("Please press 6 to exit the user settings menu");
 			try {
 				choice = input.readLine();
 			} catch (IOException e) {
@@ -411,11 +412,48 @@ public class MainMenu {
 				userItem.setViewProfile(userName, con.stmt);
 				break;
 			case "3":
-				
+				if(userItem.checkAdmin(userName, con.stmt)){
+					System.out.println("Select the amount of the most trusted users you wish to see.");
+					try {
+						choice = input.readLine();
+						userItem.topTrustedUsers(choice, con.stmt);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				}
+				else{
+					System.out.println("You are not an admin, you cannot access this function.");
+				}
 				break;
 			case "4":
+				if(userItem.checkAdmin(userName, con.stmt)){
+					System.out.println("Select the amount of the most useful users you wish to see.");
+					try {
+						choice = input.readLine();
+						userItem.topUsefulUsers(choice, con.stmt);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				}
+				else{
+					System.out.println("You are not an admin, you cannot access this function.");
+				}
 				break;
+			
 			case"5":
+				if(!userItem.checkAdmin(userName, con.stmt)){
+					userItem.setAdmin(userName, con.stmt);
+					System.out.println("You are now an admin!");
+				}
+				else{
+					System.out.println("You are already an admin.");
+				}
+				break;
+			case"6":
 				finished = true;
 				break;
 			}

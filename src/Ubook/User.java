@@ -358,7 +358,7 @@ public class User {
 				
 				sql = "UPDATE Users SET name = '"+fullName+"', userType '"+admin+"', password = '"+password+"', address = '"+address+"', phoneNumber = '"+phoneNumber+"' WHERE login = '"+userName+"';";
 				
-				rs = stmt.executeQuery(sql);
+				stmt.executeUpdate(sql);
 				
 				System.out.println("Information updated.");
 			}
@@ -440,6 +440,26 @@ public class User {
 		}
 		
 		return result;
+	}
+	
+	public boolean checkAdmin(String userName, Statement stmt){
+		boolean admin = false;
+		
+		String sql = "SELECT login FROM Users WHERE login = '"+userName+"' AND userType = '1';";
+		
+		ResultSet rs = null;
+		
+		try {
+			rs = stmt.executeQuery(sql);
+			if(rs.isBeforeFirst()){
+				admin = true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return admin;
 	}
 
 }
