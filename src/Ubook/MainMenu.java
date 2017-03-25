@@ -291,7 +291,7 @@ public class MainMenu {
 		switch(choice){
 
 			case"1":
-				shopping.browseTHs(userName, con.stmt);
+				browseTHs(userName, con, shopping);
 				break;
 			case"2":
 				reserveTHs(userName, con, shopping);
@@ -545,5 +545,55 @@ public class MainMenu {
 				shopping.insertReserve(userName, r, con.stmt);
 			}
 		}
+	}
+	
+	private static void browseTHs(String userName, Connector con, BRTH shopping) {
+		String maxPriceStr = "";
+		String minPriceStr = "0";
+		String categoryStr = "";
+		String keywordsStr = "";
+		String cityStr = "";
+		String stateStr = "";
+		String params = "";
+		String sortBy = "";
+		try {
+			System.out.println("Enter the parameters you would like to search by:");
+			System.out.println("Options: minimum_price, maximum_price, city, state, category, keywords");
+			System.out.println("Format: minimum_price and maximum_price or city");
+			params = input.readLine();
+			if(params.contains("maximum_price")) {
+				System.out.println("Enter a maximum price per night in dollars for your search:");
+				maxPriceStr = input.readLine();
+			}
+			if(params.contains("minimum_price")) {
+				System.out.println("Enter a minimum price per night in dollars for your search:");
+				minPriceStr = input.readLine();
+			}
+			if(params.contains("state")) {
+				System.out.println("Enter a State for your search: (Format: 2 letter abreviation, ie: UT");
+				stateStr = input.readLine();
+			}
+			if(params.contains("city")) {
+				System.out.println("Enter a City for your search:");
+				cityStr = input.readLine();
+			}
+			if(params.contains("category")) {
+				System.out.println("Enter a category for your search:");
+				categoryStr = input.readLine();
+			}
+			if(params.contains("keywords")) {
+				System.out.println("Enter keywords for your search:");
+				System.out.println("Format: keyword1 keyword2 keyword3");
+				keywordsStr = input.readLine();
+			}
+			System.out.println("Sort results by:");
+			System.out.println("Options(Pick one): price, average score, average trusted score");
+			sortBy = input.readLine();
+			shopping.browseTHs(con.stmt, minPriceStr, maxPriceStr, cityStr, stateStr, categoryStr, keywordsStr, sortBy, params);
+		}
+		catch(IOException e) {
+			
+		}
+		
 	}
 }
