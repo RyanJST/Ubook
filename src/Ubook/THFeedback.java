@@ -32,16 +32,10 @@ public class THFeedback {
 				stayedAt.viewStays(userName, stmt);
 				
 				System.out.println("Which house do you wish to review?");
-				try {
-					choice = MainMenu.input.readLine();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 				
 				TH verifyHouse = new TH();
 				
-				String houseID = choice;
+				String houseID = null;
 				
 				houseID = verifyHouse.verifyHouseID(userName, choice,stmt);
 				
