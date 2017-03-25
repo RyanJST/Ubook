@@ -203,7 +203,7 @@ public class dateInfo {
 			e.printStackTrace();
 		}
 		
-		System.out.println("This will remove the availability of " + pid+ "Do you want to continue?");
+		System.out.println("This will remove the availability of " + pid+ " Do you want to continue?");
 		
 		String choice = null;
 		boolean changed = false;
@@ -219,7 +219,7 @@ public class dateInfo {
 		}
 		
 		if(changed){
-			String sql = "DELETE FROM Available WHERE hid = '" +houseID + "', pid = '" + pid+"';" ;
+			String sql = "DELETE FROM Available WHERE hid = '" +houseID + "' AND pid = '" + pid+"';" ;
 			
 			try {
 				stmt.executeUpdate(sql);
@@ -233,7 +233,7 @@ public class dateInfo {
 	}
 	
 	public void createChangeAvailability(String houseID, Statement stmt, String pid, String fromDate, String toDate, String priceNight){
-		String sql = "UPDATE Available SET priceNight = '" + priceNight + "' WHERE hid = '" +houseID + "', pid = '" + pid+"';" ;
+		String sql = "UPDATE Available SET priceNight = '" + priceNight + "' WHERE hid = '" +houseID + "' AND pid = '" + pid+"';" ;
 		
 		try {
 			stmt.executeUpdate(sql);
