@@ -37,6 +37,13 @@ public class THFeedback {
 				
 				String houseID = null;
 				
+				try {
+					choice = MainMenu.input.readLine();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
 				houseID = verifyHouse.verifyHouseID(userName, choice,stmt);
 				
 				if(houseID!= null){
