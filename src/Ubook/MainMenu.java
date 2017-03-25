@@ -13,12 +13,11 @@ public class MainMenu {
 	public static void main(String[] args){
 		try{
 			Connector con = new Connector();
-			System.out.println("Hello!  Please select the option you want for UBook!");
-			//BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+			System.out.println("Hello!  Welcome to UBook, your one stop shop for a place to stay! \n Please select the option you want for UBook!");
+			
 			String userName = null;
 			boolean done = false;
-			//String innerChoice = null;
-			//String choice = "1";
+
 			while(!done){
 				System.out.println("Please press 1 to log in");
 				System.out.println("Please press 2 to sign up");
@@ -51,16 +50,17 @@ public class MainMenu {
 				System.out.println("Hello, " + userName + "!");
 				System.out.println("What would you like to do today?");
 				while(!signedDone){
-					System.out.println("Please press 1 to access your user account settings");
+					System.out.println("Please press 1 to access user account settings");
 					System.out.println("Please press 2 to Temporary Housing Settings");
 					System.out.println("Please press 3 to look for and reserve a TH.");
 					System.out.println("Please press 4 to record a stay at a TH.");
 					System.out.println("Please press 5 to create/view feedback for THs and users");
 					System.out.println("Please press 6 to view statistics about the system.");
+					System.out.println("Please press 7 to view the stays you have recorded in the system.");
 					
 					System.out.println("Please press 99 to exit");
-					String choice = input.readLine();
-					switch(choice){
+					
+					switch(input.readLine()){
 					case "1":
 						userSettings(userName, con);
 						break;
@@ -78,6 +78,9 @@ public class MainMenu {
 						break;
 					case "6":
 						statistics(userName, con);
+						break;
+					case "7":
+						viewStays(userName, con);
 						break;
 					case"99":
 						signedDone = true;
@@ -100,8 +103,15 @@ public class MainMenu {
 		}
 	}
 
+	private static void viewStays(String userName, Connector con) {
+		Stay stayedAt = new Stay();
+		
+		stayedAt.viewStays(userName, con.stmt);
+		
+	}
+
 	private static void statistics(String userName, Connector con) {
-		// TODO Auto-generated method stub
+		
 		Stats shownStats = new Stats();
 		String choice = null;
 		String amount = null;
@@ -172,7 +182,7 @@ public class MainMenu {
 	}
 
 	private static void feedback(String userName, Connector con) {
-		// TODO Auto-generated method stub
+		
 		UserFeedback createdFeedback = new UserFeedback();
 		THFeedback THReview = new THFeedback();
 		boolean done = false;
@@ -384,7 +394,10 @@ public class MainMenu {
 		while(!finished){
 			System.out.println("Please press 1 to register a new favorite TH you like to stay at.");
 			System.out.println("Please press 2 to view/change your profile");
-			System.out.println("Please press 3 to exit the user settings menu");
+			System.out.println("Please press 3 to see the n most trusted users (Must be admin to do so.)");
+			System.out.println("Please press 4 to see the n most useful users, those who gave the most useful reviews. (Must be admin to do so.)");
+			System.out.println("Please press 5 to set yourself as an admin.");
+			System.out.println("Please press 6 to exit the user settings menu");
 			try {
 				choice = input.readLine();
 			} catch (IOException e) {
@@ -399,7 +412,49 @@ public class MainMenu {
 			case"2":
 				userItem.setViewProfile(userName, con.stmt);
 				break;
-			case"3":
+			case "3":
+				if(userItem.checkAdmin(userName, con.stmt)){
+					System.out.println("Select the amount of the most trusted users you wish to see.");
+					try {
+						choice = input.readLine();
+						userItem.topTrustedUsers(choice, con.stmt);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				}
+				else{
+					System.out.println("You are not an admin, you cannot access this function.");
+				}
+				break;
+			case "4":
+				if(userItem.checkAdmin(userName, con.stmt)){
+					System.out.println("Select the amount of the most useful users you wish to see.");
+					try {
+						choice = input.readLine();
+						userItem.topUsefulUsers(choice, con.stmt);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				}
+				else{
+					System.out.println("You are not an admin, you cannot access this function.");
+				}
+				break;
+			
+			case"5":
+				if(!userItem.checkAdmin(userName, con.stmt)){
+					userItem.setAdmin(userName, con.stmt);
+					System.out.println("You are now an admin!");
+				}
+				else{
+					System.out.println("You are already an admin.");
+				}
+				break;
+			case"6":
 				finished = true;
 				break;
 			}

@@ -25,103 +25,114 @@ public class THFeedback {
 		}
 		String sql = null;
 		if(choice.toLowerCase().equals("y")){
-			
-				//System.out.println("Here is the list of houses you stayed at.");
-				//Visit visited = new Visit();
-				//Method to showed houses userName stayed at.
-				//visited.showStayedHouses(userName, stmt)
+				Stay stayedAt = new Stay();
 				
-				//System.out.println("Which house do you wish to leave feedback on?  NOTE:  You cannot review a house you own, nor a house you already reviewed, nor a house you haven't stayed at before.");
-				String houseID = TH;
-				/*try {
+				System.out.println("Here are the houses you stayed at.");
+				
+				stayedAt.viewStays(userName, stmt);
+				
+				System.out.println("Which house do you wish to review?");
+				try {
 					choice = MainMenu.input.readLine();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				*/
-				houseID = choice;
-				boolean stayedAt = true; //Used for determining if you stayed at a TH
-				if(stayedAt){
-					sql = "SELECT f.fid from Feedback F where hid = '" +houseID+ "' AND login = '" + userName+ "';";
-					boolean ratedBefore = false;
-					try {
-						rs = stmt.executeQuery(sql);
-						if(rs.isBeforeFirst()){
-							System.out.println("You have rated that TH already.  Please select another TH to rate.");
-							ratedBefore = true;
-						}
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}		
+				
+				TH verifyHouse = new TH();
+				
+				String houseID = choice;
+				
+				houseID = verifyHouse.verifyHouseID(userName, choice,stmt);
+				
+				if(houseID!= null){
+					System.out.println("You own that house, you cannot review it.");
+				}
+				
+				else{
+					houseID = stayedAt.verifyStay(userName, choice, stmt);
 					
-					if(!ratedBefore){
-						String text = null;
-						String score = null;
-						java.util.Date dt = new java.util.Date();
-						
-						java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
-						String currentTime = sdf.format(dt);
-						
-						System.out.println("Please put in the score you rate this TH.  Rate from 0(poor) to 10(excellent)");
-						
+					if(houseID != null){
+						sql = "SELECT f.fid from Feedback F where hid = '" +houseID+ "' AND login = '" + userName+ "';";
+						boolean ratedBefore = false;
 						try {
-							choice = MainMenu.input.readLine();
-						} catch (IOException e) {
+							rs = stmt.executeQuery(sql);
+							if(rs.isBeforeFirst()){
+								System.out.println("You have rated that TH already.  Please select another TH to rate.");
+								ratedBefore = true;
+							}
+						} catch (SQLException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
-						}
+						}		
 						
-						score = choice;
-						
-						System.out.println("Do you wish to write a short text review?  Leave blank if not, otherwise keep your review to 100 characters or less.");
-						
-						try {
-							choice = MainMenu.input.readLine();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						
-						if(!choice.isEmpty()){
-							text = choice;
-						}
-						
-						
-						System.out.println("Here is what your feedback will look like.");
-						
-						System.out.println("Score rating: "+score+", "
-								+ "Text Review: "+text+", House ID"+houseID+", Feedback Date: '"+currentTime);
-						
-						System.out.println("Do you wish to post this review?  (Y/N)");
-						
-						try {
-							choice = MainMenu.input.readLine();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						
-						if(!choice.toLowerCase().equals("y")){			
-							sql = "INSERT INTO Feedback(score, text, hid, login, fbdate) VALUES('"+score+"', "
-									+ "'"+text+"', '"+houseID+"', '"+userName+"', '"+currentTime+"')";
+						if(!ratedBefore){
+							String text = null;
+							String score = null;
+							java.util.Date dt = new java.util.Date();
+							
+							java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+							String currentTime = sdf.format(dt);
+							
+							System.out.println("Please put in the score you rate this TH.  Rate from 0(poor) to 10(excellent)");
 							
 							try {
-								stmt.executeUpdate(sql);
-								System.out.println("Feedback updated!");
-							} catch (SQLException e) {
+								choice = MainMenu.input.readLine();
+							} catch (IOException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
+							
+							score = choice;
+							
+							System.out.println("Do you wish to write a short text review?  Leave blank if not, otherwise keep your review to 100 characters or less.");
+							
+							try {
+								choice = MainMenu.input.readLine();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
+							if(!choice.isEmpty() && choice.length() <= 101){
+								text = choice;
+							}
+							
+							
+							System.out.println("Here is what your feedback will look like.");
+							
+							System.out.println("Score rating: "+score+", "
+									+ "Text Review: "+text+", House ID"+houseID+", Feedback Date: '"+currentTime);
+							
+							System.out.println("Do you wish to post this review?  (Y/N)");
+							
+							try {
+								choice = MainMenu.input.readLine();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
+							if(choice.toLowerCase().equals("y")){			
+								sql = "INSERT INTO Feedback(score, text, hid, login, fbdate) VALUES('"+score+"', "
+										+ "'"+text+"', '"+houseID+"', '"+userName+"', '"+currentTime+"')";
+								
+								try {
+									stmt.executeUpdate(sql);
+									System.out.println("Feedback updated!");
+								} catch (SQLException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
 						}
 					}
-				}
-				
-
-				
-			
+					else{
+						System.out.println("You did not stay at this house.  Pleas try again.");
+					}
+			}
 		}
+		System.out.println("Exiting TH review menu.");
 	}
 	
 	public void viewMostUsefulFeedback(String amount, Statement stmt, String THID){
@@ -134,7 +145,6 @@ public class THFeedback {
 		try {
 			rs = stmt.executeQuery(sql);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -145,11 +155,8 @@ public class THFeedback {
 			while(rs.next()){
 				items.add(new reviewedFeedback(rs.getString("fid"),rs.getString("score"), rs.getString("text"), rs.getString("login")
 						, rs.getString("fbdate"), rs.getString("avg_score")));
-				//System.out.println("Feedback ID: "+rs.getString("fid")+ ", TH Score: " +rs.getString("score")+ ", Feedback Text: "
-						//+rs.getString("Text")+ ", TH Score: ");
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -162,7 +169,7 @@ public class THFeedback {
 				rs = stmt.executeQuery(sql);
 				while(rs.next()){
 					items.add(new reviewedFeedback(rs.getString("fid"),rs.getString("score"), rs.getString("text"), rs.getString("login")
-							, rs.getString("fbdate"), null));
+							, rs.getString("fbdate"), "0"));
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -178,31 +185,43 @@ public class THFeedback {
 	}
 
 	public void reviewFeedback(String userName, Statement stmt, String feedbackID) {
-		// TODO Auto-generated method stub
-		
-		String sql = "SELECT R.fid from Rates R where R.fid = '" +feedbackID+ "' AND R.login = '" + userName+ "';";
+		String sql = "SELECT F.login FROM Feedback F where F.fid = '"+feedbackID+"' AND F.login = '"+userName+"';";
 		ResultSet rs = null;
 		boolean ratedBefore = false;
+		
 		try {
 			rs = stmt.executeQuery(sql);
 			if(rs.isBeforeFirst()){
-				System.out.println("You have rated that Feedback already.  Please select another Feedback to rate.");
+				System.out.println("You cannot rate a feedback you have made.");
 				ratedBefore = true;
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		if(!ratedBefore){
+			sql = "SELECT R.fid from Rates R where R.fid = '" +feedbackID+ "' AND R.login = '" + userName+ "';";
+			
+			try {
+				rs = stmt.executeQuery(sql);
+				if(rs.isBeforeFirst()){
+					System.out.println("You have rated that Feedback already.  Please select another Feedback to rate.");
+					ratedBefore = true;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 		if(!ratedBefore){		
 			System.out.println("What do you wish to rate this feedback?");
+			System.out.println("0: Not Useful");
+			System.out.println("1: Somewhat Useful");
+			System.out.println("2: Very Useful");
 			
 			String choice = null;
 			
 			try {
 				choice = MainMenu.input.readLine();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -215,7 +234,6 @@ public class THFeedback {
 			try {
 				choice = MainMenu.input.readLine();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			if(choice.toLowerCase().equals("y")){
@@ -226,7 +244,6 @@ public class THFeedback {
 					stmt.executeUpdate(sql);
 					System.out.println("Your review has been created!");
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

@@ -36,6 +36,9 @@ public class Keyword {
 			case "4":
 				ID = null;
 				break;
+			default:
+				System.out.println("That is not a valid choice, please try again.");
+				break;
 			}
 		
 		}
@@ -51,7 +54,8 @@ public class Keyword {
 		
 		viewKeyWords(ID, stmt);
 		
-		System.out.println("Which one do you wish to remove?  Press e  or enter to exit without removing any.");
+		System.out.println("Do you wish to continue with removing one?  (Y/N)");
+		
 		
 		String choice = null;				
 			
@@ -62,9 +66,25 @@ public class Keyword {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+		
+		if(!choice.toLowerCase().equals("y")){
+			done = true;
+		}
+		else{
+		System.out.println("Which one do you wish to remove? ");
+		
+		choice = null;				
+			
+				
+			try {
+				choice = MainMenu.input.readLine();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 
-			if(choice == null || choice.isEmpty() || choice.toLowerCase().equals("e")){
-				choice = null;
+			if(choice == null || choice.isEmpty()){
+				System.out.println("You need to put in a keyword.");
 				done = true;
 			}
 			if(!done){
@@ -121,9 +141,11 @@ public class Keyword {
 					
 	
 			}
+			System.out.println("Exiting remove keyword menu.");
 			System.out.println("\n");
 		
 			}
+		}
 		}
 	}
 
@@ -160,7 +182,7 @@ public class Keyword {
 			try {
 				String choice = MainMenu.input.readLine();
 				String wid = null;
-				if(choice.equals("Y")||choice.equals("y")){
+				if(choice.toLowerCase().equals("y")){
 					String sql = "Select wid from Keywords WHERE word = '"+word+"' AND language = '"+language+"';";
 					ResultSet rs;
 					try {
@@ -199,7 +221,7 @@ public class Keyword {
 							
 							choice = MainMenu.input.readLine();
 							
-							if(!choice.equals("Y")||!choice.equals("y")){
+							if(!choice.toLowerCase().equals("y")){
 								done = true;
 							}
 							else{
@@ -222,6 +244,7 @@ public class Keyword {
 			}
 				
 		}
+		System.out.println("Exiting Add keyword menu.");
 		System.out.println("\n");
 	}
 
@@ -240,6 +263,10 @@ public class Keyword {
 			catch(SQLException e){
 				e.printStackTrace();
 			}
+		
+		System.out.println("Exiting view keywords menu.");
+		System.out.println("");
 		}
+	
 }
 

@@ -75,4 +75,45 @@ public class Stay {
 			
 		} 
 	}
+	
+	public void viewStays(String userName, Statement stmt){
+		System.out.println("Here is the list of the places you stayed at and the time period.");
+		
+		String sql = "SELECT V.pid, V.hid, V.cost, T.name, P.fromDate, P.toDate FROM Visits V, TH T, Period P WHERE P.pid = V.pid AND T.hid = V.hid AND  V.login = '"+userName+"';";
+		
+		ResultSet rs = null;
+		
+		try {
+			rs = stmt.executeQuery(sql);
+			while(rs.next()){
+				System.out.println("House ID: "+rs.getString("V.hid")+", House Name: "+rs.getString("T.name")+", Cost of Stay: " +rs.getString("V.cost")+", Start Date of Stay: " +rs.getString("p.fromDate")+", End date of Stay: "+rs.getString("P.toDate"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		System.out.println("Exiting View Stay menu.");
+		System.out.println("");
+		
+	}
+	
+	public String verifyStay(String userName, String houseID, Statement stmt){
+		String result = null;
+		
+		String sql = "SELECT V.hid FROM Visits V WHERE V.login = '"+userName+"' AND V.hid = '"+userName+"';";
+		ResultSet rs = null;
+		 
+		try {
+			rs= stmt.executeQuery(sql);
+			if(rs.isBeforeFirst()){
+				result = houseID;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
 }
