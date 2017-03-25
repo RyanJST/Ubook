@@ -48,7 +48,7 @@ public class TH {
 		String houseName = "start";
 		boolean changed = false;
 		try{
-			if(!(MainMenu.input.readLine()).toLowerCase().equals("y")){
+			if((MainMenu.input.readLine()).toLowerCase().equals("y")){
 				houseName = null;	
 			}
 		}
