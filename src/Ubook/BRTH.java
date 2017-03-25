@@ -5,33 +5,63 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class BRTH {
 
-	public void browseTHs(Statement stmt, String minPrice, String maxPrice, String city, String state, String category, String keywords, String sortBy) {
-		// TODO Auto-generated method stub
+	public void browseTHs(Statement stmt, String minPrice, String maxPrice, String city, String state, String category, String keywords, String sortBy, String params) {
+		String[] parameterSplit = params.split(" ");
+		
 		String[] kws = keywords.split(" ");
 		try{
-			String sql = "SELECT DISTINCT H.*, A.hid, A.priceNight, IFNULL(AVG(F.score), 0) as fbScore FROM TH H LEFT JOIN";
+			String sql = "SELECT DISTINCT H.*, A.priceNight, IFNULL(AVG(F.score), 0) as fbScore FROM TH H LEFT JOIN";
 			if (sortBy.equals("average trusted score")) sql += " (Feedback F LEFT JOIN Trust T ON F.login = T.login2)";
 			else sql += " Feedback F";
-			sql += " ON F.hid = H.hid, Available A WHERE H.hid = A.hid AND A.priceNight > " + minPrice;
-			if (!maxPrice.equals("")) sql += " AND A.priceNight < " + maxPrice;
-			if (sortBy.equals("average trusted score")) sql += " AND (T.isTrusted OR T.isTrusted IS NULL)";
-			sql += " AND A.priceNight <= ALL (SELECT A1.priceNight FROM Available A1 WHERE A1.hid = H.hid)";
-			if (!state.equals("")) sql += " AND H.state = '" + state + "'";
-			if (!city.equals("")) sql += " AND H.city = '" + city + "'";
-			if (!category.equals("")) sql += " AND H.category = '" + category + "'";
-			if (!keywords.equals("")) {
-				sql += " AND H.hid IN (SELECT H1.hid FROM TH H1 JOIN HasKeywords HK ON H1.hid = HK.hid WHERE HK.wid IN (SELECT K.wid FROM Keywords K WHERE ";
-				for(int i = 0; i < kws.length; i++) {
-					if(i != 0) sql += " OR ";
-					sql += "K.word = '" + kws[i] + "'";
+			sql += " ON F.hid = H.hid LEFT JOIN Available A ON H.hid = A.hid WHERE ";
+			if (sortBy.equals("average trusted score")) sql += " (T.isTrusted OR T.isTrusted IS NULL) AND";
+			sql += " A.priceNight <= ALL (SELECT A1.priceNight FROM Available A1 WHERE A1.hid = H.hid)";
+			sql += " AND (";
+			int j = 0;
+			while(j < parameterSplit.length) {
+				if (parameterSplit[j].equals("minimum_price")) {
+					if (j > 0) sql += " " + parameterSplit[j-1] + " ";
+					sql += "A.priceNight > " + minPrice;
+					j+=2;
 				}
-				sql += ") GROUP BY H1.hid HAVING COUNT(*) = " + kws.length + ")";
+				else if (parameterSplit[j].equals("maximum_price")) {
+					if (j > 0) sql += " " + parameterSplit[j-1] + " ";
+					sql += "A.priceNight < " + maxPrice;
+					j+=2;
+				}
+				else if (parameterSplit[j].equals("state")) {
+					if (j > 0) sql += " " + parameterSplit[j-1] + " ";
+					sql += "H.state = '" + state + "'";
+					j+=2;
+				}
+				else if (parameterSplit[j].equals("city")) {
+					if (j > 0) sql += " " + parameterSplit[j-1] + " ";
+					sql += "H.city = '" + city + "'";
+					j+=2;
+				}
+				else if (parameterSplit[j].equals("category")) {
+					if (j > 0) sql += " " + parameterSplit[j-1] + " ";
+					sql += "H.category = '" + category + "'";
+					j+=2;
+				}
+				else if (parameterSplit[j].equals("keywords")) {
+					if (j > 0) sql += " " + parameterSplit[j-1] + " ";
+					sql += "H.hid IN (SELECT H1.hid FROM TH H1 JOIN HasKeywords HK ON H1.hid = HK.hid WHERE HK.wid IN (SELECT K.wid FROM Keywords K WHERE ";
+					for(int i = 0; i < kws.length; i++) {
+						if(i != 0) sql += " OR ";
+						sql += "K.word = '" + kws[i] + "'";
+					}
+					sql += ") GROUP BY H1.hid HAVING COUNT(*) = " + kws.length + ")";
+					j+=2;
+				}
 			}
-			sql += " GROUP BY H.hid, A.priceNight ORDER BY ";
+			sql += ") GROUP BY H.hid, A.priceNight ORDER BY ";
 			if(sortBy.equals("average score") || sortBy.equals("average trusted score")) {
 				sql += "fbScore DESC;";
 			}
@@ -41,7 +71,9 @@ public class BRTH {
  			ResultSet rs = null;
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
-				System.out.println("House ID: " + rs.getString("H.hid") + ", Name: " + rs.getString("H.name") + ", Category: " + rs.getString("H.category") + ", Price per Night as Low as: $" + rs.getString("A.priceNight"));
+				System.out.println("House ID: " + rs.getString("H.hid") + ", Name: " + rs.getString("H.name") + ", Category: " + rs.getString("H.category"));
+				if(rs.getString("A.priceNight") != null) System.out.println("  Price per Night as Low as: $" + rs.getString("A.priceNight"));
+				else System.out.println("  This house currently has no availabilities");
 				System.out.println("  Address: " + rs.getString("H.address") + ", " + rs.getString("H.city") + " " + rs.getString("H.state"));
 				System.out.println("  Owner: " + rs.getString("H.login") + ", Phone #: " + rs.getString("H.phoneNumber") +  ", Website: " + rs.getString("url"));
 				System.out.println("Average Feedback Score: " + rs.getString("fbScore"));

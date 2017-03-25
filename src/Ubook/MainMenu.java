@@ -452,14 +452,14 @@ public class MainMenu {
 		String sortBy = "";
 		try {
 			System.out.println("Enter the parameters you would like to search by:");
-			System.out.println("Options: minimum price, maximum price, city, state, category, keywords");
-			System.out.println("Format: minimum price and maximum price and city xor category");
+			System.out.println("Options: minimum_price, maximum_price, city, state, category, keywords");
+			System.out.println("Format: minimum_price and maximum_price or city");
 			params = input.readLine();
-			if(params.contains("maximum price")) {
+			if(params.contains("maximum_price")) {
 				System.out.println("Enter a maximum price per night in dollars for your search:");
 				maxPriceStr = input.readLine();
 			}
-			if(params.contains("minimum price")) {
+			if(params.contains("minimum_price")) {
 				System.out.println("Enter a minimum price per night in dollars for your search:");
 				minPriceStr = input.readLine();
 			}
@@ -483,7 +483,7 @@ public class MainMenu {
 			System.out.println("Sort results by:");
 			System.out.println("Options(Pick one): price, average score, average trusted score");
 			sortBy = input.readLine();
-			shopping.browseTHs(con.stmt, minPriceStr, maxPriceStr, cityStr, stateStr, categoryStr, keywordsStr, sortBy);
+			shopping.browseTHs(con.stmt, minPriceStr, maxPriceStr, cityStr, stateStr, categoryStr, keywordsStr, sortBy, params);
 		}
 		catch(IOException e) {
 			
