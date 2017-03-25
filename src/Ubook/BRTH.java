@@ -178,13 +178,13 @@ public class BRTH {
 			
 			sql = "INSERT INTO Reserves (pid, hid, login, cost) VALUES (LAST_INSERT_ID(), " + r.hid + ", '" + userName + "', " + (priceNight * length) + ");";
 			stmt.executeUpdate(sql);
-			if(oldFrom != r.fromDate) {
+			if(!oldFrom.equals(r.fromDate)) {
 				sql = "INSERT INTO Period (fromDate, toDate) VALUES ('" + oldFrom + "', ('" + r.fromDate + "' - INTERVAL 1 DAY));";
 				stmt.executeUpdate(sql);
 				sql = "INSERT INTO Available (pid, hid, priceNight) VALUES (LAST_INSERT_ID(), " + r.hid + ", " + priceNight + ");";
 				stmt.executeUpdate(sql);
 			}
-			if(oldTo != r.toDate) {
+			if(!oldTo.equals(r.toDate)) {
 				sql = "INSERT INTO Period (fromDate, toDate) VALUES (('" + r.toDate + "' + INTERVAL 1 DAY), '" + oldTo + "');";
 				stmt.executeUpdate(sql);
 				sql = "INSERT INTO Available (pid, hid, priceNight) VALUES (LAST_INSERT_ID(), " + r.hid + ", " + priceNight + ");";
