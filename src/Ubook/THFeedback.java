@@ -129,7 +129,7 @@ public class THFeedback {
 						}
 					}
 					else{
-						System.out.println("You did not stay at this house.  Pleas try again.");
+						System.out.println("You did not stay at this house.  Please try again.");
 					}
 			}
 		}
@@ -180,7 +180,7 @@ public class THFeedback {
 		
 		for(int i = 0; i < items.size(); i ++){
 			System.out.println("Feedback ID: "+items.get(i).lFid+ ", TH Score: " +items.get(i).lScore+ ", Feedback Text: "
-					+items.get(i).lText+ ", Feedback Maker: "+items.get(i).lLogin+ ", Feedback Date:  "+items.get(i).lFBdate+ ", Average score" + items.get(i).lAvgScore);
+					+items.get(i).lText+ ", Feedback Maker: "+items.get(i).lLogin+ ", Feedback Date:  "+items.get(i).lFBdate+ ", Average score: " + items.get(i).lAvgScore);
 		}
 		System.out.println("\n");
 	}
