@@ -260,13 +260,6 @@ public class TH {
 		System.out.println("\n");
 		System.out.println("Select which house you wish to update");
 		
-		try {
-			houseID = MainMenu.input.readLine();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
 		houseID = verifyHouseID(userName, houseID, stmt);
 	
 		
@@ -467,16 +460,12 @@ public class TH {
 		System.out.println("Select which house you wish to do availability operations on.\n");
 		String houseID = null;
 		
-		try {
-			houseID = MainMenu.input.readLine();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		if(houseID == null){
+			System.out.println("You do not own the house in question.");
 		}
-		
-		
 		houseID = verifyHouseID(userName, houseID,stmt);
 		//BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+		
 		while(houseID != null){
 			System.out.println("Press 1 to add a date of availability");
 			System.out.println("Press 2 to change a date of availability");
@@ -529,19 +518,15 @@ public class TH {
 		System.out.println("\n");
 		System.out.println("Select which house you wish to view/update/create keywords for.");
 		
-		try {
-			houseID = MainMenu.input.readLine();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		houseID = verifyHouseID(userName, houseID,stmt);
 		
 		if(houseID != null){
 			Keyword keys = new Keyword();
 			
 			keys.setUp(houseID, stmt);
+		}
+		else{
+			System.out.println("You do not own that house.");
 		}
 	}
 
