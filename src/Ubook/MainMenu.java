@@ -196,7 +196,6 @@ public class MainMenu {
 			System.out.println("Press 3 to create a trusted review on another User.");
 			System.out.println("Press 4 to see the trusted level of a User.");
 			System.out.println("Press 5 to see the most useful reviews of a TH.");
-			System.out.println("Press 6 to review a feedback on a TH");
 			System.out.println("Press 99 to exit");
 			
 			try{
@@ -208,7 +207,7 @@ public class MainMenu {
 			switch(choice){
 			
 			case "1":
-				System.out.println("Which house do you wish to leave feedback on?  NOTE:  You cannot review a house you own, nor a house you already reviewed, nor a house you haven't stayed at before.");
+			/*	System.out.println("Which house do you wish to leave feedback on?  NOTE:  You cannot review a house you own, nor a house you already reviewed, nor a house you haven't stayed at before.");
 				
 				try {
 					result = MainMenu.input.readLine();
@@ -216,7 +215,7 @@ public class MainMenu {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+				*/
 				THReview.thReview(userName,con.stmt, result);
 				break;
 			case"2":
@@ -265,9 +264,6 @@ public class MainMenu {
 				}
 				
 				THReview.viewMostUsefulFeedback(numTotal, con.stmt, result);
-				
-				break;
-			case"6":
 				
 				break;
 			case"99":

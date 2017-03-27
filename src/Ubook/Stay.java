@@ -76,15 +76,18 @@ public class Stay {
 		} 
 	}
 	
-	public void viewStays(String userName, Statement stmt){
+	public boolean viewStays(String userName, Statement stmt){
 		System.out.println("Here is the list of the places you stayed at and the time period.");
-		
+		boolean stayed = false;
 		String sql = "SELECT V.pid, V.hid, V.cost, T.name, P.fromDate, P.toDate FROM Visits V, TH T, Period P WHERE P.pid = V.pid AND T.hid = V.hid AND  V.login = '"+userName+"';";
 		
 		ResultSet rs = null;
 		
 		try {
 			rs = stmt.executeQuery(sql);
+			if(rs.isBeforeFirst()){
+				stayed = true;
+			}
 			while(rs.next()){
 				System.out.println("House ID: "+rs.getString("V.hid")+", House Name: "+rs.getString("T.name")+", Cost of Stay: " +rs.getString("V.cost")+", Start Date of Stay: " +rs.getString("p.fromDate")+", End date of Stay: "+rs.getString("P.toDate"));
 			}
@@ -95,13 +98,14 @@ public class Stay {
 		
 		System.out.println("Exiting View Stay menu.");
 		System.out.println("");
+		return stayed;
 		
 	}
 	
 	public String verifyStay(String userName, String houseID, Statement stmt){
 		String result = null;
 		
-		String sql = "SELECT V.hid FROM Visits V WHERE V.login = '"+userName+"' AND V.hid = '"+userName+"';";
+		String sql = "SELECT V.hid FROM Visits V WHERE V.login = '"+userName+"' AND V.hid = '"+houseID+"';";
 		ResultSet rs = null;
 		 
 		try {

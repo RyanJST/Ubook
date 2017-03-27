@@ -97,8 +97,8 @@ public class Stats {
 			try {
 				rs = stmt.executeQuery(sql);
 				if(!rs.isBeforeFirst()){
-					System.out.println("There are no houses that have been stayed at or reviewed yet in the system for the category " + categories.get(i) + ".");
-					System.out.println("\n");
+					System.out.println("There are no houses that have been stayed at or reviewed yet in the system for the category: '" + categories.get(i) + "'.");
+					System.out.println("");
 					
 					}
 				
@@ -106,6 +106,7 @@ public class Stats {
 					System.out.println("House Category: " + rs.getString("T.category")+", House ID: " + rs.getString("F.hid")+", House Average Score: " + rs.getString("scoreAVG")+ ", House Name: "  + rs.getString("T.category")+", House Address: " + rs.getString("T.address")
 					 + ", " +rs.getString("T.city")+", " + rs.getString("T.state")+", House Year Built: " + rs.getString("T.yearBuilt")+", House Phone Number: " + rs.getString("T.phoneNumber")+", House URL: " + rs.getString("T.URL")+
 							", House Owner: " + rs.getString("T.login"));
+					System.out.println("");
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -116,11 +117,11 @@ public class Stats {
 			
 		}
 		
-		System.out.println("\n");
+		System.out.println("");
 		
 		System.out.println("Exiting rated category TH menu");
 		
-		System.out.println("\n");
+		System.out.println("");
 	}
 
 }

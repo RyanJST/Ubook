@@ -27,110 +27,111 @@ public class THFeedback {
 		if(choice.toLowerCase().equals("y")){
 				Stay stayedAt = new Stay();
 				
-				System.out.println("Here are the houses you stayed at.");
-				
-				stayedAt.viewStays(userName, stmt);
-				
-				System.out.println("Which house do you wish to review?");
-				
-				TH verifyHouse = new TH();
-				
-				String houseID = null;
-				
-				try {
-					choice = MainMenu.input.readLine();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				if(!stayedAt.viewStays(userName, stmt)){
+					System.out.println("You have not stayed at any houses, you cannot review a TH.");
 				}
-				
-				houseID = verifyHouse.verifyHouseID(userName, choice,stmt);
-				
-				if(houseID!= null){
-					System.out.println("You own that house, you cannot review it.");
-				}
-				
 				else{
-					houseID = stayedAt.verifyStay(userName, choice, stmt);
+					System.out.println("Which house do you wish to review?");
 					
-					if(houseID != null){
-						sql = "SELECT f.fid from Feedback F where hid = '" +houseID+ "' AND login = '" + userName+ "';";
-						boolean ratedBefore = false;
-						try {
-							rs = stmt.executeQuery(sql);
-							if(rs.isBeforeFirst()){
-								System.out.println("You have rated that TH already.  Please select another TH to rate.");
-								ratedBefore = true;
-							}
-						} catch (SQLException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}		
+					TH verifyHouse = new TH();
+					
+					String houseID = null;
+					
+					try {
+						choice = MainMenu.input.readLine();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+					houseID = verifyHouse.verifyHouseID(userName, choice,stmt);
+					
+					if(houseID!= null){
+						System.out.println("You own that house, you cannot review it.");
+					}
+					
+					else{
+						houseID = stayedAt.verifyStay(userName, choice, stmt);
 						
-						if(!ratedBefore){
-							String text = null;
-							String score = null;
-							java.util.Date dt = new java.util.Date();
-							
-							java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
-							String currentTime = sdf.format(dt);
-							
-							System.out.println("Please put in the score you rate this TH.  Rate from 0(poor) to 10(excellent)");
-							
+						if(houseID != null){
+							sql = "SELECT F.fid from Feedback F where F.hid = '" +houseID+ "' AND F.login = '" + userName+ "';";
+							boolean ratedBefore = false;
 							try {
-								choice = MainMenu.input.readLine();
-							} catch (IOException e) {
+								rs = stmt.executeQuery(sql);
+								if(rs.isBeforeFirst()){
+									System.out.println("You have rated that TH already.  Please select another TH to rate.");
+									ratedBefore = true;
+								}
+							} catch (SQLException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
-							}
+							}		
 							
-							score = choice;
-							
-							System.out.println("Do you wish to write a short text review?  Leave blank if not, otherwise keep your review to 100 characters or less.");
-							
-							try {
-								choice = MainMenu.input.readLine();
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							
-							if(!choice.isEmpty() && choice.length() <= 101){
-								text = choice;
-							}
-							
-							
-							System.out.println("Here is what your feedback will look like.");
-							
-							System.out.println("Score rating: "+score+", "
-									+ "Text Review: "+text+", House ID"+houseID+", Feedback Date: '"+currentTime);
-							
-							System.out.println("Do you wish to post this review?  (Y/N)");
-							
-							try {
-								choice = MainMenu.input.readLine();
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							
-							if(choice.toLowerCase().equals("y")){			
-								sql = "INSERT INTO Feedback(score, text, hid, login, fbdate) VALUES('"+score+"', "
-										+ "'"+text+"', '"+houseID+"', '"+userName+"', '"+currentTime+"')";
+							if(!ratedBefore){
+								String text = null;
+								String score = null;
+								java.util.Date dt = new java.util.Date();
+								
+								java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+								String currentTime = sdf.format(dt);
+								
+								System.out.println("Please put in the score you rate this TH.  Rate from 0(poor) to 10(excellent)");
 								
 								try {
-									stmt.executeUpdate(sql);
-									System.out.println("Feedback updated!");
-								} catch (SQLException e) {
+									choice = MainMenu.input.readLine();
+								} catch (IOException e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
+								
+								score = choice;
+								
+								System.out.println("Do you wish to write a short text review?  Leave blank if not, otherwise keep your review to 100 characters or less.");
+								
+								try {
+									choice = MainMenu.input.readLine();
+								} catch (IOException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								
+								if(!choice.isEmpty() && choice.length() <= 101){
+									text = choice;
+								}
+								
+								
+								System.out.println("Here is what your feedback will look like.");
+								
+								System.out.println("Score rating: "+score+", "
+										+ "Text Review: "+text+", House ID: "+houseID+", Feedback Date: "+currentTime);
+								
+								System.out.println("Do you wish to post this review?  (Y/N)");
+								
+								try {
+									choice = MainMenu.input.readLine();
+								} catch (IOException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								
+								if(choice.toLowerCase().equals("y")){			
+									sql = "INSERT INTO Feedback(score, text, hid, login, fbdate) VALUES('"+score+"', "
+											+ "'"+text+"', '"+houseID+"', '"+userName+"', '"+currentTime+"')";
+									
+									try {
+										stmt.executeUpdate(sql);
+										System.out.println("Feedback updated!");
+									} catch (SQLException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+								}
 							}
 						}
-					}
-					else{
-						System.out.println("You did not stay at this house.  Please try again.");
-					}
+						else{
+							System.out.println("You did not stay at this house.  Please try again.");
+						}
+				}
 			}
 		}
 		System.out.println("Exiting TH review menu.");

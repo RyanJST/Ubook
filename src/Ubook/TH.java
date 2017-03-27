@@ -14,7 +14,7 @@ public class TH {
  
 		ResultSet rs = null;
 		
-		
+	/*	
 		if(houseID != null && !houseID.isEmpty()){
 			try {
 				houseID = MainMenu.input.readLine();
@@ -25,6 +25,7 @@ public class TH {
 			}
 
 		}
+		*/
 		String sql = "SELECT * FROM TH WHERE login = '" + userName + "' AND hid = '" +houseID+ "';";
 		try {
 			rs = stmt.executeQuery(sql);
@@ -259,8 +260,14 @@ public class TH {
 		
 		System.out.println("\n");
 		System.out.println("Select which house you wish to update");
-		
-		houseID = verifyHouseID(userName, houseID, stmt);
+		String choice = null;
+		try{
+		choice = MainMenu.input.readLine();
+		}
+		catch(IOException e){
+			e.printStackTrace();
+		}
+		houseID = verifyHouseID(userName, choice, stmt);
 	
 		
 		
@@ -295,7 +302,7 @@ public class TH {
 			
 			if(houseID != null){
 				System.out.println("Please select what you want the new name to be, leave blank to keep the name the same.");
-				String choice = null;
+				choice = null;
 				try {
 					choice = MainMenu.input.readLine();
 				} catch (IOException e) {
@@ -460,19 +467,27 @@ public class TH {
 		System.out.println("Select which house you wish to do availability operations on.\n");
 		String houseID = null;
 		
+		String choice = null;
+		try {
+			choice = MainMenu.input.readLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+
+		houseID = verifyHouseID(userName, choice, stmt);
+		//BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		if(houseID == null){
 			System.out.println("You do not own the house in question.");
 		}
-		houseID = verifyHouseID(userName, houseID,stmt);
-		//BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-		
 		while(houseID != null){
 			System.out.println("Press 1 to add a date of availability");
 			System.out.println("Press 2 to change a date of availability");
 			System.out.println("Press 3 to remove a date of availability");
 			System.out.println("Press 4 to show all current availabilities of your house");
 			System.out.println("Press 5 to exit.");
-			String choice = null;
+			choice = null;
 			try {
 				choice = MainMenu.input.readLine();
 			} catch (IOException e) {
@@ -518,7 +533,15 @@ public class TH {
 		System.out.println("\n");
 		System.out.println("Select which house you wish to view/update/create keywords for.");
 		
-		houseID = verifyHouseID(userName, houseID,stmt);
+		String choice = null;
+		try {
+			choice = MainMenu.input.readLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		houseID = verifyHouseID(userName, choice,stmt);
 		
 		if(houseID != null){
 			Keyword keys = new Keyword();
@@ -532,8 +555,8 @@ public class TH {
 
 	public void THSuggestions(String THID, String userName, Statement stmt){
 		System.out.println("Here are some other houses you may like.");
-		String sql = "SELECT DISTINCT V.hid, T.name, T.category, T.address, T.URL, T.phoneNumber, T.yearBuilt, T.city, T.state, T.login, COUNT(distinct V.login) AS guestCount FROM Visits V, TH T WHERE V.login = ANY(SELECT DISTINCT V2.login FROM Visits V2 WHERE V2.hid = '"+THID+"' AND V2.login != '"+userName+"') AND V.hid != '"+THID+"' GROUP BY  V.hid, T.name, T.category, T.address, T.URL, T.phoneNumber, T.yearBuilt, T.city, T.state, T.login ORDER BY guestCount DESC; ";
-		
+		String sql = "SELECT DISTINCT V.hid, T.name, T.category, T.address, T.URL, T.phoneNumber, T.yearBuilt, T.city, T.state, T.login, COUNT(distinct V.login) AS guestCount FROM Visits V, TH T WHERE V.login = ANY(SELECT DISTINCT V2.login FROM Visits V2 WHERE V2.hid = '"+THID+"' AND V2.login != '"+userName+"') AND V.hid != '"+THID+"' AND V.hid = T.hid GROUP BY  V.hid, T.name, T.category, T.address, T.URL, T.phoneNumber, T.yearBuilt, T.city, T.state, T.login ORDER BY guestCount DESC; ";
+		//String sql = "SELECT DISTINCT V.hid, COUNT(distinct V.login) AS guestCount FROM  Visits V WHERE V.login = ANY(SELECT DISTINCT V2.login FROM 5530db34.Visits V2 WHERE V2.hid = '"+THID+"' AND V2.login != '"+userName+"') AND V.hid != '"+THID+"' GROUP BY  V.hid ORDER BY guestCount DESC; ";
 		ResultSet rs = null;
 		
 		try {
