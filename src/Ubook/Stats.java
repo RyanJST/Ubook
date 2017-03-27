@@ -33,11 +33,11 @@ public class Stats {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("\n");
+		System.out.println("");
 		
 		System.out.println("Exiting popular TH menu");
 		
-		System.out.println("\n");
+		System.out.println("");
 	}
 
 	public void expensiveTH(String userName, String amount, Statement stmt) {
@@ -65,11 +65,11 @@ public class Stats {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("\n");
+		System.out.println("");
 		
 		System.out.println("Exiting most expensive TH menu");
 		
-		System.out.println("\n");
+		System.out.println("");
 		
 	}
 

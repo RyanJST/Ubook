@@ -122,6 +122,26 @@ public class dateInfo {
 		String toDate = null;
 		String priceNight = null;
 		
+		String sql = "SELECT A.pid, A.priceNight, P.fromDate, P.toDate FROM Available A, Period P WHERE A.hid = '"+houseID+"' AND P.pid = A.pid ;";
+		ResultSet rs = null;
+		try {
+			rs = stmt.executeQuery(sql);
+			while(rs.next()){
+				fromDate = rs.getString("P.fromDate");
+				toDate = rs.getString("P.toDate");
+				priceNight = rs.getString("A.priceNight");
+				
+				}
+				
+			}
+			
+		
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+
+		
 		System.out.println("Select the new from date. Put in the format 'YYYY-MM-DD'. Leave blank to keep the same.");
 		
 		try {

@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TH {
 	//
@@ -47,7 +45,7 @@ public class TH {
 		System.out.println("Here you register your temporary housing. Do you wish to continue? (Y/N)");
 		
 		String houseName = "start";
-		boolean changed = false;
+
 		try{
 			if((MainMenu.input.readLine()).toLowerCase().equals("y")){
 				houseName = null;	
@@ -229,13 +227,15 @@ public class TH {
 			while(rs.next()){
 				
 				System.out.println("House ID: " + rs.getString("hid") +",   House Name: " + rs.getString("name") );
-					
+				System.out.println("");	
 				}
 			
 		}
 		catch(SQLException e){
 			e.printStackTrace();
 		}
+		System.out.println("Exiting listed homes.");
+		System.out.println("");
 	}
 
 	public int changeHouse(String userName, Statement stmt) {
@@ -258,7 +258,7 @@ public class TH {
 		System.out.println("Here is a list of the houses you own.");
 		listOwnedHouses(userName, stmt);
 		
-		System.out.println("\n");
+		
 		System.out.println("Select which house you wish to update");
 		String choice = null;
 		try{
@@ -530,7 +530,7 @@ public class TH {
 		System.out.println("Here is a list of the houses you own.");
 		listOwnedHouses(userName, stmt);
 		
-		System.out.println("\n");
+		
 		System.out.println("Select which house you wish to view/update/create keywords for.");
 		
 		String choice = null;

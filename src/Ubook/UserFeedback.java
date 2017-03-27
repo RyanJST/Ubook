@@ -54,7 +54,7 @@ public class UserFeedback {
 						e1.printStackTrace();
 					}
 					
-					System.out.println("DO you wish to review another user?  (Y/N)");
+					System.out.println("Do you wish to review another user?  (Y/N)");
 					
 					try{
 						if(!MainMenu.input.readLine().toLowerCase().equals("y")){

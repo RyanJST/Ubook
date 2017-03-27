@@ -175,7 +175,7 @@ public class User {
 		boolean done = false;
 		String choice = null;
 		String sql = null;
-		ResultSet rs = null; 
+
 		int haveFavorite = -1;
 		while(!done){
 			
