@@ -117,8 +117,6 @@ public class Stats {
 			
 		}
 		
-		System.out.println("");
-		
 		System.out.println("Exiting rated category TH menu");
 		
 		System.out.println("");
