@@ -409,7 +409,7 @@ public class User {
 	public int degreeOfSeperation(String userName, String checkName,Statement stmt){
 		int result = -1;
 		
-		String sql = "SELECT F.login FROM Favorites F WHERE F.login = '"+checkName+"' AND F.hid = ANY(SELECT F2.hid FROM Favorites F WHERE F2.login = '"+userName+"');";
+		String sql = "SELECT F.login FROM Favorites F WHERE F.login = '"+checkName+"' AND F.hid = ANY(SELECT F2.hid FROM Favorites F2 WHERE F2.login = '"+userName+"');";
 		boolean found = false;
 		ResultSet rs = null;
 		

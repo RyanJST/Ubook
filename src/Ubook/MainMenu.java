@@ -50,7 +50,7 @@ public class MainMenu {
 				System.out.println("Hello, " + userName + "!");
 				System.out.println("What would you like to do today?");
 				while(!signedDone){
-					System.out.println("Please press 1 to access user account settings");
+					System.out.println("Please press 1 to account settings, admin options, and check degrees of separation");
 					System.out.println("Please press 2 to Temporary Housing Settings");
 					System.out.println("Please press 3 to look for and reserve a TH.");
 					System.out.println("Please press 4 to record a stay at a TH.");
@@ -397,7 +397,8 @@ public class MainMenu {
 			System.out.println("Please press 3 to see the n most trusted users (Must be admin to do so.)");
 			System.out.println("Please press 4 to see the n most useful users, those who gave the most useful reviews. (Must be admin to do so.)");
 			System.out.println("Please press 5 to set yourself as an admin.");
-			System.out.println("Please press 6 to exit the user settings menu");
+			System.out.println("Please press 6 to check degrees of separation of 2 users");
+			System.out.println("Please press 7 to exit the user settings menu");
 			try {
 				choice = input.readLine();
 			} catch (IOException e) {
@@ -455,6 +456,18 @@ public class MainMenu {
 				}
 				break;
 			case"6":
+				try {
+					System.out.println("Enter the two usernames you would like to check for degrees of separation, separated by a space: (user1 user2)");
+					String[] users = input.readLine().split(" ");
+					int res = userItem.degreeOfSeperation(users[0], users[1], con.stmt);
+					if(res > 0) System.out.println("Degrees of separation: " + res + "\n");
+					else System.out.println("Users have no connection\n");
+				}
+				catch (IOException e) {
+					
+				}
+				break;
+			case"7":
 				finished = true;
 				break;
 			}
