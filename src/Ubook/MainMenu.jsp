@@ -46,10 +46,25 @@ if(user == null){
 
 
 } else {
-	out.println(user);
+	out.println("Welcome " +user);
 	
-	session.invalidate();
-	response.sendRedirect("index.html");
+	
+	%>
+	<form action = "MainMenu.jsp" method=post >
+	<input type = submit name = logout value = "logout"/></form>
+	
+	<br></br>
+	
+	<form action = "User.jsp" method = post>
+	<input type = submit name = viewProfile value = "View user profile"/>
+	</form>
+	
+	<%
+	if(request.getParameter("logout") != null){
+		session.invalidate();
+		response.sendRedirect("index.html");
+	}
+
 	
 }
 %>  

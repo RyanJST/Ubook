@@ -10,7 +10,7 @@
 Connector con = new Connector();
 User user = new User();
 
-if(request.getParameter("login")){
+if(request.getParameter("login") != null){
 String userName = request.getParameter("userName");
 String password = request.getParameter("password");
 
@@ -42,7 +42,7 @@ else if(request.getParameter("registerUser") != null){
 	</form>
 <% 
 }
-else if(request.getParameter("doneRegister" != null)){
+else if(request.getParameter("doneRegister") != null){
 
 	String userName = request.getParameter("userName");
 	String password = request.getParameter("password");
@@ -77,6 +77,17 @@ else if(request.getParameter("doneRegister" != null)){
 		</form>
 		<%
 	}
+}
+
+else if(request.getParameter("viewProfile") != null){
+	String[] result = user.setViewProfile((String)session.getAttribute("user"), con.stmt);
+		
+	out.println("User Name: " + session.getAttribute("user"));
+	out.println("Full Name: " + result[1]);
+	out.println("Admin(1 for yes, 0 for no): " + result[2]);
+	out.println("Address: " +result[3]);
+	out.println("Phone Number: " + result[4]);
+	out.println("<a href=\"MainMenu.jsp\">Back to main</a>");
 }
  %>
 <%

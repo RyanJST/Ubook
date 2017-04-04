@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+
 
 public class User {
 	//BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
@@ -161,145 +165,220 @@ public class User {
 		return userName;
 	}
 
-	public void setAdmin(String userName, Statement stmt) {
+	public int setAdmin(String userName, Statement stmt) {
 		// TODO Auto-generated method stub
 		
 		String sql = "UPDATE Users Set userType = '1' WHERE login = '" + userName + "' AND userType = '0';";
-		
+		boolean done = false; 
+		int rs = 0;
 		try {
-			stmt.executeUpdate(sql);
+			rs = stmt.executeUpdate(sql);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		return rs;
 	}
 
-	public void setFavoriteTH(String userName, Statement stmt) {
+	public void setFavoriteTH(String userName, Statement stmt, String TH) {
 		// TODO Auto-generated method stub
 		boolean done = false;
 		String choice = null;
 		String sql = null;
 
-		int haveFavorite = -1;
+		int haveFavorite = 0;
 		while(!done){
 			
-			haveFavorite = viewFavoriteTH(userName, stmt, true);
-			
-			System.out.println("Here is the list of THs you have stayed at.");
-			
-			//Show Houses user has stayed at.
-			
-			System.out.println("Do you wish to register a new favorite or remove your current favorite?(Y/N)");
-			
-			try {
-				choice = MainMenu.input.readLine();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if(viewFavoriteTH(userName, stmt, true)[0] != null){
+				haveFavorite = 1;
 			}
 			
-			if(!choice.toLowerCase().equals("y")){
-				done = true;
-				
-			}
-			else{
+//			System.out.println("Here is the list of THs you have stayed at.");
+//			
+//			//Show Houses user has stayed at.
+//			
+//			System.out.println("Do you wish to register a new favorite or remove your current favorite?(Y/N)");
+			
+//			try {
+//				choice = MainMenu.input.readLine();
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			
+//			if(!choice.toLowerCase().equals("y")){
+//				done = true;
+//				
+//			}
+			//else{
 				java.util.Date dt = new java.util.Date();
 				
 				java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
 				String currentTime = sdf.format(dt);
-				System.out.println("What house ID do you wish to register as your favorite?  Leave blank to remove/not register a favorite.");
+//				System.out.println("What house ID do you wish to register as your favorite?  Leave blank to remove/not register a favorite.");
+//				
+//				try {
+//					choice = MainMenu.input.readLine();
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
 				
-				try {
-					choice = MainMenu.input.readLine();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				//String output = null;
 				
-				String output = null;
-				
-				if(choice.isEmpty()){
+				if(TH.equals("DELETE")){
 					sql = "DELETE FROM Favorites WHERE login = '" + userName + "';";
-					output = "You will have no favorite after this.";
+					//output = "You will have no favorite after this.";
 				}
 				else{
-					if(haveFavorite != -1){
+					if(haveFavorite != 0){
 						sql = "UPDATE Favorites SET hid = '" +choice+ "', fvdate = '"+currentTime+"' WHERE login = '" + userName + "';";
 					}
 					else{
 						sql = "INSERT INTO Favorites(hid, fvdate, login) VALUES('" +choice + "','"+currentTime+"', '"+userName+"');";
 					}
 					
-					output = "Your new Favorite will be, House ID: " + choice + ", Favorite Date: "+currentTime;
+					//output = "Your new Favorite will be, House ID: " + choice + ", Favorite Date: "+currentTime;
 				}
 				
 				
-				System.out.println(output);
-				System.out.println("Do you wish to keep this change?  (Y/N)");
+				//System.out.println(output);
+				//System.out.println("Do you wish to keep this change?  (Y/N)");
 				
-				try {
-					choice = MainMenu.input.readLine();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-				if(choice.toLowerCase().equals("y")){
+//				try {
+//					choice = MainMenu.input.readLine();
+//				} catch (IOException e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				}
+//				
+//				if(choice.toLowerCase().equals("y")){
 					try {
 						stmt.executeUpdate(sql);
-						System.out.println("Your Favorite has been updated!");
+						//System.out.println("Your Favorite has been updated!");
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-				}
+				//}
 
-			}
+			//}
 			
-			System.out.println("Do you wish to change/remove your favorite again? (Y/N)");
-			try {
-				choice = MainMenu.input.readLine();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			
-			if(!choice.toLowerCase().equals("y")){
-				done = true;
-			}
+//			System.out.println("Do you wish to change/remove your favorite again? (Y/N)");
+//			try {
+//				choice = MainMenu.input.readLine();
+//			} catch (IOException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//			
+//			if(!choice.toLowerCase().equals("y")){
+//				done = true;
+//			}
 			
 		}
-		System.out.println("Exitting the Favorite TH menu.");
+		//System.out.println("Exitting the Favorite TH menu.");
 		
 	}
 
-	public int viewFavoriteTH(String userName, Statement stmt, boolean viewResult){
+	public String[] viewFavoriteTH(String userName, Statement stmt, boolean viewResult){
 		ResultSet rs = null;
-		int haveFavorite = -1;
+		String [] haveFavorite = new String[2];
 		String sql = "Select F.hid, T.name FROM Favorites F, TH T WHERE F.login = '"+userName+"' AND F.hid = T.hid";
 		
 		try {
 			rs = stmt.executeQuery(sql);
-			if(!rs.isBeforeFirst()){
-				System.out.println("You do not have a favorite house currently selected.");
-			}
-			else{
+//			if(!rs.isBeforeFirst()){
+//				System.out.println("You do not have a favorite house currently selected.");
+//			}
+			//else{
 				if(viewResult){
 					while(rs.next()){
-						System.out.println("Your current favorite place to stay is:");
-						System.out.println("House ID: "+ rs.getString("F.hid") + ", House name: " + rs.getString("T.name"));
-						haveFavorite = rs.getInt("F.hid");
+						//System.out.println("Your current favorite place to stay is:");
+						//System.out.println("House ID: "+ rs.getString("F.hid") + ", House name: " + rs.getString("T.name"));
+						//haveFavorite = rs.getInt("F.hid");
+						haveFavorite[0] = rs.getString("F.hid");
+						haveFavorite[1] = rs.getString("T.name");
 					}
 				}
-			}
+			//}
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		return haveFavorite;
 	}
-	public void setViewProfile(String userName, Statement stmt) {
-		System.out.println("Here is your profile.");
+	
+	public String[] alterProfile(String userName, Statement stmt, String password, String admin, String address, String fullName, String phoneNumber){
+		String sql = "SELECT * from Users WHERE login = '"+userName+"';";
+		String fullNameInternal = null;
+		String adminInternal = null;
+		String addressInternal = null;
+		String phoneNumberInternal = null;
+		String passwordInternal = null;
+		ResultSet rs = null;
+		
+		try {
+			rs = stmt.executeQuery(sql);
+			while(rs.next()){
+				//System.out.println("User Name: "+rs.getString(1)+", Full Name: "+rs.getString(2)+", Admin(1 for yes, 0 for no): "+rs.getString(3)+", Address: "+rs.getString(5)+", Phone Number: "+rs.getString(6));
+				
+				fullNameInternal = rs.getString(2);
+				adminInternal = rs.getString(3);
+				addressInternal = rs.getString(5);
+				phoneNumberInternal = rs.getString(6);
+				passwordInternal = rs.getString(4);
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try {
+			
+				if(fullName != null && !fullName.isEmpty()){
+					fullNameInternal = fullName;
+				}
+				if(admin != null && !admin.isEmpty()){
+					adminInternal = admin;
+				}
+				if(address != null && !address.isEmpty()){
+					addressInternal = address;
+				}
+				if(phoneNumber != null && !phoneNumber.isEmpty()){
+					phoneNumberInternal = phoneNumber;
+				}
+				if(password != null && !password.isEmpty()){
+					passwordInternal = password;
+				}
+				
+				sql = "UPDATE Users SET name = '"+fullNameInternal+"', userType = '"+adminInternal+"', password = '"+passwordInternal+"', address = '"+addressInternal+"', phoneNumber = '"+phoneNumberInternal+"' WHERE login = '"+userName+"';";
+				
+				stmt.executeUpdate(sql);
+				
+				System.out.println("Information updated.");
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		String[] result = new String[6];
+		
+		result[0] = userName;
+		result[1] = fullNameInternal;
+		result[2] = adminInternal;
+		result[3] = addressInternal;
+		result[4] = phoneNumberInternal;
+		result[5] = passwordInternal;
+		return result;
+		
+	}
+	
+	public String[] setViewProfile(String userName, Statement stmt) {
+		//System.out.println("Here is your profile.");
 		
 		String sql = "SELECT * from Users WHERE login = '"+userName+"';";
 		String fullName = null;
@@ -312,7 +391,7 @@ public class User {
 		try {
 			rs = stmt.executeQuery(sql);
 			while(rs.next()){
-				System.out.println("User Name: "+rs.getString(1)+", Full Name: "+rs.getString(2)+", Admin(1 for yes, 0 for no): "+rs.getString(3)+", Address: "+rs.getString(5)+", Phone Number: "+rs.getString(6));
+				//System.out.println("User Name: "+rs.getString(1)+", Full Name: "+rs.getString(2)+", Admin(1 for yes, 0 for no): "+rs.getString(3)+", Address: "+rs.getString(5)+", Phone Number: "+rs.getString(6));
 				
 				fullName = rs.getString(2);
 				admin = rs.getString(3);
@@ -326,88 +405,103 @@ public class User {
 			e.printStackTrace();
 		}
 		
-		System.out.println("Do you wish to update your profile? (Y/N)");
+//		System.out.println("Do you wish to update your profile? (Y/N)");
+//		
+//		try {
+//			if(MainMenu.input.readLine().toLowerCase().equals("y")){
+//				System.out.println("What do you wish to update your Full name to?  Leave blank to leave the same.");
+//				String choice = MainMenu.input.readLine();
+//				if(!choice.isEmpty()){
+//					fullName = choice;
+//				}
+//				
+//				System.out.println("What do you wish to update your password to?  Leave blank to leave the same.");
+//				choice = MainMenu.input.readLine();
+//				if(!choice.isEmpty()){
+//					password = choice;
+//				}
+//				
+//				System.out.println("What do you wish to update your address to?  Leave blank to leave the same.");
+//				choice = MainMenu.input.readLine();
+//				if(!choice.isEmpty()){
+//					address = choice;
+//				}
+//				
+//				System.out.println("What do you wish to update your phone number to?  Leave blank to leave the same.");
+//				choice = MainMenu.input.readLine();
+//				if(!choice.isEmpty()){
+//					phoneNumber = choice;
+//				}
+//				
+//				System.out.println("What do you wish to update your Administator status to? Input 1 for admin, input 0 for non admin. Leave blank to leave the same.");
+//				choice = MainMenu.input.readLine();
+//				if(!choice.isEmpty()){
+//					admin = choice;
+//				}
+//				
+//				sql = "UPDATE Users SET name = '"+fullName+"', userType = '"+admin+"', password = '"+password+"', address = '"+address+"', phoneNumber = '"+phoneNumber+"' WHERE login = '"+userName+"';";
+//				
+//				stmt.executeUpdate(sql);
+//				
+//				System.out.println("Information updated.");
+//			}
+//		} catch (IOException | SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
-		try {
-			if(MainMenu.input.readLine().toLowerCase().equals("y")){
-				System.out.println("What do you wish to update your Full name to?  Leave blank to leave the same.");
-				String choice = MainMenu.input.readLine();
-				if(!choice.isEmpty()){
-					fullName = choice;
-				}
-				
-				System.out.println("What do you wish to update your password to?  Leave blank to leave the same.");
-				choice = MainMenu.input.readLine();
-				if(!choice.isEmpty()){
-					password = choice;
-				}
-				
-				System.out.println("What do you wish to update your address to?  Leave blank to leave the same.");
-				choice = MainMenu.input.readLine();
-				if(!choice.isEmpty()){
-					address = choice;
-				}
-				
-				System.out.println("What do you wish to update your phone number to?  Leave blank to leave the same.");
-				choice = MainMenu.input.readLine();
-				if(!choice.isEmpty()){
-					phoneNumber = choice;
-				}
-				
-				System.out.println("What do you wish to update your Administator status to? Input 1 for admin, input 0 for non admin. Leave blank to leave the same.");
-				choice = MainMenu.input.readLine();
-				if(!choice.isEmpty()){
-					admin = choice;
-				}
-				
-				sql = "UPDATE Users SET name = '"+fullName+"', userType = '"+admin+"', password = '"+password+"', address = '"+address+"', phoneNumber = '"+phoneNumber+"' WHERE login = '"+userName+"';";
-				
-				stmt.executeUpdate(sql);
-				
-				System.out.println("Information updated.");
-			}
-		} catch (IOException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		//System.out.println("Exiting view profile menu.");
+		String[] result = new String[6];
 		
-		System.out.println("Exiting view profile menu.");
+		result[0] = userName;
+		result[1] = fullName;
+		result[2] = admin;
+		result[3] = address;
+		result[4] = phoneNumber;
+		result[5] = password;
+		return result;
 	}
 	
-	public void topTrustedUsers(String amount, Statement stmt){
+	public List<UserInfo> topTrustedUsers(String amount, Statement stmt){
 		String sql = "Select DISTINCT T.login2, sum(case when T.isTrusted = 1 then 1 else -1 end) AS trustedLevel FROM Trust T GROUP BY T.login2 ORDER BY trustedLevel DESC LIMIT "+amount+"; ";
-		
+		List<UserInfo> result = new ArrayList<UserInfo>();
 		ResultSet rs = null;
 		
 		try {
 			rs = stmt.executeQuery(sql);
 			while(rs.next()){
-				System.out.println("User Login: " + rs.getString("T.login2") + ", Trusted Level: "+rs.getString("trustedLevel") );
+				//System.out.println("User Login: " + rs.getString("T.login2") + ", Trusted Level: "+rs.getString("trustedLevel") );
+				result.add(new UserInfo(rs.getString("T.login2"),rs.getString("trustedLevel")));
+				
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		System.out.println("Exiting top trusted users Menu.");
+		//System.out.println("Exiting top trusted users Menu.");
+		
+		return result;
 	}
 	
-	public void topUsefulUsers(String amount, Statement stmt){
+	public List<UserInfo> topUsefulUsers(String amount, Statement stmt){
 		String sql = "SELECT distinct F.login, AVG(R.rating) AS AVGuse FROM Feedback F, Rates R WHERE F.fid = R.fid GROUP BY F.login ORDER BY AVGuse DESC LIMIT 10;";
-		
+		List<UserInfo> result = new ArrayList<UserInfo>();
 		ResultSet rs = null;
 		
 		try {
 			rs = stmt.executeQuery(sql);
 			while(rs.next()){
-				System.out.println("User Login: " + rs.getString("F.login") + ", Usefulness of Feedback Average: "+rs.getString("AVGuse") );
+				//System.out.println("User Login: " + rs.getString("F.login") + ", Usefulness of Feedback Average: "+rs.getString("AVGuse") );
+				result.add(new UserInfo(rs.getString("T.login2"),rs.getString("AVGuse")));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		System.out.println("Exiting top trusted users Menu.");
+		//System.out.println("Exiting top trusted users Menu.");
+		return result;
 	}
 	
 	public int degreeOfSeperation(String userName, String checkName,Statement stmt){
