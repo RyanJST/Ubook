@@ -27,6 +27,11 @@ public class Connector {
 		}
 	}
 	
+	public void closeStatement() throws Exception{
+		stmt.close();
+	}
+
+	
 	public void closeConnection() throws Exception{
 		con.close();
 	}

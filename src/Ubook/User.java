@@ -7,129 +7,133 @@ import java.sql.Statement;
 
 public class User {
 	//BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-	public String setUpUser(Statement stmt) {
+	public String setUpUser(Statement stmt, String userName, String password, String name, String address, String phoneNumber, String admin) {
 		// TODO Auto-generated method stub
-		int gottenResults = 0;
 		
-		//BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+
 		String sql = null;
-		System.out.println("Please put in your preffered user name");
-		String userName = null;
-		while(userName == null){
-			try {
-				userName = MainMenu.input.readLine();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			
-			sql = "SELECT login FROM Users WHERE login = '" + userName + "';";
-			ResultSet rs = null;
-			try {
-				rs = stmt.executeQuery(sql);
-					if(rs.isBeforeFirst()){
-						System.out.println("That username has already been taken.  Please select a different one.\n");
-					}
+		//System.out.println("Please put in your preffered user name");
+		//String userName = null;
+//		while(userName == null){
+//			try {
+//				userName = MainMenu.input.readLine();
+//			} catch (IOException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//			
+//			
+//			}
+//
+//		System.out.println("Please put in your password");
+//		String password = null;
+//		
+//		try {
+//			password = MainMenu.input.readLine();
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//		
+//		System.out.println("Please put in your full name");
+//		String name = null;
+//		
+//		try {
+//			name = MainMenu.input.readLine();
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//		
+//		System.out.println("Please put in your address");
+//		String address = null;
+//		
+//		try {
+//			address = MainMenu.input.readLine();
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//		
+//		System.out.println("Please put in your phone number");
+//		String phoneNumber = null;
+//		
+//		try {
+//			phoneNumber = MainMenu.input.readLine();
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//		
+//		String admin = "0";
+//		System.out.println("Are you an Admin of the system? (Y/N)");
+//		
+//		try {
+//			if(MainMenu.input.readLine().toLowerCase().equals("y")){
+//				admin = "1";
+//			}
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//		
+		
+		sql = "SELECT login FROM Users WHERE login = '" + userName + "';";
+		ResultSet rs = null;
+		try {
+			rs = stmt.executeQuery(sql);
+				if(rs.isBeforeFirst()){
+					System.out.println("That username has already been taken.  Please select a different one.\n");
+					userName = null;
 				}
-			
-			catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();	
-				}
 			}
-
-		System.out.println("Please put in your password");
-		String password = null;
 		
-		try {
-			password = MainMenu.input.readLine();
-		} catch (IOException e1) {
+		catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		System.out.println("Please put in your full name");
-		String name = null;
-		
-		try {
-			name = MainMenu.input.readLine();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		System.out.println("Please put in your address");
-		String address = null;
-		
-		try {
-			address = MainMenu.input.readLine();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		System.out.println("Please put in your phone number");
-		String phoneNumber = null;
-		
-		try {
-			phoneNumber = MainMenu.input.readLine();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		String admin = "0";
-		System.out.println("Are you an Admin of the system? (Y/N)");
-		
-		try {
-			if(MainMenu.input.readLine().toLowerCase().equals("y")){
-				admin = "1";
+			e.printStackTrace();	
 			}
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-
+		if(userName != null){
 		sql = "INSERT INTO Users (login, name, password, address, phoneNumber, userType)"
 				+ " VALUES( '" + userName + "', '" + name+"','" + password + "', '" + address+"','" + phoneNumber + "', '"+admin+"')";
 		try{
-   		 	gottenResults=stmt.executeUpdate(sql);		     
+   		 	stmt.executeUpdate(sql);		     
 		 	}
 		 	catch(Exception e)
 		 	{
 		 		System.out.println("cannot execute the query");
 		 		System.out.println(e.getMessage());
+		 		userName = null;
 		 	}
-		if(gottenResults == 0){
-			userName = null;
 		}
+		//if(gottenResults == 0){
+			//userName = null;
+		//}
 		
 	    return userName;
 	}
 
-	public String loginUser(Statement stmt) {
+	public String loginUser(Statement stmt, String userName, String password) {
 		//BufferedReader MainMenu.input = new BufferedReader(new InputStreamReader(System.in));
-		
-		System.out.println("Please put in your user name");
-		String userName = null;
-		
-		try {
-			userName = MainMenu.input.readLine();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		System.out.println("Please put in your password");
-		
-		String password = null;
-		try {
-			password = MainMenu.input.readLine();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+//		
+//		System.out.println("Please put in your user name");
+//		String userName = null;
+//		
+//		try {
+//			userName = MainMenu.input.readLine();
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//		
+//		System.out.println("Please put in your password");
+//		
+//		String password = null;
+//		try {
+//			password = MainMenu.input.readLine();
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
 		
 		String sql = "SELECT password FROM Users WHERE login = '" + userName + "';";
 		ResultSet rs = null;
@@ -140,8 +144,8 @@ public class User {
 					
 					if(!rs.getString("password").equals(password)){
 						userName = null;
-						System.out.println("That is the wrong password "
-								+ "for the username you entered");
+						//System.out.println("That is the wrong password "
+							//	+ "for the username you entered");
 						
 					}
 				}

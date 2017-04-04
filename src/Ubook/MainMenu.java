@@ -13,15 +13,21 @@ public class MainMenu {
 	public static void main(String[] args){
 		try{
 			Connector con = new Connector();
-			System.out.println("Hello!  Welcome to UBook, your one stop shop for a place to stay! \n Please select the option you want for UBook!");
+			String opening = "Hello!  Welcome to UBook, your one stop shop for a place to stay! \n Please select the option you want for UBook!";
+			System.out.println(opening);
 			
 			String userName = null;
 			boolean done = false;
-
+			String option1 = "Please press 1 to log in";
+			String option2 = "Please press 2 to sign up";
+			String option3 = "Please press 3 to exit";
+			String incorrectChoice = "That is not a valid option, please try again";
+			String finished = "Thank you for using UBook!  Have a great day!";
 			while(!done){
-				System.out.println("Please press 1 to log in");
-				System.out.println("Please press 2 to sign up");
-				System.out.println("Please press 3 to exit");
+				
+				System.out.println(option1);
+				System.out.println(option2);
+				System.out.println(option3);
 				String choice = input.readLine();
 				switch(choice){
 				case "1":
@@ -40,14 +46,15 @@ public class MainMenu {
 					done = true;
 					break;
 				default:
-					System.out.println("That is not a valid option, please try again");
+					System.out.println(incorrectChoice);
 					break;
 				}
 			}
 			
 			boolean signedDone = false;
 			if(userName != null){
-				System.out.println("Hello, " + userName + "!");
+				String greeting = "Hello, " + userName + "!";
+				System.out.println(greeting);
 				System.out.println("What would you like to do today?");
 				while(!signedDone){
 					System.out.println("Please press 1 to account settings, admin options, and check degrees of separation");
@@ -86,14 +93,14 @@ public class MainMenu {
 						signedDone = true;
 						break;
 					default:
-						System.out.println("That is not a valid option, please try again");
+						System.out.println(incorrectChoice);
 						break;
 					}
 				}
 				
 			}
 			
-			System.out.println("Thank you for using UBook!  Have a great day!");
+			System.out.println(finished);
 			con.closeConnection();
 			input.close();
 		}
@@ -318,7 +325,7 @@ public class MainMenu {
 		User newUser = new User();
 		String name = null;
 		boolean result = false;
-		name = newUser.setUpUser(con.stmt);
+		//name = newUser.setUpUser(con.stmt);
 		while(!result){
 			if(name != null){
 				result = true;
@@ -339,7 +346,7 @@ public class MainMenu {
 					
 				}
 				else{
-					name = newUser.setUpUser(con.stmt);
+					//name = newUser.setUpUser(con.stmt);
 				}
 			}
 			}
@@ -352,7 +359,9 @@ public class MainMenu {
 		User loginUser = new User();
 		String name = null;
 		boolean result = false;
-		name = loginUser.loginUser(con.stmt);
+		String userName = null;
+		String password = null;
+		name = loginUser.loginUser(con.stmt, userName, password);
 		while(!result){
 			if(name != null){
 				result = true;
@@ -368,7 +377,7 @@ public class MainMenu {
 						
 					}
 					else{
-						name = loginUser.loginUser(con.stmt);
+						name = loginUser.loginUser(con.stmt, userName, password);
 					}
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
