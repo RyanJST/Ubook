@@ -7,7 +7,7 @@ import java.util.List;
 
 public class BRTH {
 
-	public void browseTHs(Statement stmt, String minPrice, String maxPrice, String city, String state, String category, String keywords, String sortBy, String params) {
+	public String browseTHs(Statement stmt, String minPrice, String maxPrice, String city, String state, String category, String keywords, String sortBy, String params) {
 		String[] parameterSplit = params.split(" ");
 		
 		String[] kws = keywords.split(" ");
@@ -64,19 +64,21 @@ public class BRTH {
 			else {
 				sql += "A.priceNight ASC;";
 			}
+			StringBuilder output = new StringBuilder();
  			ResultSet rs = null;
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
-				System.out.println("House ID: " + rs.getString("H.hid") + ", Name: " + rs.getString("H.name") + ", Category: " + rs.getString("H.category"));
-				if(rs.getString("A.priceNight") != null) System.out.println("  Price per Night as Low as: $" + rs.getString("A.priceNight"));
-				else System.out.println("  This house currently has no availabilities");
-				System.out.println("  Address: " + rs.getString("H.address") + ", " + rs.getString("H.city") + " " + rs.getString("H.state"));
-				System.out.println("  Owner: " + rs.getString("H.login") + ", Phone #: " + rs.getString("H.phoneNumber") +  ", Website: " + rs.getString("url"));
-				System.out.println("Average Feedback Score: " + rs.getString("fbScore"));
+				output.append("House ID: " + rs.getString("H.hid") + ", Name: " + rs.getString("H.name") + ", Category: " + rs.getString("H.category") + "\n");
+				if(rs.getString("A.priceNight") != null) output.append("  Price per Night as Low as: $" + rs.getString("A.priceNight") + "\n");
+				else output.append("  This house currently has no availabilities" + "\n");
+				output.append("  Address: " + rs.getString("H.address") + ", " + rs.getString("H.city") + " " + rs.getString("H.state") + "\n");
+				output.append("  Owner: " + rs.getString("H.login") + ", Phone #: " + rs.getString("H.phoneNumber") +  ", Website: " + rs.getString("url") + "\n");
+				output.append("Average Feedback Score: " + rs.getString("fbScore") + "\n");
 			}
+			return output.toString();
 		}
 		catch(SQLException e) {
-			System.out.println(e.getMessage());
+			return(e.getMessage());
 		}
 	}
 	
