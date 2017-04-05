@@ -68,12 +68,12 @@ public class BRTH {
  			ResultSet rs = null;
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
-				output.append("House ID: " + rs.getString("H.hid") + ", Name: " + rs.getString("H.name") + ", Category: " + rs.getString("H.category") + "\n");
-				if(rs.getString("A.priceNight") != null) output.append("  Price per Night as Low as: $" + rs.getString("A.priceNight") + "\n");
-				else output.append("  This house currently has no availabilities" + "\n");
-				output.append("  Address: " + rs.getString("H.address") + ", " + rs.getString("H.city") + " " + rs.getString("H.state") + "\n");
-				output.append("  Owner: " + rs.getString("H.login") + ", Phone #: " + rs.getString("H.phoneNumber") +  ", Website: " + rs.getString("url") + "\n");
-				output.append("Average Feedback Score: " + rs.getString("fbScore") + "\n");
+				output.append("<p><a href = \"" + rs.getString("H.hid") + "\"> House ID: " + rs.getString("H.hid") + ", Name: " + rs.getString("H.name") + ", Category: " + rs.getString("H.category") + " ");
+				if(rs.getString("A.priceNight") != null) output.append("  Price per Night as Low as: $" + rs.getString("A.priceNight") + " ");
+				else output.append("  This house currently has no availabilities" + " ");
+				output.append("  Address: " + rs.getString("H.address") + ", " + rs.getString("H.city") + " " + rs.getString("H.state") + " ");
+				output.append("  Owner: " + rs.getString("H.login") + ", Phone #: " + rs.getString("H.phoneNumber") +  ", Website: " + rs.getString("url") + " ");
+				output.append("Average Feedback Score: " + rs.getString("fbScore") + "</a></p>");
 			}
 			return output.toString();
 		}

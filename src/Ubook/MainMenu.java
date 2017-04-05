@@ -11,6 +11,14 @@ public class MainMenu {
 
 	public static BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 	public static void main(String[] args){
+		try{
+			Connector con = new Connector();
+			BRTH reserve = new BRTH();
+			String res = reserve.browseTHs(con.stmt, "20", "", "", "", "", "", "price", "minimum_price");
+		}
+		catch(Exception e) {
+			
+		}
 //		try{
 //			Connector con = new Connector();
 //			String opening = "Hello!  Welcome to UBook, your one stop shop for a place to stay! \n Please select the option you want for UBook!";
