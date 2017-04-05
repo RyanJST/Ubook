@@ -68,7 +68,7 @@ public class BRTH {
  			ResultSet rs = null;
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
-				output.append("<p><a href = \"" + rs.getString("H.hid") + "\"> House ID: " + rs.getString("H.hid") + ", Name: " + rs.getString("H.name") + ", Category: " + rs.getString("H.category") + " ");
+				output.append("<p><a href = \"AvlailsTH.jsp?id=" + rs.getString("H.hid") + "\"> House ID: " + rs.getString("H.hid") + ", Name: " + rs.getString("H.name") + ", Category: " + rs.getString("H.category") + " ");
 				if(rs.getString("A.priceNight") != null) output.append("  Price per Night as Low as: $" + rs.getString("A.priceNight") + " ");
 				else output.append("  This house currently has no availabilities" + " ");
 				output.append("  Address: " + rs.getString("H.address") + ", " + rs.getString("H.city") + " " + rs.getString("H.state") + " ");
@@ -82,46 +82,50 @@ public class BRTH {
 		}
 	}
 	
-	public void showTHs(Statement stmt) {
+	public String showTHs(Statement stmt) {
 		String sql = "SELECT hid, name FROM TH;";
 		ResultSet rs = null;
+		StringBuilder output = new StringBuilder();
 		try {
 			rs = stmt.executeQuery(sql);
 			if(!rs.isBeforeFirst()){
-				System.out.println("There are no houses in the system.");
-				return;
+				output.append("<p>There are no houses in the system.</p>");
+				return output.toString();
 			}
+			output.append("<ul>");
 			while(rs.next()){
 				
-				System.out.println("House ID: " + rs.getString("hid") +",   House Name: " + rs.getString("name") );
+				output.append("<li><a href = \"AvailsTH.jsp?id=" + rs.getString("hid") + "\">House Name: " + rs.getString("name") + "</a></li>" );
 					
 			}
+			output.append("</ul>");
+			return output.toString();
 		}
 		catch(SQLException e){
-			e.printStackTrace();
+			return e.getMessage();
 		}
 	}
 	
-	public boolean showTHAvails(String hid, Statement stmt) {
+	public String showTHAvails(String hid, Statement stmt) {
 		try{
+			StringBuilder output = new StringBuilder();
 			String sql = "SELECT P.fromDate, P.toDate, A.priceNight FROM Available A, Period P WHERE A.pid = P.pid AND hid = " + hid + ";";
 			ResultSet rs = stmt.executeQuery(sql);
-			System.out.println("Availability:");
+			output.append("Availability:");
 			boolean empty = true;
+			output.append("<ul>");
 			while(rs.next()){
-				System.out.println("From: " + rs.getString("P.fromDate") + ", To: " + rs.getString("P.toDate") + ", Price: $" + rs.getString("A.priceNight"));
+				output.append("<li>From: " + rs.getString("P.fromDate") + ", To: " + rs.getString("P.toDate") + ", Price: $" + rs.getString("A.priceNight") + "</li>");
 				empty = false;
 			}
 			if(empty){
-				System.out.println("This house currently has no availabilities");
-				return false;
+				output.append("This house currently has no availabilities");
 			}
-			else return true;
+			return output.toString();
 		}
 		catch(SQLException E) {
-			
+			return E.getMessage();
 		}
-		return false;
 	}
 	
 	public void printSelected(Statement stmt, List<Reserve> reserves) {
