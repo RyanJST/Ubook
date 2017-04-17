@@ -27,7 +27,7 @@ public class THFeedback {
 		if(choice.toLowerCase().equals("y")){
 				Stay stayedAt = new Stay();
 				
-				if(!stayedAt.viewStays(userName, stmt)){
+				if(stayedAt.viewStays(userName, stmt, "Feedback.jsp") == null){
 					System.out.println("You have not stayed at any houses, you cannot review a TH.");
 				}
 				else{

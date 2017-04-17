@@ -6,8 +6,9 @@ import java.sql.Statement;
 import java.util.*;
 
 public class Stay {
-	public void showReservations(String userName, Statement stmt, List<String> pids) {
+	public String showReservations(String userName, Statement stmt, List<String> pids) {
 		try {
+			StringBuilder output = new StringBuilder();
 			String sql = "SELECT R.pid, R.cost, H.hid, H.name, P.fromDate, P.toDate  "
 					+ "FROM Reserves R, TH H, Period P "
 					+ "WHERE P.pid = R.pid AND R.hid = H.hid AND R.login = '" + userName + "'"
@@ -21,17 +22,21 @@ public class Stay {
 			sql = sql.substring(0, sql.length() - 2);
 			sql += ");";
 			ResultSet rs = stmt.executeQuery(sql);
+			output.append("<ul>");
 			while(rs.next()) {
-				System.out.println("Id: " + rs.getString("R.pid")
-				+ ", Name: " + rs.getString("H.name")
+				output.append("<li><a href = \"StayConfirm.jsp?id=" + rs.getString("R.pid") + "\">"
+				+ "Name: " + rs.getString("H.name")
 				+ ", From: "+ rs.getString("P.fromDate")
 				+ ", To: " + rs.getString("toDate")
-				+ ", Cost: " + rs.getString("cost"));
+				+ ", Cost: " + rs.getString("cost")
+				+ "</a></li>");
 				
 			}
+			output.append("</ul>");
+			return output.toString();
 		}
 		catch (SQLException e) {
-			
+			return e.getMessage();
 		} 
 	}
 	
@@ -49,8 +54,9 @@ public class Stay {
 		} 
 	}
 	
-	public void printSelected(String userName, Statement stmt, List<String> pids) {
+	public String printSelected(String userName, Statement stmt, List<String> pids) {
 		try {
+			StringBuilder output = new StringBuilder();
 			String sql = "SELECT R.pid, R.cost, H.hid, H.name, P.fromDate, P.toDate  "
 					+ "FROM Reserves R, TH H, Period P "
 					+ "WHERE P.pid = R.pid AND R.hid = H.hid AND R.login = '" + userName + "'"
@@ -64,41 +70,45 @@ public class Stay {
 			sql += ");";
 			ResultSet rs = stmt.executeQuery(sql);
 			while(rs.next()) {
-				System.out.println("Id: " + rs.getString("R.pid")
-				+ ", Name: " + rs.getString("H.name")
-				+ ", From: "+ rs.getString("P.fromDate")
-				+ ", To: " + rs.getString("toDate")
-				+ ", Cost: " + rs.getString("cost"));
+			output.append("<li>"
+					+ "Name: " + rs.getString("H.name")
+					+ ", From: "+ rs.getString("P.fromDate")
+					+ ", To: " + rs.getString("toDate")
+					+ ", Cost: " + rs.getString("cost")
+					+ "</li>");
 			}
+			return output.toString();
 		}
 		catch (SQLException e) {
-			
+			return e.toString();
 		} 
 	}
 	
-	public boolean viewStays(String userName, Statement stmt){
-		System.out.println("Here is the list of the places you stayed at and the time period.");
-		boolean stayed = false;
+	public String viewStays(String userName, Statement stmt, String targetDoc){
+		StringBuilder output = new StringBuilder();
 		String sql = "SELECT V.pid, V.hid, V.cost, T.name, P.fromDate, P.toDate FROM Visits V, TH T, Period P WHERE P.pid = V.pid AND T.hid = V.hid AND  V.login = '"+userName+"';";
-		
 		ResultSet rs = null;
 		
 		try {
 			rs = stmt.executeQuery(sql);
 			if(rs.isBeforeFirst()){
-				stayed = true;
+				return null;
 			}
+			output.append("<ul>");
 			while(rs.next()){
-				System.out.println("House ID: "+rs.getString("V.hid")+", House Name: "+rs.getString("T.name")+", Cost of Stay: " +rs.getString("V.cost")+", Start Date of Stay: " +rs.getString("p.fromDate")+", End date of Stay: "+rs.getString("P.toDate"));
+				output.append("<li><a href = \"" + targetDoc + "?id=" + rs.getString("V.hid") + "\">"
+						+ "House Name: " + rs.getString("T.name")
+						+ ", Cost of Stay: " + rs.getString("V.cost")
+						+ ", Start Date of Stay: " +rs.getString("p.fromDate")
+						+ ", End date of Stay: " + rs.getString("P.toDate")
+						+ "</a></li>");
 			}
+			output.append("</ul>");
+			return output.toString();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return e.getMessage();
 		}
-		
-		System.out.println("Exiting View Stay menu.");
-		System.out.println("");
-		return stayed;
 		
 	}
 	

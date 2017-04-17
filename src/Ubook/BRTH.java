@@ -68,7 +68,7 @@ public class BRTH {
  			ResultSet rs = null;
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
-				output.append("<p><a href = \"AvlailsTH.jsp?id=" + rs.getString("H.hid") + "\"> House ID: " + rs.getString("H.hid") + ", Name: " + rs.getString("H.name") + ", Category: " + rs.getString("H.category") + " ");
+				output.append("<p><a href = \"AvlailsTH.jsp?id=" + rs.getString("H.hid") + "\">Name: " + rs.getString("H.name") + ", Category: " + rs.getString("H.category") + " ");
 				if(rs.getString("A.priceNight") != null) output.append("  Price per Night as Low as: $" + rs.getString("A.priceNight") + " ");
 				else output.append("  This house currently has no availabilities" + " ");
 				output.append("  Address: " + rs.getString("H.address") + ", " + rs.getString("H.city") + " " + rs.getString("H.state") + " ");
